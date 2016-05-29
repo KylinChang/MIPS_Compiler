@@ -5,7 +5,8 @@
 /*
 	* TK_MUL有修改成TK_STAR
 	* <del>不知道文档里的DIV表示"/"还是"DIV"，我就当实数除"/"处理了</del>
-	  文档里的DIV表示"/"
+	  <del>文档里的DIV表示"/"</del>
+	  用SLAH表示"/"，而DIV表示"DIV"
 	* 在真正的pascal中，program_head中的标识符ID是不能以下划线开头的，而变量里的标识符是可以的。然而老师文档里这两者并没有进行区分，所以我就直接取了两者的交集(即不能以下划线开头)。
 	* boolean类型只有两种值：true, false，且老师文档里没有提及，所以我就把它写在SYS_CON里了。
 	* 文档里没写注释的匹配规则，所以我就没写。
@@ -14,10 +15,13 @@
 */
 /*
 	代码内容修改：
+	2016.5.29
+		* 按照张的文档对代码进行了相应的修改
 	2016.5.24
 		* 修改了CHAR和STRING的判断条件，STRING可判断多单引号情况，且将空字符归为STRING(ubuntu上的free pascal是这样)
 */
 
+void endlessComment();  /*  用于处理注释只有前面一半的情况  */
 %}
 
 DOT "."
@@ -73,14 +77,29 @@ UNEQUAL "<>"
 PLUS "+"
 OR "OR"
 MUL "*"
-DIV "/"
+DIV "DIV"
+SLASH "/"
 MOD "MOD"
 AND "AND"
 SYS_FUNCT "abs"|"chr"|"odd"|"ord"|"pred"|"sqr"|"sqrt"|"succ"
 NOT "NOT"
 
-SYS_CON "maxint"|"maxlongint"|"true"|"false"|"nil"
-SYS_TYPE "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"extended"|"comp"|"currency"|"real"|"ansichar"|"widechar"|"char"|"string"|"bytebool"|"wordbool"|"longbool"|"boolean"|"byte"|"word"|"dword"|"longword"|"cardinal"|"file"|"text"|"TDateTime"
+EXTERNAL "EXTERNAL"|"EXTERN"
+FORWARD "FORWARD"
+IN "IN"
+LABEL "LABEL"
+NIL "NIL"
+OTHERWISE "OTHERWISE"
+PACKED "PACKED"
+FILE "FILE"
+SET "SET"
+WITH "WITH"
+STARSTAR "**"
+UPARROW "->"|"^"
+
+
+SYS_CON "maxint"|"maxlongint"|"true"|"false"
+SYS_TYPE "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"extended"|"comp"|"currency"|"real"|"ansichar"|"widechar"|"char"|"string"|"bytebool"|"wordbool"|"longbool"|"boolean"|"byte"|"word"|"dword"|"longword"|"cardinal"|"text"|"TDateTime"
 
 ID [A-Z]([_A-Z0-9])*
 
@@ -93,13 +112,13 @@ ID [A-Z]([_A-Z0-9])*
 
 {REAL} { return TK_REAL; }  /*  实数类型应写在整数类型之上  */
 {INTEGER} { return TK_INTEGER; }
-{CHAR} { return TK_CHAR; }  /*  注意单引号的表示方法：''''  */
+{CHAR} { return TK_CHAR; }  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
 {STRING} { return TK_STRING; }
 
 {TYPE} { return TK_TYPE; }
 {ARRAY} { return TK_ARRAY; }
-{LB} { reutrn LB; }
-{RB} { reutrn RB; }
+{LB} { reutrn TK_LB; }
+{RB} { reutrn TK_RB; }
 {OF} { return TK_OF; }
 {RECORD} { return TK_RECORD; }
 {END} { return TK_END; }
@@ -115,7 +134,7 @@ ID [A-Z]([_A-Z0-9])*
 {ASSIGN} { return TK_ASSIGN; }
 {SYS_PROC} { return TK_SYS_PROC; }
 {READ} { return TK_READ; }
-{BEGIN} { return TK__BEGIN; }
+{BEGIN} { return TK_BEGIN; }
 {IF} { return TK_IF; }
 {THEN} { return TK_THEN; }
 {ELSE} { return TK_ELSE; }
@@ -137,21 +156,56 @@ ID [A-Z]([_A-Z0-9])*
 {OR} { return TK_OR; }
 {MUL} { return TK_STAR; }
 {DIV} { return TK_DIV; }
+{SLASH} { return TK_SLASH; }
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
 {SYS_FUNCT} { return TK_SYS_FUNCT; }
 {NOT} { return TK_NOT; }
 
+{EXTERNAL} { return EXTERNAL; }
+{FORWARD} { return FORWARD; }
+{IN} { return TK_IN; }  /*  ??  */
+{LABEL} { return LABEL; }
+{NIL} { return NIL; }
+{OTHERWISE} { return TK_OTHERWISE; }
+{PACKED} { return PACKED; }
+{FILE} { return PFILE; }
+{SET} { return SET; }
+{WITH} { return WITH; }
+{STARSTAR} { return STARSTAR; }
+{UPARROW} { return TK_UPARROW; }
+
+
 {SYS_CON} { return TK_SYS_CON; }
 {SYS_TYPE} { return TK_SYS_TYPE; }
 
-{ID} { return TK_ID; }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
+[a-zA-Z][_a-zA-Z0-9]* { return TK_ID; }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
+
+"{" {
+	char c;
+	while ((c=input())!='}')
+		~c?:endlessComment();
+}
+"(*" {
+	char c;
+	do {
+		while ((c=input())!='*')
+			~c?:endlessComment();
+		while ((c=input())=='*');
+		~c?:endlessComment();
+		if (c==')') break;
+	} while (1);
+}
 
 \n { /*  忽略回车  */ }
 [ \t]+ { /*  skip whitespace  */ }
 . { return ERROR; }
 
 %%
+void endlessComment() {
+	fprintf(yyout, "Unexpected EOF inside comment\n");
+	exit(1);
+}
 int main() {
 	yylex();
 }
