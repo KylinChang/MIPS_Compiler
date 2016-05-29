@@ -117,8 +117,8 @@ ID [A-Z]([_A-Z0-9])*
 
 {TYPE} { return TK_TYPE; }
 {ARRAY} { return TK_ARRAY; }
-{LB} { reutrn TK_LB; }
-{RB} { reutrn TK_RB; }
+{LB} { return TK_LB; }
+{RB} { return TK_RB; }
 {OF} { return TK_OF; }
 {RECORD} { return TK_RECORD; }
 {END} { return TK_END; }
@@ -183,21 +183,26 @@ ID [A-Z]([_A-Z0-9])*
 
 "{" {
 	char c;
-	while ((c=input())!='}')
-		~c?:endlessComment();
+	while ((c=input())!='}') {
+		if (!(~c)) endlessComment();
+		if (c=='\n') yylineno++;
+	}
 }
 "(*" {
 	char c;
 	do {
-		while ((c=input())!='*')
-			~c?:endlessComment();
+		while ((c=input())!='*') {
+			if (!(~c)) endlessComment();		
+			if (c=='\n') yylineno++;
+		}
 		while ((c=input())=='*');
-		~c?:endlessComment();
+		if (!(~c)) endlessComment();
+		if (c=='\n') yylineno++;
 		if (c==')') break;
 	} while (1);
 }
 
-\n { /*  忽略回车  */ }
+\n { yylineno++; }
 [ \t]+ { /*  skip whitespace  */ }
 . { return ERROR; }
 
@@ -206,6 +211,9 @@ void endlessComment() {
 	fprintf(yyout, "Unexpected EOF inside comment\n");
 	exit(1);
 }
-int main() {
-	yylex();
+int yywrap() {
+	return 1;
 }
+/*int main() {
+	yylex();
+}*/
