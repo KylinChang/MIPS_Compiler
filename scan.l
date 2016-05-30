@@ -1,6 +1,7 @@
 %option caseless
 %option yylineno
 %{
+#include "node.h"
 #include "y.tab.h"
 /*
 	* <del>不知道文档里的DIV表示"/"还是"DIV"，我就当实数除"/"处理了</del>
@@ -12,10 +13,6 @@
 	* 文档里的GOTO语句貌似是错的。
 */
 
-#define NODE_SIZE sizeof(NODE)
-#define NEWNODE (NODE*)malloc(NODE_SIZE)
-
-extern void cpString(char** str1, char** str2);
 extern int DEBUG;
 %}
 
@@ -97,10 +94,8 @@ SYS_TYPE  "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"e
 
 {REAL} { return TK_REAL; }  /*  实数类型应写在整数类型之上  */
 {INTEGER} {	
-	yylval = NEWNODE;
+	yylval = NEWNODE(TK_INTEGER);
 	sscanf(yytext, "%d", &yylval->ival);
-	yylval->type = TK_INTEGER;
-	yylval->child_number = 0;
 	yylval->child =  NULL;
 	return TK_INTEGER;
 	}
@@ -163,10 +158,8 @@ SYS_TYPE  "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"e
 {SYS_TYPE} { return TK_SYS_TYPE; }
 
 [a-zA-Z]([_a-zA-Z0-9])* {
-	yylval = NEWNODE;
+	yylval = NEWNODE(TK_ID);
 	cpString(&yylval->name, &yytext);
-	//sscanf(yytext, "%s", yylval->name);
-	yylval->type = TK_ID;
 	yylval->child_number = 0;
 	yylval->child = NULL;
 	yylval->attr = NULL;

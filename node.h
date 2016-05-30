@@ -1,3 +1,8 @@
+#ifndef __NODE__
+#define __NODE__
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 typedef struct NODE{
     char* name;
     char* str;
@@ -13,5 +18,9 @@ typedef struct NODE{
 
 #define NODE_SIZE sizeof(NODE)
 #define NODE_POINTER_SIZE sizeof(NODE*)
-#define NEWNODE (NODE*)malloc(NODE_SIZE)
-#define MALLOC(num) (NODE**)malloc(NODE_POINTER_SIZE*num)
+#define MALLOC(pointer,num) (NODE**)malloc(NODE_POINTER_SIZE*(pointer->child_number=num))
+
+NODE* NEWNODE(int type);
+void cpString(char** str1, char** str2);
+
+#endif
