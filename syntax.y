@@ -541,22 +541,49 @@ function_decl : function_head TK_SEMI routine TK_SEMI{
 			}
 			;
 
-function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl
-			  ;
+function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl{
+				//NOTE: IGNORE TK_FUNCTION TK_COLON
+				if(DEBUG){
+					printf("PARSING TK_FUNCTINO HEAD\n");
+				}
+				$$.type = TK_FUNC_HEAD;
+				$$.child_numebr = 3;
+				$$.child = MALLOC(3);
+				$$.child[0] = &$2;
+				$$.child[1] = &$3;
+				$$.child[2] = &$5;
+			}
+			;
 
-procedure_decl : procedure_head TK_SEMI routine TK_SEMI
-			   ;
+procedure_decl : procedure_head TK_SEMI routine TK_SEMI{
+				//NOTE: IGNORE TK_SEMI
+				
+			}
+			;
 
 procedure_head : TK_PROCEDURE TK_ID parameters
 			   ;
 
-parameters : TK_LP para_decl_list TK_RP
-		   |{
+parameters : TK_LP para_decl_list TK_RP{
+			//NOTE: PARAMETERS IS 'TK_PARA', IGNORE TK_LP TK_RP
+				if(DEBUG){
+					printf("PARSING PARA\n");
+				}
+				$$.type = TK_PARA;
+		   		$$.child_number = 1;
+		   		$$.child = MALLOC(1);
+		   		$$.child[0] = &$2;
+			}
+		   	|{
+		   	//NOTE: PARAMETERS IS 'TK_PARA'
 		   		if(DEBUG){
 		   			printf("PARSING PARA NULL\n");
 		   		}
-		   }
-		   ;
+		   		$$.type = TK_PARA;
+		   		$$.child_number = 0;
+		   		$$.child = NULL;
+		   	}
+		   	;
 
 para_decl_list : para_decl_list TK_SEMI para_type_list
 			| para_type_list
@@ -753,11 +780,27 @@ compound_stmt : TK_BEGIN stmt_list TK_END{
 
 if_stmt : TK_IF expression TK_THEN stmt else_clause{
 			//NOTE: IGNORE TK_IF TK_THEN
-			
+			if(DEBUG){
+				printf("PARSING IF STMT\n");
+			}
+			$$.type = TK_IF;
+			$$.child_numebr = 3;
+			$$.child = MALLOC(3);
+			$$.child[0] = &$2;
+			$$.child[1] = &$4;
+			$$.child[2] = &$5;
 		}
 		;
 
-else_clause : TK_ELSE stmt
+else_clause : TK_ELSE stmt{
+				if(DEBUG){
+					printf("PARSING ELSE CLAUSE\n");
+				}
+				$$.type = TK_ELSE;
+				$$.child_number = 1;
+				$$.child = MALLOC(1);
+				$$.child[0] = &$2;
+			}
 			|{
 				if(DEBUG){
 					printf("PARSING ELSE CLAUSE NULL\n");
@@ -815,11 +858,18 @@ goto_stmt : TK_GOTO TK_INTEGER{
 
 expression_list : expression_list TK_COMMA expression{
 					//NOTE: IGNORE TK_COMMA
-
+					if(DEBUG){
+						printf("PARSING EXP LIST\n");
+					}
+					$$.type = TK_EXP_LIST;
+					$$.child_number = 2;
+					$$.child = MALLOC(2);
+					$$.child[0] = &$1;
+					$$.child[1] = &$3;
 				}
 				| expression{
 					if(DEBUG){
-						printf("PARSING EXP LIST\n");
+						printf("PARSING EXP LIST : FIRST ONE\n");
 					}
 					$$.type = TK_EXP_LIST;
 					$$.child_number = 1;
