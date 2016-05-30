@@ -12,6 +12,8 @@
 	* 文档里的GOTO语句貌似是错的。
 */
 
+#define NODE_SIZE sizeof(NODE)
+#define NEWNODE (NODE*)malloc(NODE_SIZE)
 extern int DEBUG;
 %}
 
@@ -93,10 +95,11 @@ SYS_TYPE  "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"e
 
 {REAL} { return TK_REAL; }  /*  实数类型应写在整数类型之上  */
 {INTEGER} {	
-	sscanf(yytext, "%d", &yylval.ival);
-	yylval.type = TK_INTEGER;
-	yylval.child_number = 0;
-	yylval.child =  NULL;
+	yylval = NEWNODE;
+	sscanf(yytext, "%d", &yylval->ival);
+	yylval->type = TK_INTEGER;
+	yylval->child_number = 0;
+	yylval->child =  NULL;
 	return TK_INTEGER;
 	}
 {CHAR} { return TK_CHAR; }  /*  注意单引号的表示方法：''''  */
@@ -158,10 +161,12 @@ SYS_TYPE  "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"e
 {SYS_TYPE} { return TK_SYS_TYPE; }
 
 [a-zA-Z]([_a-zA-Z0-9])* {
-	sscanf(yytext, "%s", yylval.name);
-	yylval.type = TK_ID;
-	yylval.child_number = 0;
-	yylval.child = NULL;
+	yylval = NEWNODE;
+	sscanf(yytext, "%s", yylval->name);
+	yylval->type = TK_ID;
+	yylval->child_number = 0;
+	yylval->child = NULL;
+	yylval->attr = NULL;
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 
