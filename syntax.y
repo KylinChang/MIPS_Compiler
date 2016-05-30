@@ -300,22 +300,59 @@ record_type_decl : TK_RECORD field_decl_list TK_END{
 			}
 			;
 
-field_decl_list : field_decl_list field_decl
-				| field_decl
-				;
+field_decl_list : field_decl_list field_decl{
+				if(DEBUG){
+					printf("PARSING FIELD DECL LIST\n");
+				}
+				$$.type = TK_FIELD_DECL_LIST;
+				$$.child_number = 2;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+				$$.child[1] = &$2;
+			}
+			| field_decl{
+				if(DEBUG){
+					printf("PARSING FIELD DECL LIST : FIRST ONE\n");
+				}
+				$$.type = TK_FIELD_DECL_LIST;
+				$$.child_number = 1;
+				$$.child = MALLOC(1);
+				$$.child[0] = &$1;
+			}
+			;
 
-field_decl : name_list TK_COLON type_decl TK_SEMI
-		   ;
+field_decl : name_list TK_COLON type_decl TK_SEMI{
+			//NOTE: IGNORE TK_COLON TK_SEMI
+				if(DEBUG){
+					printf("PARSING FIELD DECL\n");
+				}
+				$$.type = TK_FIELD_DECL;
+				$$.child_number = 2;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+				$$.child[1] = &$3;
+			}
+		   	;
 
 name_list : name_list TK_COMMA TK_ID{
-			//NOTE: HERE TAG IS SIMPLIFIED AS 'TK_NL'
-				
+			//NOTE: HERE TAG IS SIMPLIFIED AS 'TK_NL', IGNORE TK_COMMA
+				if(DEBUG){
+					printf("PARSING NAME LIST\n");
+				}
+				$$.type = TK_NL;
+				$$.child_number = 2;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+				$$.child[1] = &$3;
 			}
 		  	| TK_ID{
 		  		if(DEBUG){
 		  			printf("PARSING NAME LIST : FIRST ONE\n");
 		  		}
-		  		$$.type = TK_NL
+		  		$$.type = TK_NL;
+		  		$$.child_number = 1;
+		  		$$.child = MALLOC(1);
+		  		$$.child[0] = &$1;
 		  	}
 		  	;
 
@@ -432,17 +469,58 @@ var_decl_list : var_decl_list var_decl{
 
 var_decl : name_list TK_COLON type_decl TK_SEMI{
 			//NOTE: IGNORE TK_COLON TK_SEMI
-
+			if(DEBUG){
+				printf("PARSING VAR DECL\n");
+			}
+			$$.type = TK_VAR_DECL;
+			$$.child_number = 2;
+			$$.child = MALLOC(2);
+			$$.child[0] = &$1;
+			$$.child[1] = &$3;
 		}
 		;
 
-routine_part : routine_part function_decl
-			 | routine_part procedure_decl
-			 | function_decl
-			 | procedure_decl
+routine_part : routine_part function_decl{
+				if(DEBUG){
+					printf("PARSING ROUTINE_PART\n");
+				}
+				$$.type = TK_ROUTINE_PART;
+				$$.child_number = 2;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+				$$.child[1] = &$2;
+			}
+			 | routine_part procedure_decl{
+				if(DEBUG){
+					printf("PARSING ROUTINE_PART\n");
+				}
+				$$.type = TK_ROUTINE_PART;
+				$$.child_number = 2;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+				$$.child[1] = &$2;
+			}
+			 | function_decl{
+				if(DEBUG){
+					printf("PARSING ROUTINE_PART\n");
+				}
+				$$.type = TK_ROUTINE_PART;
+				$$.child_number = 1;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+			}
+			 | procedure_decl{
+				if(DEBUG){
+					printf("PARSING ROUTINE_PART\n");
+				}
+				$$.type = TK_ROUTINE_PART;
+				$$.child_number = 1;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+			}
 			 |{
 			 	if(DEBUG){
-			 		printf("PARSING ROUTINE_PART\n");
+			 		printf("PARSING ROUTINE_PART NULL\n");
 			 	}
 			 	$$.type = TK_ROUTINE_PART;
 			 	$$.child_number = 0;
@@ -450,8 +528,18 @@ routine_part : routine_part function_decl
 			 }
 			 ;
 
-function_decl : function_head TK_SEMI routine TK_SEMI
-			  ;
+function_decl : function_head TK_SEMI routine TK_SEMI{
+				//NOTE: IGNORE TK_SEMI
+				if(DEBUG){
+					printf("PARSING FUNC DECL\n");
+				}
+				$$.type = TK_FUNC_DECL;
+				$$.child_number = 2;
+				$$.child = MALLOC(2);
+				$$.child[0] = &$1;
+				$$.child[1] = &$3;
+			}
+			;
 
 function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl
 			  ;
@@ -463,7 +551,11 @@ procedure_head : TK_PROCEDURE TK_ID parameters
 			   ;
 
 parameters : TK_LP para_decl_list TK_RP
-		   |
+		   |{
+		   		if(DEBUG){
+		   			printf("PARSING PARA NULL\n");
+		   		}
+		   }
 		   ;
 
 para_decl_list : para_decl_list TK_SEMI para_type_list
@@ -475,7 +567,7 @@ para_type_list : var_para_list TK_COLON simple_type_decl
 			   ;
 
 var_para_list : TK_VAR name_list{
-				//NOTE: IGNORE TK_VAR
+				//NOTE: IGNORE TK_VAR VAR_PARA_LIST IS "TK_VAR"
 				if(DEBUG){
 					printf("PARSING VAR LIST\n");
 				}
@@ -486,8 +578,16 @@ var_para_list : TK_VAR name_list{
 			}
 			;
 
-val_para_list : name_list
-			  ;
+val_para_list : name_list{
+				if(DEBUG){
+					printf("PARSING VAL PARA LIST\n");
+				}
+				$$.type = TK_VAL_PARA_LIST;
+				$$.child_number = 1;
+				$$.child = MALLOC(1);
+				$$.child[0] = &$1;
+			}
+			;
 
 routine_body : compound_stmt{
 				if(DEBUG){
@@ -708,35 +808,192 @@ goto_stmt : TK_GOTO TK_INTEGER{
 			if(DEBUG){
 				printf("PARSING GOTO STMT\n");
 			}
-			$$ = $1;
+			$$ = $2;
 			$$.type = TK_GOTO;
 		}
 		;
 
-expression_list : expression_list TK_COMMA expression
-				| expression
+expression_list : expression_list TK_COMMA expression{
+					//NOTE: IGNORE TK_COMMA
+
+				}
+				| expression{
+					if(DEBUG){
+						printf("PARSING EXP LIST\n");
+					}
+					$$.type = TK_EXP_LIST;
+					$$.child_number = 1;
+					$$.child = MALLOC(1);
+					$$.child[0] = &$1;
+				}
 				;
 
-expression : expression TK_GE expr
-		   | expression TK_GT expr
-		   | expression TK_LE expr
-		   | expression TK_LT expr
-		   | expression TK_EQUAL expr
-		   | expression TK_UNEQUAL expr
-		   | expr
+expression : expression TK_GE expr{
+			//NOTE: IGNORE TK_GE TK_GT TK_LE TK_LT TK_EQUAL TK_UNEQUAL
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION\n");
+		   		}
+		   		$$.type = TK_GE;
+		   		$$.child_number = 2;
+		   		$$.child = MALLOC(2);
+		   		$$.child[0] = &$1;
+		   		$$.child[1] = &$3;
+		   }
+		   | expression TK_GT expr{
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION\n");
+		   		}
+		   		$$.type = TK_GT;
+		   		$$.child_number = 2;
+		   		$$.child = MALLOC(2);
+		   		$$.child[0] = &$1;
+		   		$$.child[1] = &$3;
+		   }
+		   | expression TK_LE expr{
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION\n");
+		   		}
+		   		$$.type = TK_LE;
+		   		$$.child_number = 2;
+		   		$$.child = MALLOC(2);
+		   		$$.child[0] = &$1;
+		   		$$.child[1] = &$3;
+		   }
+		   | expression TK_LT expr{
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION\n");
+		   		}
+		   		$$.type = TK_LT;
+		   		$$.child_number = 2;
+		   		$$.child = MALLOC(2);
+		   		$$.child[0] = &$1;
+		   		$$.child[1] = &$3;
+		   }
+		   | expression TK_EQUAL expr{
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION\n");
+		   		}
+		   		$$.type = TK_EQUAL;
+		   		$$.child_number = 2;
+		   		$$.child = MALLOC(2);
+		   		$$.child[0] = &$1;
+		   		$$.child[1] = &$3;
+		   }
+		   | expression TK_UNEQUAL expr{
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION\n");
+		   		}
+		   		$$.type = TK_UNEQUAL;
+		   		$$.child_number = 2;
+		   		$$.child = MALLOC(2);
+		   		$$.child[0] = &$1;
+		   		$$.child[1] = &$3;
+		   }
+		   | expr{
+		   		if(DEBUG){
+		   			printf("PARSING EXPRESSION : FIRST ONE\n");
+		   		}
+		   		$$.type = TK_EXP;
+		   		$$.child_number = 1;
+		   		$$.child = MALLOC(1);
+		   		$$.child[0] = &$1;
+		   }
 		   ;
 
-expr : expr TK_PLUS term
-	 | expr TK_MINUS term
-	 | expr TK_OR term
-	 | term
+expr : expr TK_PLUS term{
+	 //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_PLUS
+	 	if(DEBUG){
+	 		printf("PARSING EXPR : FIRST ONE\n");
+	 	}
+	 	$$.type = TK_PLUS;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | expr TK_MINUS term{
+	 //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
+	 	if(DEBUG){
+	 		printf("PARSING EXPR : FIRST ONE\n");
+	 	}
+	 	$$.type = TK_MINUS;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | expr TK_OR term{
+	 //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
+	 	if(DEBUG){
+	 		printf("PARSING EXPR : FIRST ONE\n");
+	 	}
+	 	$$.type = TK_OR;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | term{
+	 //NOTE: expr IS EXPR, expression IS EXP
+	 	if(DEBUG){
+	 		printf("PARSING EXPR : FIRST ONE\n");
+	 	}
+	 	$$.type = TK_EXPR;
+	 	$$.child_number = 1;
+	 	$$.child = MALLOC(1);
+	 	$$.child[0] = &$1;
+	 }
 	 ;
 
-term : term TK_MUL factor
-	 | term TK_DIV factor
-	 | term TK_MOD factor
-	 | term TK_AND factor
-	 | factor
+term : term TK_MUL factor{
+	 	if(DEBUG){
+	 		printf("PARSING TK_MUL\n");
+	 	}
+	 	$$.type = TK_MUL;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | term TK_DIV factor{
+	 	if(DEBUG){
+	 		printf("PARSING TK_DIV\n");
+	 	}
+	 	$$.type = TK_DIV;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | term TK_MOD factor{
+	 	if(DEBUG){
+	 		printf("PARSING TK_MOD\n");
+	 	}
+	 	$$.type = TK_MOD;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | term TK_AND factor{
+	 	if(DEBUG){
+	 		printf("PARSING TK_AND\n");
+	 	}
+	 	$$.type = TK_AND;
+	 	$$.child_number = 2;
+	 	$$.child = MALLOC(2);
+	 	$$.child[0] = &$1;
+	 	$$.child[1] = &$3;
+	 }
+	 | factor{
+	 	if(DEBUG){
+	 		printf("PARSING TERM : FIRST ONE\n");
+	 	}
+	 	$$.type = TK_TERM;
+	 	$$.child_number = 1;
+	 	$$.child = MALLOC(1);
+	 	$$.child[0] = &$1;
+	 }
 	 ;
 
 factor : TK_ID{
