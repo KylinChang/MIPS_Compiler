@@ -1,16 +1,5 @@
 %code requires{
-typedef struct NODE{
-    char* name;
-    char* str;
-    char ch;
-    int type;
-    int ival;
-    double dval;
-    int child_number;
-    struct NODE** child;
-
-    struct NODE* attr;
-}NODE;
+#include "node.h"
 
 #define YYSTYPE NODE*
 
