@@ -14,6 +14,8 @@
 
 #define NODE_SIZE sizeof(NODE)
 #define NEWNODE (NODE*)malloc(NODE_SIZE)
+
+extern void cpString(char** str1, char** str2);
 extern int DEBUG;
 %}
 
@@ -162,7 +164,8 @@ SYS_TYPE  "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"e
 
 [a-zA-Z]([_a-zA-Z0-9])* {
 	yylval = NEWNODE;
-	sscanf(yytext, "%s", yylval->name);
+	cpString(&yylval->name, &yytext);
+	//sscanf(yytext, "%s", yylval->name);
 	yylval->type = TK_ID;
 	yylval->child_number = 0;
 	yylval->child = NULL;

@@ -83,11 +83,13 @@ extern FILE* yyin;
 #define NEWNODE (NODE*)malloc(NODE_SIZE)
 #define MALLOC(num) (NODE**)malloc(NODE_POINTER_SIZE*num)
 
+void cpString(char** str1, char** str2);
+
 int DEBUG=1;
 
 
 /* Line 189 of yacc.c  */
-#line 91 "y.tab.c"
+#line 93 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -113,9 +115,9 @@ int DEBUG=1;
 #line 1 "syntax.y"
 
 typedef struct NODE{
-    char name[256];
-    char ch;
+    char* name;
     char* str;
+    char ch;
     int type;
     int ival;
     double dval;
@@ -132,7 +134,7 @@ NODE* ROOT;
 
 
 /* Line 209 of yacc.c  */
-#line 136 "y.tab.c"
+#line 138 "y.tab.c"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -391,7 +393,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 395 "y.tab.c"
+#line 397 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -737,19 +739,19 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    61,    61,    76,    89,   102,   117,   128,   139,   152,
-     166,   176,   186,   196,   206,   218,   229,   241,   252,   264,
-     277,   287,   297,   309,   323,   336,   347,   359,   373,   385,
-     397,   408,   418,   428,   439,   450,   461,   474,   485,   496,
-     507,   519,   533,   544,   555,   565,   575,   586,   600,   615,
-     629,   643,   654,   666,   678,   691,   703,   717,   730,   742,
-     754,   765,   776,   788,   801,   811,   821,   831,   841,   851,
-     861,   871,   881,   893,   905,   918,   934,   944,   956,   966,
-     978,   992,  1004,  1019,  1029,  1040,  1054,  1068,  1085,  1093,
-    1103,  1117,  1129,  1142,  1154,  1168,  1179,  1191,  1203,  1215,
-    1226,  1237,  1248,  1259,  1270,  1282,  1294,  1306,  1318,  1331,
-    1342,  1353,  1364,  1375,  1387,  1398,  1410,  1422,  1432,  1443,
-    1453,  1463,  1475,  1489,  1501
+       0,    63,    63,    78,    91,   104,   119,   130,   141,   154,
+     168,   178,   188,   198,   208,   220,   231,   243,   254,   266,
+     279,   289,   299,   311,   325,   338,   349,   361,   375,   387,
+     399,   410,   420,   430,   441,   452,   463,   476,   487,   498,
+     509,   521,   535,   546,   557,   567,   577,   588,   602,   617,
+     631,   645,   656,   668,   680,   693,   705,   719,   732,   744,
+     756,   767,   778,   790,   803,   813,   823,   833,   843,   853,
+     863,   873,   883,   895,   907,   920,   936,   946,   958,   968,
+     980,   994,  1006,  1021,  1031,  1042,  1056,  1070,  1087,  1095,
+    1105,  1119,  1131,  1144,  1156,  1170,  1181,  1193,  1205,  1217,
+    1228,  1239,  1250,  1261,  1272,  1284,  1296,  1308,  1320,  1333,
+    1344,  1355,  1366,  1377,  1389,  1400,  1412,  1424,  1434,  1445,
+    1455,  1465,  1477,  1491,  1503
 };
 #endif
 
@@ -1866,7 +1868,7 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 61 "syntax.y"
+#line 63 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING PROGRAM\n");
@@ -1885,7 +1887,7 @@ yyreduce:
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 76 "syntax.y"
+#line 78 "syntax.y"
     {
 			if(DEBUG){
 				printf("PROGRAM HEAD:%s\n", (yyvsp[(2) - (3)])->name);
@@ -1893,7 +1895,7 @@ yyreduce:
 			(yyval) = NEWNODE;
 			(yyval) = (yyvsp[(2) - (3)]);
 			(yyval)->type = TK_PROGRAM_HEAD;
-			//strcpy($$->name, $2->name);
+			cpString(&((yyval)->name), &((yyvsp[(2) - (3)])->name));
 			(yyval)->child_number = 0;
 			(yyval)->child = NULL;
 		}
@@ -1902,7 +1904,7 @@ yyreduce:
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 89 "syntax.y"
+#line 91 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING ROUTINE\n");
@@ -1919,7 +1921,7 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 102 "syntax.y"
+#line 104 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING ROUTINE HEAD\n");
@@ -1938,7 +1940,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 117 "syntax.y"
+#line 119 "syntax.y"
     {
 		//NOTE: IGNORE TK_CONST
 			if(DEBUG){
@@ -1955,7 +1957,7 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 128 "syntax.y"
+#line 130 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING CONST PART NULL\n");
@@ -1970,7 +1972,7 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 139 "syntax.y"
+#line 141 "syntax.y"
     {
 				//NOTE: IGNORE TK_EQUAL TK_SEMI
 					if(DEBUG){
@@ -1989,7 +1991,7 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 152 "syntax.y"
+#line 154 "syntax.y"
     {
 				//NOTE: IGNORE TK_EQUAL TK_SEMI
 					if(DEBUG){
@@ -2007,7 +2009,7 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 166 "syntax.y"
+#line 168 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING COSNT VALUE INTEGER\n");
@@ -2023,7 +2025,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 176 "syntax.y"
+#line 178 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING COSNT VALUE REAL\n");
@@ -2039,7 +2041,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 186 "syntax.y"
+#line 188 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING COSNT VALUE CHAR\n");
@@ -2055,7 +2057,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 196 "syntax.y"
+#line 198 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING COSNT VALUE STRING\n");
@@ -2071,7 +2073,7 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 206 "syntax.y"
+#line 208 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING COSNT VALUE SYS CON\n");
@@ -2087,7 +2089,7 @@ yyreduce:
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 218 "syntax.y"
+#line 220 "syntax.y"
     {
 			//NOTE: IGNORE TYPE
 			if(DEBUG){
@@ -2104,7 +2106,7 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 229 "syntax.y"
+#line 231 "syntax.y"
     {
 		  	//NOTE: IGNORE TYPE
 		  		if(DEBUG){
@@ -2120,7 +2122,7 @@ yyreduce:
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 241 "syntax.y"
+#line 243 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING TYPE DECL LIST DEF\n");
@@ -2137,7 +2139,7 @@ yyreduce:
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 252 "syntax.y"
+#line 254 "syntax.y"
     {
 			   		if(DEBUG){
 						printf("PARSING TYPE DECL LIST\n");
@@ -2153,7 +2155,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 264 "syntax.y"
+#line 266 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING TYPE DEF\n");
@@ -2170,7 +2172,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 277 "syntax.y"
+#line 279 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING TYPE DECL\n");
@@ -2186,7 +2188,7 @@ yyreduce:
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 287 "syntax.y"
+#line 289 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING TYPE DECL\n");
@@ -2202,7 +2204,7 @@ yyreduce:
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 297 "syntax.y"
+#line 299 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING TYPE DECL\n");
@@ -2218,7 +2220,7 @@ yyreduce:
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 309 "syntax.y"
+#line 311 "syntax.y"
     {
 				//NOTE: IGNORE TK_LB TK_RB TK_OF
 				if(DEBUG){
@@ -2236,7 +2238,7 @@ yyreduce:
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 323 "syntax.y"
+#line 325 "syntax.y"
     {
 				//NOTE: IGNORE TK_END
 				if(DEBUG){
@@ -2253,7 +2255,7 @@ yyreduce:
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 336 "syntax.y"
+#line 338 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING FIELD DECL LIST\n");
@@ -2270,7 +2272,7 @@ yyreduce:
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 347 "syntax.y"
+#line 349 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING FIELD DECL LIST : FIRST ONE\n");
@@ -2286,7 +2288,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 359 "syntax.y"
+#line 361 "syntax.y"
     {
 			//NOTE: IGNORE TK_COLON TK_SEMI
 				if(DEBUG){
@@ -2304,7 +2306,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 373 "syntax.y"
+#line 375 "syntax.y"
     {
 			//NOTE: HERE TAG IS SIMPLIFIED AS 'TK_NL', IGNORE TK_COMMA
 				if(DEBUG){
@@ -2322,7 +2324,7 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 385 "syntax.y"
+#line 387 "syntax.y"
     {
 		  		if(DEBUG){
 		  			printf("PARSING NAME LIST : FIRST ONE\n");
@@ -2338,7 +2340,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 397 "syntax.y"
+#line 399 "syntax.y"
     {
 				//NOTE: HERE TAG IS SIMPLIFIED AS 'TK_STD' AND FOLLOWED BY A TYPE
 					if(DEBUG){
@@ -2355,7 +2357,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 408 "syntax.y"
+#line 410 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2371,7 +2373,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 418 "syntax.y"
+#line 420 "syntax.y"
     {
 				 	if(DEBUG){
 						printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2387,7 +2389,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 428 "syntax.y"
+#line 430 "syntax.y"
     {
 				 	if(DEBUG){
 						printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2404,7 +2406,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 439 "syntax.y"
+#line 441 "syntax.y"
     {
 				 	if(DEBUG){
 						printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2421,7 +2423,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 450 "syntax.y"
+#line 452 "syntax.y"
     {
 				 	if(DEBUG){
 						printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2438,7 +2440,7 @@ yyreduce:
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 461 "syntax.y"
+#line 463 "syntax.y"
     {
 				 	if(DEBUG){
 						printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2455,7 +2457,7 @@ yyreduce:
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 474 "syntax.y"
+#line 476 "syntax.y"
     {
 		//NOTE: IGNORE TK_VAR
 			if(DEBUG){
@@ -2472,7 +2474,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 485 "syntax.y"
+#line 487 "syntax.y"
     {
 		  	if(DEBUG){
 		  		printf("PARSING VAR PART NULL\n");
@@ -2487,7 +2489,7 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 496 "syntax.y"
+#line 498 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING VAR DECL LIST\n");
@@ -2504,7 +2506,7 @@ yyreduce:
   case 40:
 
 /* Line 1455 of yacc.c  */
-#line 507 "syntax.y"
+#line 509 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING VAR DECL LIST : FIRST ONE\n");
@@ -2520,7 +2522,7 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 519 "syntax.y"
+#line 521 "syntax.y"
     {
 			//NOTE: IGNORE TK_COLON TK_SEMI
 			if(DEBUG){
@@ -2538,7 +2540,7 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 533 "syntax.y"
+#line 535 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ROUTINE_PART\n");
@@ -2555,7 +2557,7 @@ yyreduce:
   case 43:
 
 /* Line 1455 of yacc.c  */
-#line 544 "syntax.y"
+#line 546 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ROUTINE_PART\n");
@@ -2572,7 +2574,7 @@ yyreduce:
   case 44:
 
 /* Line 1455 of yacc.c  */
-#line 555 "syntax.y"
+#line 557 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ROUTINE_PART\n");
@@ -2588,7 +2590,7 @@ yyreduce:
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 565 "syntax.y"
+#line 567 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ROUTINE_PART\n");
@@ -2604,7 +2606,7 @@ yyreduce:
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 575 "syntax.y"
+#line 577 "syntax.y"
     {
 			 	if(DEBUG){
 			 		printf("PARSING ROUTINE_PART NULL\n");
@@ -2619,7 +2621,7 @@ yyreduce:
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 586 "syntax.y"
+#line 588 "syntax.y"
     {
 				//NOTE: IGNORE TK_SEMI
 				if(DEBUG){
@@ -2637,7 +2639,7 @@ yyreduce:
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 600 "syntax.y"
+#line 602 "syntax.y"
     {
 				//NOTE: IGNORE TK_FUNCTION TK_COLON
 				if(DEBUG){
@@ -2656,7 +2658,7 @@ yyreduce:
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 615 "syntax.y"
+#line 617 "syntax.y"
     {
 				//NOTE: IGNORE TK_SEMI PROCEDURE_DECL IS 'TK_PROC_DECL'
 				if(DEBUG){
@@ -2674,7 +2676,7 @@ yyreduce:
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 629 "syntax.y"
+#line 631 "syntax.y"
     {
 				//NOTE: IGNORE TK_PROCEDURE  PROCEDURE_HEAD IS 'TK_PROC_HEAD'
 				if(DEBUG){
@@ -2692,7 +2694,7 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 643 "syntax.y"
+#line 645 "syntax.y"
     {
 			//NOTE: PARAMETERS IS 'TK_PARA', IGNORE TK_LP TK_RP
 				if(DEBUG){
@@ -2709,7 +2711,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 654 "syntax.y"
+#line 656 "syntax.y"
     {
 		   	//NOTE: PARAMETERS IS 'TK_PARA'
 		   		if(DEBUG){
@@ -2725,7 +2727,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 666 "syntax.y"
+#line 668 "syntax.y"
     {
 				//NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
 				if(DEBUG){
@@ -2743,7 +2745,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 678 "syntax.y"
+#line 680 "syntax.y"
     {
 				//NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
 				if(DEBUG){
@@ -2760,7 +2762,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 691 "syntax.y"
+#line 693 "syntax.y"
     {
 					//NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
 					if(DEBUG){
@@ -2778,7 +2780,7 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 703 "syntax.y"
+#line 705 "syntax.y"
     {
 					//NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
 					if(DEBUG){
@@ -2796,7 +2798,7 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 717 "syntax.y"
+#line 719 "syntax.y"
     {
 				//NOTE: IGNORE TK_VAR VAR_PARA_LIST IS "TK_VAR"
 				if(DEBUG){
@@ -2813,7 +2815,7 @@ yyreduce:
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 730 "syntax.y"
+#line 732 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING VAL PARA LIST\n");
@@ -2829,7 +2831,7 @@ yyreduce:
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 742 "syntax.y"
+#line 744 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ROUTINE BODY\n");
@@ -2845,7 +2847,7 @@ yyreduce:
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 754 "syntax.y"
+#line 756 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING STMT LIST\n");
@@ -2862,7 +2864,7 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 765 "syntax.y"
+#line 767 "syntax.y"
     {
 		  	if(DEBUG){
 		  		printf("PARSING STMT LIST NULL\n");
@@ -2877,7 +2879,7 @@ yyreduce:
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 776 "syntax.y"
+#line 778 "syntax.y"
     {
 		//NOTE: IGNORE TK_COLON
 		if(DEBUG){
@@ -2895,7 +2897,7 @@ yyreduce:
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 788 "syntax.y"
+#line 790 "syntax.y"
     {
 	 	//NOTE: IGNORE TK_COLON
 	 	if(DEBUG){
@@ -2912,7 +2914,7 @@ yyreduce:
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 801 "syntax.y"
+#line 803 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING ASSIGN STMT\n");
@@ -2928,7 +2930,7 @@ yyreduce:
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 811 "syntax.y"
+#line 813 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING PROC STMT\n");
@@ -2944,7 +2946,7 @@ yyreduce:
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 821 "syntax.y"
+#line 823 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING CP STMT\n");
@@ -2960,7 +2962,7 @@ yyreduce:
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 831 "syntax.y"
+#line 833 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING IF STMT\n");
@@ -2976,7 +2978,7 @@ yyreduce:
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 841 "syntax.y"
+#line 843 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING REPEAT STMT\n");
@@ -2992,7 +2994,7 @@ yyreduce:
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 851 "syntax.y"
+#line 853 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING WHILE STMT\n");
@@ -3008,7 +3010,7 @@ yyreduce:
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 861 "syntax.y"
+#line 863 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING FOR STMT\n");
@@ -3024,7 +3026,7 @@ yyreduce:
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 871 "syntax.y"
+#line 873 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING CASE STMT\n");
@@ -3040,7 +3042,7 @@ yyreduce:
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 881 "syntax.y"
+#line 883 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING GOTO STMT\n");
@@ -3056,7 +3058,7 @@ yyreduce:
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 893 "syntax.y"
+#line 895 "syntax.y"
     {
 				//NOTE: IGNORE TK_ASSIGN
 				if(DEBUG){
@@ -3074,7 +3076,7 @@ yyreduce:
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 905 "syntax.y"
+#line 907 "syntax.y"
     {
 				//NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
 				if(DEBUG){
@@ -3093,7 +3095,7 @@ yyreduce:
   case 75:
 
 /* Line 1455 of yacc.c  */
-#line 918 "syntax.y"
+#line 920 "syntax.y"
     {
 				//NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
 				if(DEBUG){
@@ -3113,7 +3115,7 @@ yyreduce:
   case 76:
 
 /* Line 1455 of yacc.c  */
-#line 934 "syntax.y"
+#line 936 "syntax.y"
     {
 			if(DEBUG){
           		printf("PARSING PROC STMT\n");
@@ -3129,7 +3131,7 @@ yyreduce:
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 944 "syntax.y"
+#line 946 "syntax.y"
     {
           	//NOTE: IGNROE TK_LP TK_RP
           	if(DEBUG){
@@ -3147,7 +3149,7 @@ yyreduce:
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 956 "syntax.y"
+#line 958 "syntax.y"
     {
 			if(DEBUG){
           		printf("PARSING PROC STMT\n");
@@ -3163,7 +3165,7 @@ yyreduce:
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 966 "syntax.y"
+#line 968 "syntax.y"
     {
           	//NOTE: IGNROE TK_LP TK_RP
           	if(DEBUG){
@@ -3181,7 +3183,7 @@ yyreduce:
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 978 "syntax.y"
+#line 980 "syntax.y"
     {
           	//NOTE: IGNROE TK_LP TK_RP
           	if(DEBUG){
@@ -3199,7 +3201,7 @@ yyreduce:
   case 81:
 
 /* Line 1455 of yacc.c  */
-#line 992 "syntax.y"
+#line 994 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING CP STMT\n");
@@ -3215,7 +3217,7 @@ yyreduce:
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 1004 "syntax.y"
+#line 1006 "syntax.y"
     {
 			//NOTE: IGNORE TK_IF TK_THEN
 			if(DEBUG){
@@ -3234,7 +3236,7 @@ yyreduce:
   case 83:
 
 /* Line 1455 of yacc.c  */
-#line 1019 "syntax.y"
+#line 1021 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ELSE CLAUSE\n");
@@ -3250,7 +3252,7 @@ yyreduce:
   case 84:
 
 /* Line 1455 of yacc.c  */
-#line 1029 "syntax.y"
+#line 1031 "syntax.y"
     {
 				if(DEBUG){
 					printf("PARSING ELSE CLAUSE NULL\n");
@@ -3265,7 +3267,7 @@ yyreduce:
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 1040 "syntax.y"
+#line 1042 "syntax.y"
     {
 				//NOTE: IGNORE TK_REPEAR TK_UNTIL
 				if(DEBUG){
@@ -3283,7 +3285,7 @@ yyreduce:
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 1054 "syntax.y"
+#line 1056 "syntax.y"
     {
 				//NOTE: IGNORE TK_WHILE TK_DO
 				if(DEBUG){
@@ -3301,7 +3303,7 @@ yyreduce:
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 1068 "syntax.y"
+#line 1070 "syntax.y"
     {
 			//NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
 			if(DEBUG){
@@ -3322,7 +3324,7 @@ yyreduce:
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 1085 "syntax.y"
+#line 1087 "syntax.y"
     {
 		//NOTE: THERE IS NO DIR
 			if(DEBUG){
@@ -3336,7 +3338,7 @@ yyreduce:
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 1093 "syntax.y"
+#line 1095 "syntax.y"
     {
 		//NOTE: THERE IS NO DIR
 			if(DEBUG){
@@ -3350,7 +3352,7 @@ yyreduce:
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 1103 "syntax.y"
+#line 1105 "syntax.y"
     {
 			//NOTE: IGNORE TK_CASE TK_OF TK_END
 			if(DEBUG){
@@ -3368,7 +3370,7 @@ yyreduce:
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 1117 "syntax.y"
+#line 1119 "syntax.y"
     {
 			//NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
 			if(DEBUG){
@@ -3386,7 +3388,7 @@ yyreduce:
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 1129 "syntax.y"
+#line 1131 "syntax.y"
     {
 			//NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
 			if(DEBUG){
@@ -3403,7 +3405,7 @@ yyreduce:
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 1142 "syntax.y"
+#line 1144 "syntax.y"
     {
 			//NOTE: IGNORE TK_COLON TK_SEMI
 			if(DEBUG){
@@ -3421,7 +3423,7 @@ yyreduce:
   case 94:
 
 /* Line 1455 of yacc.c  */
-#line 1154 "syntax.y"
+#line 1156 "syntax.y"
     {
         	//NOTE: IGNORE TK_COLON TK_SEMI
 			if(DEBUG){
@@ -3439,7 +3441,7 @@ yyreduce:
   case 95:
 
 /* Line 1455 of yacc.c  */
-#line 1168 "syntax.y"
+#line 1170 "syntax.y"
     {
 		//NOTE: GOTO STMT IS ACTUALLY TK_INTEGER
 			if(DEBUG){
@@ -3454,7 +3456,7 @@ yyreduce:
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 1179 "syntax.y"
+#line 1181 "syntax.y"
     {
 					//NOTE: IGNORE TK_COMMA
 					if(DEBUG){
@@ -3472,7 +3474,7 @@ yyreduce:
   case 97:
 
 /* Line 1455 of yacc.c  */
-#line 1191 "syntax.y"
+#line 1193 "syntax.y"
     {
 					if(DEBUG){
 						printf("PARSING EXP LIST : FIRST ONE\n");
@@ -3488,7 +3490,7 @@ yyreduce:
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 1203 "syntax.y"
+#line 1205 "syntax.y"
     {
 			//NOTE: IGNORE TK_GE TK_GT TK_LE TK_LT TK_EQUAL TK_UNEQUAL
 		   		if(DEBUG){
@@ -3506,7 +3508,7 @@ yyreduce:
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 1215 "syntax.y"
+#line 1217 "syntax.y"
     {
 		   		if(DEBUG){
 		   			printf("PARSING EXPRESSION\n");
@@ -3523,7 +3525,7 @@ yyreduce:
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 1226 "syntax.y"
+#line 1228 "syntax.y"
     {
 		   		if(DEBUG){
 		   			printf("PARSING EXPRESSION\n");
@@ -3540,7 +3542,7 @@ yyreduce:
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 1237 "syntax.y"
+#line 1239 "syntax.y"
     {
 		   		if(DEBUG){
 		   			printf("PARSING EXPRESSION\n");
@@ -3557,7 +3559,7 @@ yyreduce:
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 1248 "syntax.y"
+#line 1250 "syntax.y"
     {
 		   		if(DEBUG){
 		   			printf("PARSING EXPRESSION\n");
@@ -3574,7 +3576,7 @@ yyreduce:
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 1259 "syntax.y"
+#line 1261 "syntax.y"
     {
 		   		if(DEBUG){
 		   			printf("PARSING EXPRESSION\n");
@@ -3591,7 +3593,7 @@ yyreduce:
   case 104:
 
 /* Line 1455 of yacc.c  */
-#line 1270 "syntax.y"
+#line 1272 "syntax.y"
     {
 		   		if(DEBUG){
 		   			printf("PARSING EXPRESSION : FIRST ONE\n");
@@ -3607,7 +3609,7 @@ yyreduce:
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 1282 "syntax.y"
+#line 1284 "syntax.y"
     {
 	 //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_PLUS
 	 	if(DEBUG){
@@ -3625,7 +3627,7 @@ yyreduce:
   case 106:
 
 /* Line 1455 of yacc.c  */
-#line 1294 "syntax.y"
+#line 1296 "syntax.y"
     {
 	 //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
 	 	if(DEBUG){
@@ -3643,7 +3645,7 @@ yyreduce:
   case 107:
 
 /* Line 1455 of yacc.c  */
-#line 1306 "syntax.y"
+#line 1308 "syntax.y"
     {
 	 //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
 	 	if(DEBUG){
@@ -3661,7 +3663,7 @@ yyreduce:
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 1318 "syntax.y"
+#line 1320 "syntax.y"
     {
 	 //NOTE: expr IS EXPR, expression IS EXP
 	 	if(DEBUG){
@@ -3678,7 +3680,7 @@ yyreduce:
   case 109:
 
 /* Line 1455 of yacc.c  */
-#line 1331 "syntax.y"
+#line 1333 "syntax.y"
     {
 	 	if(DEBUG){
 	 		printf("PARSING TK_MUL\n");
@@ -3695,7 +3697,7 @@ yyreduce:
   case 110:
 
 /* Line 1455 of yacc.c  */
-#line 1342 "syntax.y"
+#line 1344 "syntax.y"
     {
 	 	if(DEBUG){
 	 		printf("PARSING TK_DIV\n");
@@ -3712,7 +3714,7 @@ yyreduce:
   case 111:
 
 /* Line 1455 of yacc.c  */
-#line 1353 "syntax.y"
+#line 1355 "syntax.y"
     {
 	 	if(DEBUG){
 	 		printf("PARSING TK_MOD\n");
@@ -3729,7 +3731,7 @@ yyreduce:
   case 112:
 
 /* Line 1455 of yacc.c  */
-#line 1364 "syntax.y"
+#line 1366 "syntax.y"
     {
 	 	if(DEBUG){
 	 		printf("PARSING TK_AND\n");
@@ -3746,7 +3748,7 @@ yyreduce:
   case 113:
 
 /* Line 1455 of yacc.c  */
-#line 1375 "syntax.y"
+#line 1377 "syntax.y"
     {
 	 	if(DEBUG){
 	 		printf("PARSING TERM : FIRST ONE\n");
@@ -3762,7 +3764,7 @@ yyreduce:
   case 114:
 
 /* Line 1455 of yacc.c  */
-#line 1387 "syntax.y"
+#line 1389 "syntax.y"
     {
 	//NOTE: THERE IS NO TK_FACTOR BUT 'TK_FACTOR' FOLLOWED BY A TYPE
 		if(DEBUG){
@@ -3779,7 +3781,7 @@ yyreduce:
   case 115:
 
 /* Line 1455 of yacc.c  */
-#line 1398 "syntax.y"
+#line 1400 "syntax.y"
     {
 	//NOTE: IGNORE TK_LP TK_RP
 		if(DEBUG){
@@ -3797,7 +3799,7 @@ yyreduce:
   case 116:
 
 /* Line 1455 of yacc.c  */
-#line 1410 "syntax.y"
+#line 1412 "syntax.y"
     {
 	//NOTE: IGNORE TK_LP TK_RP
 		if(DEBUG){
@@ -3815,7 +3817,7 @@ yyreduce:
   case 117:
 
 /* Line 1455 of yacc.c  */
-#line 1422 "syntax.y"
+#line 1424 "syntax.y"
     {
 		if(DEBUG){
 			printf("PARSING FACTOR \n");
@@ -3831,7 +3833,7 @@ yyreduce:
   case 118:
 
 /* Line 1455 of yacc.c  */
-#line 1432 "syntax.y"
+#line 1434 "syntax.y"
     {
 	//NOTE: IGNORE TK_LP TK_RP
 		if(DEBUG){
@@ -3848,7 +3850,7 @@ yyreduce:
   case 119:
 
 /* Line 1455 of yacc.c  */
-#line 1443 "syntax.y"
+#line 1445 "syntax.y"
     {
 		if(DEBUG){
 			printf("PARSING FACTOR \n");
@@ -3864,7 +3866,7 @@ yyreduce:
   case 120:
 
 /* Line 1455 of yacc.c  */
-#line 1453 "syntax.y"
+#line 1455 "syntax.y"
     {
 		if(DEBUG){
 			printf("PARSING FACTOR \n");
@@ -3880,7 +3882,7 @@ yyreduce:
   case 121:
 
 /* Line 1455 of yacc.c  */
-#line 1463 "syntax.y"
+#line 1465 "syntax.y"
     {
 	//NOTE: IGNORE TK_LB TK_RB
 		if(DEBUG){
@@ -3898,7 +3900,7 @@ yyreduce:
   case 122:
 
 /* Line 1455 of yacc.c  */
-#line 1475 "syntax.y"
+#line 1477 "syntax.y"
     {
 	//NOTE: ID->ID IS IN ONE NODE
 		if(DEBUG){
@@ -3916,7 +3918,7 @@ yyreduce:
   case 123:
 
 /* Line 1455 of yacc.c  */
-#line 1489 "syntax.y"
+#line 1491 "syntax.y"
     {
 			//NOTE: IGNORE TK_COMMA
 			if(DEBUG){
@@ -3934,7 +3936,7 @@ yyreduce:
   case 124:
 
 /* Line 1455 of yacc.c  */
-#line 1501 "syntax.y"
+#line 1503 "syntax.y"
     {
 			if(DEBUG){
 				printf("PARSING ARGS LIST : FIRST ONE\n");
@@ -3950,7 +3952,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 3954 "y.tab.c"
+#line 3956 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -4162,7 +4164,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 1513 "syntax.y"
+#line 1515 "syntax.y"
 
 
 int yyerror(char* s){
@@ -4176,11 +4178,14 @@ int yyerror(char* s){
 void preorder(NODE* root){
 	int i;
 	printf("TYPE:%d; CHILDREN:%d\n", root->type, root->child_number);
-	printf("TYPE:%d; CHILDREN:%d\n", root->child[0]->type, root->child[0]->child_number);
-	printf("TYPE:%d; CHILDREN:%d\n", root->child[1]->type, root->child[1]->child_number);
 	for(i=0;i<root->child_number;i++){
-		//preorder(root->child[i]);
+		preorder(root->child[i]);
 	}
+}
+
+void cpString(char** str1, char** str2){
+	*str1 = (char*)malloc(sizeof(char) * (strlen(*str2) + 1));
+	strcpy(*str1, *str2);
 }
 
 int main(){

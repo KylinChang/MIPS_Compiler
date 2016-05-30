@@ -38,9 +38,9 @@
 #line 1 "syntax.y"
 
 typedef struct NODE{
-    char name[256];
-    char ch;
+    char* name;
     char* str;
+    char ch;
     int type;
     int ival;
     double dval;

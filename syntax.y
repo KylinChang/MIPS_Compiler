@@ -1,8 +1,8 @@
 %code requires{
 typedef struct NODE{
-    char name[256];
-    char ch;
+    char* name;
     char* str;
+    char ch;
     int type;
     int ival;
     double dval;
@@ -30,6 +30,8 @@ extern FILE* yyin;
 #define NODE_POINTER_SIZE sizeof(NODE*)
 #define NEWNODE (NODE*)malloc(NODE_SIZE)
 #define MALLOC(num) (NODE**)malloc(NODE_POINTER_SIZE*num)
+
+void cpString(char** str1, char** str2);
 
 int DEBUG=1;
 %}
@@ -74,13 +76,14 @@ program : program_head routine TK_DOT{
 		;
 
 program_head : TK_PROGRAM TK_ID TK_SEMI{
+		//NOTE: PROGRAM HEAD ACTUALLY IS TK_ID
 			if(DEBUG){
 				printf("PROGRAM HEAD:%s\n", $2->name);
 			}
 			$$ = NEWNODE;
 			$$ = $2;
 			$$->type = TK_PROGRAM_HEAD;
-			//strcpy($$->name, $2->name);
+			cpString(&($$->name), &($2->name));
 			$$->child_number = 0;
 			$$->child = NULL;
 		}
@@ -1523,11 +1526,14 @@ int yyerror(char* s){
 void preorder(NODE* root){
 	int i;
 	printf("TYPE:%d; CHILDREN:%d\n", root->type, root->child_number);
-	printf("TYPE:%d; CHILDREN:%d\n", root->child[0]->type, root->child[0]->child_number);
-	printf("TYPE:%d; CHILDREN:%d\n", root->child[1]->type, root->child[1]->child_number);
 	for(i=0;i<root->child_number;i++){
-		//preorder(root->child[i]);
+		preorder(root->child[i]);
 	}
+}
+
+void cpString(char** str1, char** str2){
+	*str1 = (char*)malloc(sizeof(char) * (strlen(*str2) + 1));
+	strcpy(*str1, *str2);
 }
 
 int main(){
