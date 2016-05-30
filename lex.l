@@ -25,8 +25,8 @@ DIGITS ([0-9])+
 INTEGER_10 ("+"|"-")?{DIGITS}
 INTEGER $?("+"|"-")?{DIGITS}
 REAL {INTEGER_10}"."{DIGITS}(E{INTEGER_10})?
-CHAR '[A-Z]'|''''
-STRING "\'[A-Z]([A-Z])+\'"
+CHAR '([^'\n]|'')'
+STRING '([^\'\n]|'')*'
 
 TYPE "TYPE"
 ARRAY "ARRAY"
