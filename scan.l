@@ -1,7 +1,5 @@
 %option caseless
 %{
-#include "node.h"
-#include "y.tab.h"
 /*
 	* <del>TK_MUL有修改成TK_STAR</del>
 	* <del>不知道文档里的DIV表示"/"还是"DIV"，我就当实数除"/"处理了</del>
@@ -23,10 +21,19 @@
 		* 修改了CHAR和STRING的判断条件，STRING可判断多单引号情况，且将空字符归为STRING(ubuntu上的free pascal是这样)
 */
 
-void endlessComment();  /*  用于处理注释只有前面一半的情况  */
+#include "node.h"
+#include "y.tab.h"
+#define min(a,b) ( ((a)>(b)) ? (b):(a) )
 
 extern int DEBUG;
 extern void cpString(char** str1, char** str2);
+char *genString(char *s, int len) {
+	char *ss = (char*)malloc(sizeof(char) * (len + 1));
+	strcpy(ss, s);
+	return ss;
+}
+
+void endlessComment();  /*  用于处理注释只有前面一半的情况  */
 %}
 
 DOT "."
@@ -37,7 +44,7 @@ EQUAL "="
 
 DIGITS ([0-9])+
 INTEGER_10 ("+"|"-")?{DIGITS}
-INTEGER $?("+"|"-")?{DIGITS}
+INTEGER ("+"|"-")?$?{DIGITS}
 REAL {INTEGER_10}"."{DIGITS}(E{INTEGER_10})?
 CHAR '([^'\n]|'')'
 STRING '([^\'\n]|'')*'
@@ -94,27 +101,41 @@ SYS_TYPE "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"ex
 ID [A-Z]([_A-Z0-9])*
 
 %%
-{DOT} {
-	return TK_DOT;
-}
-{PROGRAM} {
-	return TK_PROGRAM;
-}
-{SEMI} {
-	return TK_SEMI;
-}
+{DOT} { return TK_DOT; }
+{PROGRAM} { return TK_PROGRAM; }
+{SEMI} { return TK_SEMI; }
 {CONST} { return TK_CONST; }
 {EQUAL} { return TK_EQUAL; }
 
-{REAL} { return TK_REAL; }  /*  实数类型应写在整数类型之上  */
-{INTEGER} {	
+{REAL} {
+	yylval = NEWNODE(TK_REAL);
+	sscanf(yytext, "%lf", &yylval->dval);
+	return TK_REAL;
+}  /*  实数类型应写在整数类型之上  */
+{INTEGER} {
 	yylval = NEWNODE(TK_INTEGER);
-	sscanf(yytext, "%d", &yylval->ival);
-	yylval->child =  NULL;
+	char *ts = yytext;
+	int sign = 1;
+	if (*ts == '+' || *ts == '-') {
+		sign = (*ts=='+') ? 1 : -1;
+		ts++;
+	}
+	if (*ts == '$') sscanf(++ts, "%x", &yylval->ival);
+	else            sscanf(ts, "%d", &yylval->ival);
+	yylval->ival *= sign;
 	return TK_INTEGER;
 }
-{CHAR} { return TK_CHAR; }  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
-{STRING} { return TK_STRING; }
+{CHAR} {
+	yylval = NEWNODE(TK_CHAR);
+	sscanf(yytext+1, "%c", &yylval->ch);  /*  单引号的情况也可处理  */
+	return TK_CHAR;
+}  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
+{STRING} {
+	yylval = NEWNODE(TK_STRING);
+	yytext[min(256, yyleng-1)]=0;
+	yylval->str = genString(yytext+1, min(255, yyleng-2));
+	return TK_STRING;
+}  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
 
 {TYPE} { return TK_TYPE; }
 {ARRAY} { return TK_ARRAY; }
@@ -137,7 +158,11 @@ ID [A-Z]([_A-Z0-9])*
 {FUNCTION} { return TK_FUNCTION; }
 {PROCEDURE} { return TK_PROCEDURE; }
 {ASSIGN} { return TK_ASSIGN; }
-{SYS_PROC} { return TK_SYS_PROC; }
+{SYS_PROC} {
+	yylval = NEWNODE(TK_SYS_PROC);
+	yylval->name = genString(yytext, yyleng);
+	return TK_SYS_PROC;
+}
 {READ} { return TK_READ; }
 {BEGIN} {
 	return TK_BEGIN;
@@ -162,21 +187,34 @@ ID [A-Z]([_A-Z0-9])*
 {PLUS} { return TK_PLUS; }
 {OR} { return TK_OR; }
 {MUL} { return TK_MUL; }
-{DIV} { return TK_DIV; }
+{DIV} {
+	yylval = NEWNODE(TK_DIV);
+	yylval->name = genString(yytext, yyleng);
+	return TK_DIV;
+}
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
-{SYS_FUNCT} { return TK_SYS_FUNCT; }
+{SYS_FUNCT} {
+	yylval = NEWNODE(TK_SYS_FUNCT);
+	yylval->name = genString(yytext, yyleng);
+	return TK_SYS_FUNCT;
+}
 {NOT} { return TK_NOT; }
 
-{SYS_CON} { return TK_SYS_CON; }
-{SYS_TYPE} { return TK_SYS_TYPE; }
+{SYS_CON} {
+	yylval = NEWNODE(TK_SYS_CON);
+	yylval->name = genString(yytext, yyleng);
+	return TK_SYS_CON;
+}
+{SYS_TYPE} {
+	yylval = NEWNODE(TK_SYS_TYPE);
+	yylval->name = genString(yytext, yyleng);
+	return TK_SYS_TYPE;
+}
 
 {ID} {
 	yylval = NEWNODE(TK_ID);
 	cpString(&yylval->name, &yytext);
-	yylval->child_number = 0;
-	yylval->child = NULL;
-	yylval->attr = NULL;
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 
