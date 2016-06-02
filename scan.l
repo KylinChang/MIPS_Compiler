@@ -26,6 +26,7 @@
 void endlessComment();  /*  用于处理注释只有前面一半的情况  */
 
 extern int DEBUG;
+extern void cpString(char** str1, char** str2);
 %}
 
 DOT "."
@@ -86,20 +87,6 @@ MOD "MOD"
 AND "AND"
 SYS_FUNCT "abs"|"chr"|"odd"|"ord"|"pred"|"sqr"|"sqrt"|"succ"
 NOT "NOT"
-
-EXTERNAL "EXTERNAL"|"EXTERN"
-FORWARD "FORWARD"
-IN "IN"
-LABEL "LABEL"
-NIL "NIL"
-OTHERWISE "OTHERWISE"
-PACKED "PACKED"
-FILE "FILE"
-SET "SET"
-WITH "WITH"
-STARSTAR "**"
-UPARROW "->"|"^"
-
 
 SYS_CON "maxint"|"maxlongint"|"true"|"false"
 SYS_TYPE "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"extended"|"comp"|"currency"|"real"|"ansichar"|"widechar"|"char"|"string"|"bytebool"|"wordbool"|"longbool"|"boolean"|"byte"|"word"|"dword"|"longword"|"cardinal"|"text"|"TDateTime"
@@ -176,30 +163,15 @@ ID [A-Z]([_A-Z0-9])*
 {OR} { return TK_OR; }
 {MUL} { return TK_MUL; }
 {DIV} { return TK_DIV; }
-{SLASH} { return TK_SLASH; }
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
 {SYS_FUNCT} { return TK_SYS_FUNCT; }
 {NOT} { return TK_NOT; }
 
-{EXTERNAL} { return EXTERNAL; }
-{FORWARD} { return FORWARD; }
-{IN} { return TK_IN; }  /*  ??  */
-{LABEL} { return LABEL; }
-{NIL} { return NIL; }
-{OTHERWISE} { return TK_OTHERWISE; }
-{PACKED} { return PACKED; }
-{FILE} { return PFILE; }
-{SET} { return SET; }
-{WITH} { return WITH; }
-{STARSTAR} { return STARSTAR; }
-{UPARROW} { return TK_UPARROW; }
-
-
 {SYS_CON} { return TK_SYS_CON; }
 {SYS_TYPE} { return TK_SYS_TYPE; }
 
-[a-zA-Z]([_a-zA-Z0-9])* {
+{ID} {
 	yylval = NEWNODE(TK_ID);
 	cpString(&yylval->name, &yytext);
 	yylval->child_number = 0;
