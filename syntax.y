@@ -39,6 +39,7 @@ int DEBUG=1;
 		TK_STD_SYS_TYPE TK_STD_ID TK_STD_NL TK_STD_DD TK_DL TK_VAR_DECL TK_FUNC_DECL TK_FUNC_HEAD 
 		TK_PROC_DECL TK_PROC_HEAD TK_PARA TK_PARA_DL TK_PARA_TL TK_PROC
 		TK_CASE_EL TK_CASE_EXPR TK_EXPR TK_ASSIGN_ID TK_ASSIGN_ID_EXPR TK_ASSIGN_DD
+		TK_PROC_ID TK_PROC_ID_ARGS TK_PROC_SYS TK_PROC_SYS_ARGS TK_PROC_READ
 
 %%
 program : program_head routine TK_DOT{
@@ -770,7 +771,7 @@ proc_stmt : TK_ID{
 			if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_ID);
           	$$->child = MALLOC($$,1);
           	$$->child[0] = $1;
 		}
@@ -779,7 +780,7 @@ proc_stmt : TK_ID{
           	if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_ID_ARGS);
           	$$->child = MALLOC($$,2);
           	$$->child[0] = $1;
           	$$->child[1] = $3;
@@ -788,7 +789,7 @@ proc_stmt : TK_ID{
 			if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_SYS);
           	$$->child = MALLOC($$,1);
           	$$->child[0] = $1;
 		}
@@ -797,7 +798,7 @@ proc_stmt : TK_ID{
           	if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_SYS_ARGS);
           	$$->child = MALLOC($$,2);
           	$$->child[0] = $1;
           	$$->child[1] = $3;
@@ -807,7 +808,7 @@ proc_stmt : TK_ID{
           	if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_READ);
           	$$->child = MALLOC($$,2);
           	$$->child[0] = $1;
           	$$->child[1] = $3;

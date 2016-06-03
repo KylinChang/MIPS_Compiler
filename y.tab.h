@@ -172,7 +172,12 @@ NODE* ROOT;
      TK_EXPR = 373,
      TK_ASSIGN_ID = 374,
      TK_ASSIGN_ID_EXPR = 375,
-     TK_ASSIGN_DD = 376
+     TK_ASSIGN_DD = 376,
+     TK_PROC_ID = 377,
+     TK_PROC_ID_ARGS = 378,
+     TK_PROC_SYS = 379,
+     TK_PROC_SYS_ARGS = 380,
+     TK_PROC_READ = 381
    };
 #endif
 /* Tokens.  */
@@ -295,6 +300,11 @@ NODE* ROOT;
 #define TK_ASSIGN_ID 374
 #define TK_ASSIGN_ID_EXPR 375
 #define TK_ASSIGN_DD 376
+#define TK_PROC_ID 377
+#define TK_PROC_ID_ARGS 378
+#define TK_PROC_SYS 379
+#define TK_PROC_SYS_ARGS 380
+#define TK_PROC_READ 381
 
 
 
