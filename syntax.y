@@ -11,7 +11,7 @@ NODE* ROOT;
 #include <stdlib.h>
 
 extern char* yytext;
-extern int yylineno;
+//extern int yylineno;
 extern FILE* yyin;
 
 int DEBUG=1;
@@ -38,7 +38,8 @@ int DEBUG=1;
 		TK_CONST_EL TK_TYPE_DL TK_TYPE_DEF TK_TYPE_DECL TK_FIELD_DL TK_FIELD_DECL TK_NL
 		TK_STD_SYS_TYPE TK_STD_ID TK_STD_NL TK_STD_DD TK_DL TK_VAR_DECL TK_FUNC_DECL TK_FUNC_HEAD 
 		TK_PROC_DECL TK_PROC_HEAD TK_PARA TK_PARA_DL TK_PARA_TL TK_PROC
-		TK_CASE_EL TK_CASE_EXPR TK_EXPR
+		TK_CASE_EL TK_CASE_EXPR TK_EXPR TK_ASSIGN_ID TK_ASSIGN_ID_EXPR TK_ASSIGN_DD
+		TK_PROC_ID TK_PROC_ID_ARGS TK_PROC_SYS TK_PROC_SYS_ARGS TK_PROC_READ
 
 %%
 program : program_head routine TK_DOT{
@@ -736,7 +737,7 @@ assign_stmt : TK_ID TK_ASSIGN expression{
 				if(DEBUG){
 					printf("PARSING ASSIGN\n");
 				}
-				$$ = NEWNODE(TK_ASSIGN);
+				$$ = NEWNODE(TK_ASSIGN_ID);
 				$$->child = MALLOC($$,2);
 				$$->child[0] = $1;
 				$$->child[1] = $3;
@@ -746,7 +747,7 @@ assign_stmt : TK_ID TK_ASSIGN expression{
 				if(DEBUG){
 					printf("PARSING ASSIGN\n");
 				}
-				$$ = NEWNODE(TK_ASSIGN);
+				$$ = NEWNODE(TK_ASSIGN_ID_EXPR);
 				$$->child = MALLOC($$,3);
 				$$->child[0] = $1;
 				$$->child[1] = $3;
@@ -757,7 +758,7 @@ assign_stmt : TK_ID TK_ASSIGN expression{
 				if(DEBUG){
 					printf("PARSING ASSIGN\n");
 				}
-				$$ = NEWNODE(TK_ASSIGN);
+				$$ = NEWNODE(TK_ASSIGN_DD);
 				$$->child = MALLOC($$,2);
 				$$->child[0] = $1;
 				$$->child[1] = $5;
@@ -770,7 +771,7 @@ proc_stmt : TK_ID{
 			if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_ID);
           	$$->child = MALLOC($$,1);
           	$$->child[0] = $1;
 		}
@@ -779,7 +780,7 @@ proc_stmt : TK_ID{
           	if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_ID_ARGS);
           	$$->child = MALLOC($$,2);
           	$$->child[0] = $1;
           	$$->child[1] = $3;
@@ -788,7 +789,7 @@ proc_stmt : TK_ID{
 			if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_SYS);
           	$$->child = MALLOC($$,1);
           	$$->child[0] = $1;
 		}
@@ -797,7 +798,7 @@ proc_stmt : TK_ID{
           	if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_SYS_ARGS);
           	$$->child = MALLOC($$,2);
           	$$->child[0] = $1;
           	$$->child[1] = $3;
@@ -807,7 +808,7 @@ proc_stmt : TK_ID{
           	if(DEBUG){
           		printf("PARSING PROC STMT\n");
           	}
-          	$$ = NEWNODE(TK_PROC);
+          	$$ = NEWNODE(TK_PROC_READ);
           	$$->child = MALLOC($$,2);
           	$$->child[0] = $1;
           	$$->child[1] = $3;
@@ -1255,7 +1256,7 @@ args_list : args_list TK_COMMA expression{
 int yyerror(char* s){
             printf("\n");
             printf( "%s\n", s);
-            fprintf(stderr, "line %d: ", yylineno);
+            //fprintf(stderr, "line %d: ", yylineno);
             fprintf(stderr, "\"%s\"\n", yytext);
             return 1;
 }

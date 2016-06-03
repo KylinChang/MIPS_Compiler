@@ -26,6 +26,7 @@
 #define min(a,b) ( ((a)>(b)) ? (b):(a) )
 
 extern int DEBUG;
+
 extern void cpString(char** str1, char** str2);
 char *genString(char *s, int len) {
 	char *ss = (char*)malloc(sizeof(char) * (len + 1));
@@ -222,7 +223,7 @@ ID [A-Z]([_A-Z0-9])*
 	char c;
 	while ((c=input())!='}') {
 		if (!(~c)) endlessComment();
-		if (c=='\n') yylineno++;
+		//if (c=='\n') yylineno++;
 	}
 }
 "(*" {
@@ -230,17 +231,17 @@ ID [A-Z]([_A-Z0-9])*
 	do {
 		while ((c=input())!='*') {
 			if (!(~c)) endlessComment();		
-			if (c=='\n') yylineno++;
+			//if (c=='\n') yylineno++;
 		}
 		while ((c=input())=='*');
 		if (!(~c)) endlessComment();
-		if (c=='\n') yylineno++;
+		//if (c=='\n') yylineno++;
 		if (c==')') break;
 	} while (1);
 }
 
 \n {
-	++yylineno;
+	//++yylineno;
 }
 \r {
 }
