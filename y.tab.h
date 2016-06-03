@@ -169,7 +169,10 @@ NODE* ROOT;
      TK_PROC = 370,
      TK_CASE_EL = 371,
      TK_CASE_EXPR = 372,
-     TK_EXPR = 373
+     TK_EXPR = 373,
+     TK_ASSIGN_ID = 374,
+     TK_ASSIGN_ID_EXPR = 375,
+     TK_ASSIGN_DD = 376
    };
 #endif
 /* Tokens.  */
@@ -289,6 +292,9 @@ NODE* ROOT;
 #define TK_CASE_EL 371
 #define TK_CASE_EXPR 372
 #define TK_EXPR 373
+#define TK_ASSIGN_ID 374
+#define TK_ASSIGN_ID_EXPR 375
+#define TK_ASSIGN_DD 376
 
 
 
