@@ -4,10 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 typedef struct NODE{
+    int type;
+    
     char* name;
     char* str;
     char ch;
-    int type;
     int ival;
     double dval;
     int child_number;

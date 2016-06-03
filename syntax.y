@@ -738,7 +738,7 @@ assign_stmt : TK_ID TK_ASSIGN expression{
 				}
 				$$ = NEWNODE(TK_ASSIGN);
 				$$->child = MALLOC($$,2);
-				$$->child[0] = $2;
+				$$->child[0] = $1;
 				$$->child[1] = $3;
 			}
 			| TK_ID TK_LB expression TK_RB TK_ASSIGN expression{
