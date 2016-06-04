@@ -1,18 +1,22 @@
 program test8;
+const
+PI=3.14 ;
+
+type
+color = a;
+
 var
     n,i:byte;
     a,b,c:longint;
-    book :record
-        title:integer;
-        author:integer;
-end;
+    book: record
+        title : integer;
+        author : integer;
+    end;
+
 
 procedure findMin(x, y:integer; var m:integer);
 begin
-    function hello();
-    var y:integer;
-    begin
-    end
+
     if x<y then
         m:=x
     else
@@ -46,7 +50,9 @@ begin
     end;
 
     1:
-    a := 1;
-    b := 2;
+        a:=1;
+        b:=2;
     goto 1;
+
+
 end.
