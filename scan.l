@@ -162,7 +162,11 @@ ID [A-Z]([_A-Z0-9])*
 	yylval->name = string(genString(yytext, yyleng));
 	return TK_SYS_PROC;
 }
-{READ} { return TK_READ; }
+{READ} {
+	yylval = NEWNODE(TK_READ);
+	yylval->name = string(genString(yytext, yyleng));
+	return TK_READ;
+}
 {BEGIN} {
 	return TK_BEGIN;
 }
@@ -174,8 +178,16 @@ ID [A-Z]([_A-Z0-9])*
 {WHILE} { return TK_WHILE; }
 {DO} { return TK_DO; }
 {FOR} { return TK_FOR; }
-{TO} { return TK_TO; }
-{DOWNTO} { return TK_DOWNTO; }
+{TO} {
+	yylval = NEWNODE(TK_TO);
+	yylval->name = string(genString(yytext, yyleng));
+	return TK_TO;
+}
+{DOWNTO} {
+	yylval = NEWNODE(TK_DOWNTO);
+	yylval->name = string(genString(yytext, yyleng));
+	return TK_DOWNTO;
+}
 {CASE} { return TK_CASE; }
 {GOTO} { return TK_GOTO; }
 {GE} { return TK_GE; }
@@ -221,7 +233,7 @@ ID [A-Z]([_A-Z0-9])*
 	char c;
 	while ((c=yyinput())!='}') {
 		if (!(~c)) endlessComment();
-		//if (c=='\n') yylineno++;
+		if (c=='\n') yylineno++;
 	}
 }
 "(*" {
@@ -229,28 +241,28 @@ ID [A-Z]([_A-Z0-9])*
 	do {
 		while ((c=yyinput())!='*') {
 			if (!(~c)) endlessComment();		
-			//if (c=='\n') yylineno++;
+			if (c=='\n') yylineno++;
 		}
 		while ((c=yyinput())=='*');
 		if (!(~c)) endlessComment();
-		//if (c=='\n') yylineno++;
+		if (c=='\n') yylineno++;
 		if (c==')') break;
 	} while (1);
 }
 
 \n {
-	//++yylineno;
+	++yylineno;
 }
 \r {
 }
-^[ \t\f]+ { /*  缩进  */ }
+^[ \t]+ { /*  缩进  */ }
 [ \t\f]+ { /*  skip whitespace  */ }
 . { return ERROR; }
 
 %%
 void endlessComment() {
 	fprintf(yyout, "Unexpected EOF inside comment\n");
-//	exit(1);
+	exit(1);
 }
 int yywrap() {
 	return 1;
