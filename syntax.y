@@ -31,7 +31,7 @@ NODE* ROOT;
         TK_CONST_EL TK_CONST_EL_END TK_TYPE_DL TK_TYPE_DL_END TK_TYPE_DEF TK_TYPE_DECL_SIM TK_TYPE_DECL_ARR TK_TYPE_DECL_REC
         TK_FIELD_DL TK_FIELD_DL_END TK_FIELD_DECL TK_NL TK_NL_END
         TK_STD_SYS_TYPE TK_STD_ID TK_STD_NL TK_STD_DD TK_STD_DD_M TK_STD_DD_MM TK_STD_DD_ID TK_DL TK_DL_END TK_VAR_DECL TK_FUNC_DECL TK_FUNC_HEAD 
-        TK_PROC_DECL TK_PROC_HEAD TK_PARA  TK_PARA_NULL TK_PARA_DL TK_PARA_DL_END TK_PARA_TL TK_PARA_TL_END TK_PROC
+        TK_PROC_DECL TK_PROC_HEAD TK_PARA  TK_PARA_NULL TK_PARA_DL TK_PARA_DL_END TK_PARA_TL_VAR TK_PARA_TL_VAL TK_PARA_TL_END TK_PROC
         TK_CASE_EL TK_CASE_EL_END TK_CASE_EXPR TK_CASE_EXPR_END TK_EXPR TK_ASSIGN_ID TK_ASSIGN_ID_EXPR TK_ASSIGN_DD
         TK_PROC_ID TK_PROC_ID_ARGS TK_PROC_SYS TK_PROC_SYS_ARGS TK_PROC_READ
 
@@ -109,21 +109,36 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
                     if(DEBUG){
                         printf("PARSING CONST EXPR LIST\n");
                     }
-                    $$ = NEWNODE(TK_CONST_EL);
-                    $$->child = MALLOC($$,3);
-                    $$->child[0] = $1;
-                    $$->child[1] = $2;
-                    $$->child[2] = $4;    
+                    $$ = $1;
+                    NODE* node = NEWNODE(TK_CONST_EL_END);
+                    node->child = MALLOC(node,2);
+                    node->child[0] = $2;
+                    node->child[1] = $4;
+
+                    NODE** tmp = $$->child;
+                    int old_child_number = $$->child_number;
+                    $$->child = MALLOC($$, (2+old_child_number));
+                    int i;
+                    for(i=0;i<old_child_number;i++){
+                    	$$->child[i] = tmp[i];
+                    }
+                    $$->child[i] = node;
+
+                    free(tmp);
                 }
                 | TK_ID TK_EQUAL const_value TK_SEMI{
                 //NOTE: IGNORE TK_EQUAL TK_SEMI
                     if(DEBUG){
                         printf("PARSING CONST EXPR LIST : FIRST ONE\n");
                     }
-                    $$ = NEWNODE(TK_CONST_EL_END);
-                    $$->child = MALLOC($$,2);
-                    $$->child[0] = $1;
-                    $$->child[1] = $3;
+                    $$ = NEWNODE(TK_CONST_EL);
+                    NODE* node = NEWNODE(TK_CONST_EL_END);
+                    $$->child = MALLOC($$,1);
+                    $$->child[0] = node;
+
+                    node->child = MALLOC($$,2);
+                    node->child[0] = $1;
+                    node->child[1] = $3;
                 }
                 ;
 
@@ -164,9 +179,7 @@ type_part : TK_TYPE type_decl_list{
             if(DEBUG){
                 printf("PARSING TYPE PART NULL\n");
             }
-            $$ = NEWNODE(TK_TYPE_PART);
-            $$->child = MALLOC($$,1);
-            $$->child[0] = $2;
+            $$ = $2;
         }
         |{
               //NOTE: IGNORE TYPE
@@ -183,16 +196,22 @@ type_decl_list : type_decl_list type_definition{
                     if(DEBUG){
                         printf("PARSING TYPE DECL LIST DEF\n");
                     }
-                    $$ = NEWNODE(TK_TYPE_DL);
-                    $$->child = MALLOC($$,2);
-                    $$->child[0] = $1;
-                    $$->child[1] = $2;
+                    $$ = $1;
+
+                    int old_child_number = $$->child_number;
+                    NODE** tmp = $$->child;
+                    $$->child = MALLOC($$, (1+old_child_number));
+                    int i;
+                    for(i=0;i<old_child_number;i++){
+                    	$$->child[i] = tmp[i];
+                    }
+                    $$->child[i] = $2;
                 }
                | type_definition{
                     if(DEBUG){
                         printf("PARSING TYPE DECL LIST\n");
                     }
-                    $$ = NEWNODE(TK_TYPE_DL_END);
+                    $$ = NEWNODE(TK_TYPE_DL);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $1;
                }
@@ -213,7 +232,7 @@ type_decl : simple_type_decl{
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
                 }
-                $$ = NEWNODE(TK_TYPE_DECL_SIM);
+                $$ = NEWNODE(TK_TYPE_DECL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
           }
@@ -221,7 +240,7 @@ type_decl : simple_type_decl{
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
                 }
-                $$ = NEWNODE(TK_TYPE_DECL_ARR);
+                $$ = NEWNODE(TK_TYPE_DECL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
           }
@@ -229,7 +248,7 @@ type_decl : simple_type_decl{
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
                 }
-                $$ = NEWNODE(TK_TYPE_DECL_REC);
+                $$ = NEWNODE(TK_TYPE_DECL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
           }
@@ -262,16 +281,23 @@ field_decl_list : field_decl_list field_decl{
                 if(DEBUG){
                     printf("PARSING FIELD DECL LIST\n");
                 }
-                $$ = NEWNODE(TK_FIELD_DL);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $2;
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
             }
             | field_decl{
                 if(DEBUG){
                     printf("PARSING FIELD DECL LIST : FIRST ONE\n");
                 }
-                $$ = NEWNODE(TK_FIELD_DL_END);
+                $$ = NEWNODE(TK_FIELD_DL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
             }
@@ -294,16 +320,23 @@ name_list : name_list TK_COMMA TK_ID{
                 if(DEBUG){
                     printf("PARSING NAME LIST\n");
                 }
-                $$ = NEWNODE(TK_NL);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+              	$$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $3;
+
+                free(tmp);
             }
               | TK_ID{
                   if(DEBUG){
                       printf("PARSING NAME LIST : FIRST ONE\n");
                   }
-                  $$ = NEWNODE(TK_NL_END);
+                  $$ = NEWNODE(TK_NL);
                   $$->child = MALLOC($$,1);
                   $$->child[0] = $1;
               }
@@ -380,17 +413,13 @@ var_part : TK_VAR var_decl_list{
             if(DEBUG){
                   printf("PARSING VAR PART NOT NULL\n");
               }
-              $$ = NEWNODE(TK_VAR_PART);
-            $$->child = MALLOC($$,1);
-            $$->child[0] = $2;
+              $$ = $2;
         }
         |{
               if(DEBUG){
                   printf("PARSING VAR PART NULL\n");
               }
-              $$ = NEWNODE(TK_VAR_PART_END);
-            $$->child_number = 0;
-            $$->child = NULL;
+             $$ = NULL;
         }
         ;
 
@@ -398,16 +427,23 @@ var_decl_list : var_decl_list var_decl{
                 if(DEBUG){
                     printf("PARSING VAR DECL LIST\n");
                 }
-                $$ = NEWNODE(TK_DL);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $2;
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
             }
             | var_decl{
                 if(DEBUG){
                     printf("PARSING VAR DECL LIST : FIRST ONE\n");
                 }
-                $$ = NEWNODE(TK_DL_END);
+                $$ = NEWNODE(TK_DL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
             }
@@ -429,25 +465,39 @@ routine_part : routine_part function_decl{
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                $$ = NEWNODE(TK_ROUTINE_PART_RF);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $2;
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
             }
              | routine_part procedure_decl{
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                $$ = NEWNODE(TK_ROUTINE_PART_RP);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $2;
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
             }
              | function_decl{
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                $$ = NEWNODE(TK_ROUTINE_PART_FUNC);
+                $$ = NEWNODE(TK_ROUTINE_PART);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
             }
@@ -455,7 +505,7 @@ routine_part : routine_part function_decl{
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                $$ = NEWNODE(TK_ROUTINE_PART_PROC);
+                $$ = NEWNODE(TK_ROUTINE_PART);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
             }
@@ -463,9 +513,7 @@ routine_part : routine_part function_decl{
                  if(DEBUG){
                      printf("PARSING ROUTINE_PART NULL\n");
                  }
-                 $$ = NEWNODE(TK_ROUTINE_PART_NULL);
-                 $$->child_number = 0;
-                 $$->child = NULL;
+                 $$ = NULL;
              }
              ;
 
@@ -523,18 +571,14 @@ parameters : TK_LP para_decl_list TK_RP{
                 if(DEBUG){
                     printf("PARSING PARA\n");
                 }
-                $$ = NEWNODE(TK_PARA);
-                $$->child = MALLOC($$,1);
-                $$->child[0] = $2;
+                $$ = $2;
             }
             |{
             //NOTE: PARAMETERS IS 'TK_PARA'
                 if(DEBUG){
                     printf("PARSING PARA NULL\n");
                 }
-                $$ = NEWNODE(TK_PARA_NULL);
-                $$->child_number = 0;
-                $$->child = NULL;
+                $$ = NULL;
             }
             ;
 
@@ -543,17 +587,24 @@ para_decl_list : para_decl_list TK_SEMI para_type_list{
                 if(DEBUG){
                     printf("PARSING PARA DECL LIST\n");
                 }
-                $$ = NEWNODE(TK_PARA_DL);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $3;
+
+                free(tmp);
             }
             | para_type_list{
                 //NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
                 if(DEBUG){
                     printf("PARSING PARA DECL LIST : FIRST ONE\n");
                 }
-                $$ = NEWNODE(TK_PARA_DL_END);
+                $$ = NEWNODE(TK_PARA_DL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
             }
@@ -564,7 +615,7 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     if(DEBUG){
                         printf("PARSING TK_COLON\n");
                     }
-                    $$ = NEWNODE(TK_PARA_TL);
+                    $$ = NEWNODE(TK_PARA_TL_VAR);
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
@@ -574,7 +625,7 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     if(DEBUG){
                         printf("PARSING TK_COLON\n");
                     }
-                    $$ = NEWNODE(TK_PARA_TL_END);
+                    $$ = NEWNODE(TK_PARA_TL_VAL);
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
@@ -586,9 +637,7 @@ var_para_list : TK_VAR name_list{
                 if(DEBUG){
                     printf("PARSING VAR LIST\n");
                 }
-                $$ = NEWNODE(TK_VAR);
-                $$->child = MALLOC($$,1);
-                $$->child[0] = $2;
+                $$ = $2;
             }
             ;
 
@@ -596,9 +645,7 @@ val_para_list : name_list{
                 if(DEBUG){
                     printf("PARSING VAL PARA LIST\n");
                 }
-                $$ = NEWNODE(TK_VAL_PARA_LIST);
-                $$->child = MALLOC($$,1);
-                $$->child[0] = $1;
+                $$ = $1;
             }
             ;
 
@@ -606,9 +653,7 @@ routine_body : compound_stmt{
                 if(DEBUG){
                     printf("PARSING ROUTINE BODY\n");
                 }
-                $$ = NEWNODE(TK_ROUTINE_BODY);
-                $$->child = MALLOC($$,1);
-                $$->child[0] = $1;
+                $$ = $1;
             }
             ;
 
@@ -616,18 +661,30 @@ stmt_list : stmt_list stmt TK_SEMI{
             if(DEBUG){
                 printf("PARSING STMT LIST\n");
             }
-            $$ = NEWNODE(TK_STMT_LIST);
-            $$->child = MALLOC($$,2);
-            $$->child[0] = $1;
-            $$->child[1] = $2;
+            if($1==NULL){
+          		$$ = NEWNODE(TK_STMT_LIST);
+          		$$->child = MALLOC($$, 1);
+          		$$->child[0] = $2;
+            }
+          	else{
+          		$$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $3;
+
+                free(tmp);
+          	}
         }
         |{
               if(DEBUG){
                   printf("PARSING STMT LIST NULL\n");
               }
-              $$ = NEWNODE(TK_STMT_LIST_NULL);
-              $$->child_number = 0;
-              $$->child = NULL;
+              $$=NULL;
         }
         ;
 
@@ -656,73 +713,55 @@ non_label_stmt : assign_stmt{
                     if(DEBUG){
                         printf("PARSING ASSIGN STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_ASSIGN);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | proc_stmt{
                     if(DEBUG){
                         printf("PARSING PROC STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_PROC);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | compound_stmt{
                     if(DEBUG){
                         printf("PARSING CP STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_CP);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | if_stmt{
                     if(DEBUG){
                         printf("PARSING IF STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_IF);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | repeat_stmt{
                     if(DEBUG){
                         printf("PARSING REPEAT STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_REP);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | while_stmt{
                     if(DEBUG){
                         printf("PARSING WHILE STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_WHILE);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | for_stmt{
                     if(DEBUG){
                         printf("PARSING FOR STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_FOR);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | case_stmt{
                     if(DEBUG){
                         printf("PARSING CASE STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_CASE);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                | goto_stmt{
                     if(DEBUG){
                         printf("PARSING GOTO STMT\n");
                     }
-                    $$ = NEWNODE(TK_NON_LABEL_STMT_GOTO);
-                    $$->child = MALLOC($$,1);
-                    $$->child[0] = $1;
+                    $$ = $1;
                 }
                ;
 
@@ -813,9 +852,7 @@ compound_stmt : TK_BEGIN stmt_list TK_END{
             if(DEBUG){
                 printf("PARSING CP STMT\n");
             }
-            $$ = NEWNODE(TK_CP_STMT);
-            $$->child = MALLOC($$,1);
-            $$->child[0] = $2;
+            $$ = $2;
         }
         ;
 
@@ -836,17 +873,13 @@ else_clause : TK_ELSE stmt{
                 if(DEBUG){
                     printf("PARSING ELSE CLAUSE\n");
                 }
-                $$ = NEWNODE(TK_ELSE);
-                $$->child = MALLOC($$,1);
-                $$->child[0] = $2;
+                $$ = $2;
             }
             |{
                 if(DEBUG){
                     printf("PARSING ELSE CLAUSE NULL\n");
                 }
-                $$ = NEWNODE(TK_ELSE_NULL);
-                $$->child_number = 0;
-                $$->child = NULL;
+                $$ = NULL;
             }
             ;
 
@@ -922,17 +955,24 @@ case_expr_list : case_expr_list case_expr{
             if(DEBUG){
                 printf("PARSING CASE EXPR LIST\n");
             }
-            $$ = NEWNODE(TK_CASE_EL);
-            $$->child = MALLOC($$,2);
-            $$->child[0] = $1;
-            $$->child[1] = $2;
+            	$$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
         }
         | case_expr{
             //NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
             if(DEBUG){
                 printf("PARSING CASE EXPR LIST : FIRST ONE\n");
             }
-            $$ = NEWNODE(TK_CASE_EL_END);
+            $$ = NEWNODE(TK_CASE_EL);
             $$->child = MALLOC($$,1);
             $$->child[0] = $1;
         }
@@ -976,16 +1016,23 @@ expression_list : expression_list TK_COMMA expression{
                     if(DEBUG){
                         printf("PARSING EXP LIST\n");
                     }
-                    $$ = NEWNODE(TK_EXP_LIST);
-                    $$->child = MALLOC($$,2);
-                    $$->child[0] = $1;
-                    $$->child[1] = $3;
+                    $$ = $1;
+                	int old_child_number = $$->child_number;
+                	NODE** tmp = $$->child;
+                	$$->child = MALLOC($$, (1+old_child_number));
+                	int i;
+                	for(i=0;i<old_child_number;i++){
+                		$$->child[i] = tmp[i];
+                	}
+                	$$->child[i] = $3;
+
+                	free(tmp);
                 }
                 | expression{
                     if(DEBUG){
                         printf("PARSING EXP LIST : FIRST ONE\n");
                     }
-                    $$ = NEWNODE(TK_EXP_LIST_END);
+                    $$ = NEWNODE(TK_EXP_LIST);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $1;
                 }
@@ -997,62 +1044,75 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_GE);
+                $1->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
            }
            | expression TK_GT expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_GT);
+                $1->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
            }
            | expression TK_LE expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_LE);
+                $1->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
            }
            | expression TK_LT expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_LT);
+                $1->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
            }
            | expression TK_EQUAL expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_EQUAL);
+                $1->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
            }
            | expression TK_UNEQUAL expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_UNEQUAL);
+                $1->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = $3;
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
            }
            | expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION : FIRST ONE\n");
                 }
                 $$ = NEWNODE(TK_EXP);
-                $$->child = MALLOC($$,1);
+                $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
+                $$->child[1] = NULL;
            }
            ;
 
@@ -1062,9 +1122,11 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_PLUS);
+         $1->child[1] = $$;
          $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+         $$->child[0] = $3;
+         $$->child[1] = NULL;
+         $$ = $1;
      }
      | expr TK_MINUS term{
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
@@ -1072,9 +1134,11 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_MINUS);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+         $1->child[1] = $$;
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
      }
      | expr TK_OR term{
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
@@ -1082,9 +1146,11 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_OR);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+         $1->child[1] = $$;
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
      }
      | term{
      //NOTE: expr IS EXPR, expression IS EXP
@@ -1092,8 +1158,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_EXPR);
-         $$->child = MALLOC($$,1);
+         $$->child = MALLOC($$,2);
          $$->child[0] = $1;
+         $$->child[1] = NULL;
      }
      ;
 
@@ -1102,43 +1169,53 @@ term : term TK_MUL factor{
              printf("PARSING TK_MUL\n");
          }
          $$ = NEWNODE(TK_MUL);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+         $1->child[1] = $$;
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
      }
      | term TK_DIV factor{
          if(DEBUG){
              printf("PARSING TK_DIV\n");
          }
          $$ = NEWNODE(TK_DIV);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+        	$1->child[1] = $$;
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
      }
      | term TK_MOD factor{
          if(DEBUG){
              printf("PARSING TK_MOD\n");
          }
          $$ = NEWNODE(TK_MOD);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+        $1->child[1] = $$;
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
      }
      | term TK_AND factor{
          if(DEBUG){
              printf("PARSING TK_AND\n");
          }
          $$ = NEWNODE(TK_AND);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = $3;
+         $1->child[1] = $$;
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $3;
+                $$->child[1] = NULL;
+                $$ = $1;
      }
      | factor{
          if(DEBUG){
              printf("PARSING TERM : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_TERM);
-         $$->child = MALLOC($$,1);
+         $$->child = MALLOC($$,2);
          $$->child[0] = $1;
+         $$->child[1] = NULL;
      }
      ;
 
@@ -1231,16 +1308,23 @@ args_list : args_list TK_COMMA expression{
             if(DEBUG){
                 printf("PARSING ARGS LIST\n");
             }
-            $$ = NEWNODE(TK_ARGS_LIST);
-            $$->child = MALLOC($$,2);
-            $$->child[0] = $1;
-            $$->child[1] = $2;
+            	$$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
         }
         | expression{
             if(DEBUG){
                 printf("PARSING ARGS LIST : FIRST ONE\n");
             }
-            $$ = NEWNODE(TK_ARGS_LIST_END);
+            $$ = NEWNODE(TK_ARGS_LIST);
             $$->child = MALLOC($$,1);
             $$->child[0] = $1;
         }
