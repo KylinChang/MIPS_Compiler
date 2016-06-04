@@ -164,7 +164,7 @@ ID [A-Z]([_A-Z0-9])*
 }
 {READ} {
 	yylval = NEWNODE(TK_READ);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_READ;
 }
 {BEGIN} {
@@ -180,12 +180,12 @@ ID [A-Z]([_A-Z0-9])*
 {FOR} { return TK_FOR; }
 {TO} {
 	yylval = NEWNODE(TK_TO);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_TO;
 }
 {DOWNTO} {
 	yylval = NEWNODE(TK_DOWNTO);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_DOWNTO;
 }
 {CASE} { return TK_CASE; }
@@ -214,7 +214,7 @@ ID [A-Z]([_A-Z0-9])*
 
 {SYS_CON} {
 	yylval = NEWNODE(TK_SYS_CON);
-	yylval->name =genString(yytext, yyleng);
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_CON;
 }
 {SYS_TYPE} {

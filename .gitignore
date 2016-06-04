@@ -5,6 +5,8 @@
 /la.l
 /note
 *.bak
+/Makefile
+
 
 
 ### C++ template
