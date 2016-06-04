@@ -89,10 +89,7 @@ NODE* ROOT;
 # define YYERROR_VERBOSE 0
 #endif
 
-/* In a future release of Bison, this section will be replaced
-   by #include "yy.tab.hpp".  */
-#ifndef YY_YY_YY_TAB_HPP_INCLUDED
-# define YY_YY_YY_TAB_HPP_INCLUDED
+
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -176,98 +173,267 @@ extern int yydebug;
     ERROR = 325,
     TK_PROGRAM_HEAD = 326,
     TK_ROUTINE = 327,
-    TK_ROUTINE_HEAD = 328,
-    TK_ROUTINE_BODY = 329,
-    TK_CONST_PART = 330,
-    TK_CONST_PART_END = 331,
-    TK_TYPE_PART = 332,
-    TK_TYPE_PART_END = 333,
-    TK_VAR_PART = 334,
-    TK_VAR_PART_END = 335,
-    TK_ROUTINE_PART_RF = 336,
-    TK_ROUTINE_PART_RP = 337,
-    TK_ROUTINE_PART_FUNC = 338,
-    TK_ROUTINE_PART_PROC = 339,
-    TK_ROUTINE_PART_NULL = 340,
-    TK_STMT_LIST = 341,
-    TK_STMT_LIST_NULL = 342,
-    TK_STMT = 343,
-    TK_STMT_END = 344,
-    TK_CP_STMT = 345,
-    TK_VAL_PARA_LIST = 346,
-    TK_NON_LABEL_STMT_ASSIGN = 347,
-    TK_NON_LABEL_STMT_PROC = 348,
-    TK_NON_LABEL_STMT_CP = 349,
-    TK_NON_LABEL_STMT_IF = 350,
-    TK_NON_LABEL_STMT_REP = 351,
-    TK_NON_LABEL_STMT_WHILE = 352,
-    TK_NON_LABEL_STMT_FOR = 353,
-    TK_NON_LABEL_STMT_CASE = 354,
-    TK_NON_LABEL_STMT_GOTO = 355,
-    TK_EXP_LIST = 356,
-    TK_EXP_LIST_END = 357,
-    TK_EXP = 358,
-    TK_TERM = 359,
-    TK_FACTOR_ID = 360,
-    TK_FACTOR_ID_ARGS = 361,
-    TK_FACTOR_SYS_FUNCT = 362,
-    TK_FACTOR_CONST = 363,
-    TK_FACTOR_EXP = 364,
-    TK_FACTOR_NOT = 365,
-    TK_FACTOR_MINUS = 366,
-    TK_FACTOR_ID_EXP = 367,
-    TK_FACTOR_DD = 368,
-    TK_ARGS_LIST = 369,
-    TK_ARGS_LIST_END = 370,
-    TK_CONST_EL = 371,
-    TK_CONST_EL_END = 372,
-    TK_TYPE_DL = 373,
-    TK_TYPE_DL_END = 374,
-    TK_TYPE_DEF = 375,
-    TK_TYPE_DECL_SIM = 376,
-    TK_TYPE_DECL_ARR = 377,
-    TK_TYPE_DECL_REC = 378,
-    TK_FIELD_DL = 379,
-    TK_FIELD_DL_END = 380,
-    TK_FIELD_DECL = 381,
-    TK_NL = 382,
-    TK_NL_END = 383,
-    TK_STD_SYS_TYPE = 384,
-    TK_STD_ID = 385,
-    TK_STD_NL = 386,
-    TK_STD_DD = 387,
-    TK_STD_DD_M = 388,
-    TK_STD_DD_MM = 389,
-    TK_STD_DD_ID = 390,
-    TK_DL = 391,
-    TK_DL_END = 392,
-    TK_VAR_DECL = 393,
-    TK_FUNC_DECL = 394,
-    TK_FUNC_HEAD = 395,
-    TK_PROC_DECL = 396,
-    TK_PROC_HEAD = 397,
-    TK_PARA = 398,
-    TK_PARA_NULL = 399,
-    TK_PARA_DL = 400,
-    TK_PARA_DL_END = 401,
-    TK_PARA_TL = 402,
-    TK_PARA_TL_END = 403,
-    TK_PROC = 404,
-    TK_CASE_EL = 405,
-    TK_CASE_EL_END = 406,
-    TK_CASE_EXPR = 407,
-    TK_CASE_EXPR_END = 408,
-    TK_EXPR = 409,
-    TK_ASSIGN_ID = 410,
-    TK_ASSIGN_ID_EXPR = 411,
-    TK_ASSIGN_DD = 412,
-    TK_PROC_ID = 413,
-    TK_PROC_ID_ARGS = 414,
-    TK_PROC_SYS = 415,
-    TK_PROC_SYS_ARGS = 416,
-    TK_PROC_READ = 417
+    TK_ROUTINE_PART = 328,
+    TK_ROUTINE_HEAD = 329,
+    TK_ROUTINE_BODY = 330,
+    TK_CONST_PART = 331,
+    TK_CONST_PART_END = 332,
+    TK_TYPE_PART = 333,
+    TK_TYPE_PART_END = 334,
+    TK_VAR_PART = 335,
+    TK_VAR_PART_END = 336,
+    TK_ROUTINE_PART_RF = 337,
+    TK_ROUTINE_PART_RP = 338,
+    TK_ROUTINE_PART_FUNC = 339,
+    TK_ROUTINE_PART_PROC = 340,
+    TK_ROUTINE_PART_NULL = 341,
+    TK_STMT_LIST = 342,
+    TK_STMT_LIST_NULL = 343,
+    TK_STMT = 344,
+    TK_STMT_END = 345,
+    TK_CP_STMT = 346,
+    TK_VAL_PARA_LIST = 347,
+    TK_NON_LABEL_STMT_ASSIGN = 348,
+    TK_NON_LABEL_STMT_PROC = 349,
+    TK_NON_LABEL_STMT_CP = 350,
+    TK_NON_LABEL_STMT_IF = 351,
+    TK_NON_LABEL_STMT_REP = 352,
+    TK_NON_LABEL_STMT_WHILE = 353,
+    TK_NON_LABEL_STMT_FOR = 354,
+    TK_NON_LABEL_STMT_CASE = 355,
+    TK_NON_LABEL_STMT_GOTO = 356,
+    TK_EXP_LIST = 357,
+    TK_EXP_LIST_END = 358,
+    TK_EXP = 359,
+    TK_TERM = 360,
+    TK_FACTOR_ID = 361,
+    TK_FACTOR_ID_ARGS = 362,
+    TK_FACTOR_SYS_FUNCT = 363,
+    TK_FACTOR_CONST = 364,
+    TK_FACTOR_EXP = 365,
+    TK_FACTOR_NOT = 366,
+    TK_FACTOR_MINUS = 367,
+    TK_FACTOR_ID_EXP = 368,
+    TK_FACTOR_DD = 369,
+    TK_ARGS_LIST = 370,
+    TK_ARGS_LIST_END = 371,
+    TK_CONST_EL = 372,
+    TK_CONST_EL_END = 373,
+    TK_TYPE_DL = 374,
+    TK_TYPE_DL_END = 375,
+    TK_TYPE_DEF = 376,
+    TK_TYPE_DECL = 377,
+    TK_TYPE_DECL_SIM = 378,
+    TK_TYPE_DECL_ARR = 379,
+    TK_TYPE_DECL_REC = 380,
+    TK_FIELD_DL = 381,
+    TK_FIELD_DL_END = 382,
+    TK_FIELD_DECL = 383,
+    TK_NL = 384,
+    TK_NL_END = 385,
+    TK_STD_SYS_TYPE = 386,
+    TK_STD_ID = 387,
+    TK_STD_NL = 388,
+    TK_STD_DD = 389,
+    TK_STD_DD_M = 390,
+    TK_STD_DD_MM = 391,
+    TK_STD_DD_ID = 392,
+    TK_DL = 393,
+    TK_DL_END = 394,
+    TK_VAR_DECL = 395,
+    TK_FUNC_DECL = 396,
+    TK_FUNC_HEAD = 397,
+    TK_PROC_DECL = 398,
+    TK_PROC_HEAD = 399,
+    TK_PARA = 400,
+    TK_PARA_TL = 401,
+    TK_PARA_NULL = 402,
+    TK_PARA_DL = 403,
+    TK_PARA_DL_END = 404,
+    TK_PARA_TL_VAR = 405,
+    TK_PARA_TL_VAL = 406,
+    TK_PARA_TL_END = 407,
+    TK_PROC = 408,
+    TK_CASE_EL = 409,
+    TK_CASE_EL_END = 410,
+    TK_CASE_EXPR = 411,
+    TK_CASE_EXPR_END = 412,
+    TK_EXPR = 413,
+    TK_ASSIGN_ID = 414,
+    TK_ASSIGN_ID_EXPR = 415,
+    TK_ASSIGN_DD = 416,
+    TK_PROC_ID = 417,
+    TK_PROC_ID_ARGS = 418,
+    TK_PROC_SYS = 419,
+    TK_PROC_SYS_ARGS = 420,
+    TK_PROC_READ = 421
   };
 #endif
+/* Tokens.  */
+#define TK_AND 258
+#define TK_ARRAY 259
+#define TK_ASSIGN 260
+#define TK_CASE 261
+#define TK_TYPE 262
+#define TK_SYS_TYPE 263
+#define TK_COLON 264
+#define TK_COMMA 265
+#define TK_CONST 266
+#define TK_DIGITS 267
+#define TK_DIV 268
+#define TK_DO 269
+#define TK_DOT 270
+#define TK_DOTDOT 271
+#define TK_DOWNTO 272
+#define TK_ELSE 273
+#define TK_ELSE_NULL 274
+#define TK_END 275
+#define TK_EQUAL 276
+#define TK_FOR 277
+#define TK_FUNCTION 278
+#define TK_GE 279
+#define TK_GOTO 280
+#define TK_GT 281
+#define TK_ID 282
+#define TK_REF 283
+#define TK_IF 284
+#define TK_IN 285
+#define TK_LB 286
+#define TK_LE 287
+#define TK_LP 288
+#define TK_LT 289
+#define TK_MINUS 290
+#define TK_MOD 291
+#define TK_UNEQUAL 292
+#define TK_OF 293
+#define TK_OR 294
+#define TK_OTHERWISE 295
+#define TK_BEGIN 296
+#define TK_PLUS 297
+#define TK_PROCEDURE 298
+#define TK_PROGRAM 299
+#define TK_RB 300
+#define TK_REAL 301
+#define TK_RECORD 302
+#define TK_REPEAT 303
+#define TK_RP 304
+#define TK_SYS_PROC 305
+#define TK_READ 306
+#define TK_SEMI 307
+#define TK_MUL 308
+#define TK_THEN 309
+#define TK_NOT 310
+#define TK_TO 311
+#define TK_UNTIL 312
+#define TK_UPARROW 313
+#define TK_VAR 314
+#define TK_WHILE 315
+#define TK_SET 316
+#define TK_STARSTAR 317
+#define TK_CHAR 318
+#define TK_STRING 319
+#define TK_INTEGER 320
+#define TK_SYS_CON 321
+#define TK_SYS_FUNCT 322
+#define TK_WITH 323
+#define TK_NIL 324
+#define ERROR 325
+#define TK_PROGRAM_HEAD 326
+#define TK_ROUTINE 327
+#define TK_ROUTINE_PART 328
+#define TK_ROUTINE_HEAD 329
+#define TK_ROUTINE_BODY 330
+#define TK_CONST_PART 331
+#define TK_CONST_PART_END 332
+#define TK_TYPE_PART 333
+#define TK_TYPE_PART_END 334
+#define TK_VAR_PART 335
+#define TK_VAR_PART_END 336
+#define TK_ROUTINE_PART_RF 337
+#define TK_ROUTINE_PART_RP 338
+#define TK_ROUTINE_PART_FUNC 339
+#define TK_ROUTINE_PART_PROC 340
+#define TK_ROUTINE_PART_NULL 341
+#define TK_STMT_LIST 342
+#define TK_STMT_LIST_NULL 343
+#define TK_STMT 344
+#define TK_STMT_END 345
+#define TK_CP_STMT 346
+#define TK_VAL_PARA_LIST 347
+#define TK_NON_LABEL_STMT_ASSIGN 348
+#define TK_NON_LABEL_STMT_PROC 349
+#define TK_NON_LABEL_STMT_CP 350
+#define TK_NON_LABEL_STMT_IF 351
+#define TK_NON_LABEL_STMT_REP 352
+#define TK_NON_LABEL_STMT_WHILE 353
+#define TK_NON_LABEL_STMT_FOR 354
+#define TK_NON_LABEL_STMT_CASE 355
+#define TK_NON_LABEL_STMT_GOTO 356
+#define TK_EXP_LIST 357
+#define TK_EXP_LIST_END 358
+#define TK_EXP 359
+#define TK_TERM 360
+#define TK_FACTOR_ID 361
+#define TK_FACTOR_ID_ARGS 362
+#define TK_FACTOR_SYS_FUNCT 363
+#define TK_FACTOR_CONST 364
+#define TK_FACTOR_EXP 365
+#define TK_FACTOR_NOT 366
+#define TK_FACTOR_MINUS 367
+#define TK_FACTOR_ID_EXP 368
+#define TK_FACTOR_DD 369
+#define TK_ARGS_LIST 370
+#define TK_ARGS_LIST_END 371
+#define TK_CONST_EL 372
+#define TK_CONST_EL_END 373
+#define TK_TYPE_DL 374
+#define TK_TYPE_DL_END 375
+#define TK_TYPE_DEF 376
+#define TK_TYPE_DECL 377
+#define TK_TYPE_DECL_SIM 378
+#define TK_TYPE_DECL_ARR 379
+#define TK_TYPE_DECL_REC 380
+#define TK_FIELD_DL 381
+#define TK_FIELD_DL_END 382
+#define TK_FIELD_DECL 383
+#define TK_NL 384
+#define TK_NL_END 385
+#define TK_STD_SYS_TYPE 386
+#define TK_STD_ID 387
+#define TK_STD_NL 388
+#define TK_STD_DD 389
+#define TK_STD_DD_M 390
+#define TK_STD_DD_MM 391
+#define TK_STD_DD_ID 392
+#define TK_DL 393
+#define TK_DL_END 394
+#define TK_VAR_DECL 395
+#define TK_FUNC_DECL 396
+#define TK_FUNC_HEAD 397
+#define TK_PROC_DECL 398
+#define TK_PROC_HEAD 399
+#define TK_PARA 400
+#define TK_PARA_TL 401
+#define TK_PARA_NULL 402
+#define TK_PARA_DL 403
+#define TK_PARA_DL_END 404
+#define TK_PARA_TL_VAR 405
+#define TK_PARA_TL_VAL 406
+#define TK_PARA_TL_END 407
+#define TK_PROC 408
+#define TK_CASE_EL 409
+#define TK_CASE_EL_END 410
+#define TK_CASE_EXPR 411
+#define TK_CASE_EXPR_END 412
+#define TK_EXPR 413
+#define TK_ASSIGN_ID 414
+#define TK_ASSIGN_ID_EXPR 415
+#define TK_ASSIGN_DD 416
+#define TK_PROC_ID 417
+#define TK_PROC_ID_ARGS 418
+#define TK_PROC_SYS 419
+#define TK_PROC_SYS_ARGS 420
+#define TK_PROC_READ 421
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -281,11 +447,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_YY_TAB_HPP_INCLUDED  */
+
 
 /* Copy the second part of user declarations.  */
 
-#line 289 "yy.tab.cpp" /* yacc.c:358  */
+#line 455 "yy.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -530,7 +696,7 @@ union yyalloc
 #define YYLAST   336
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  163
+#define YYNTOKENS  167
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  54
 /* YYNRULES -- Number of rules.  */
@@ -541,7 +707,7 @@ union yyalloc
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   417
+#define YYMAXUTOK   421
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -591,26 +757,27 @@ static const yytype_uint8 yytranslate[] =
      125,   126,   127,   128,   129,   130,   131,   132,   133,   134,
      135,   136,   137,   138,   139,   140,   141,   142,   143,   144,
      145,   146,   147,   148,   149,   150,   151,   152,   153,   154,
-     155,   156,   157,   158,   159,   160,   161,   162
+     155,   156,   157,   158,   159,   160,   161,   162,   163,   164,
+     165,   166
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    39,    39,    52,    64,    75,    88,    97,   107,   118,
-     130,   136,   142,   148,   154,   162,   171,   182,   191,   201,
-     212,   220,   228,   238,   250,   261,   270,   280,   292,   302,
-     312,   321,   329,   337,   346,   356,   367,   378,   387,   397,
-     406,   416,   428,   437,   446,   454,   462,   472,   484,   497,
-     509,   521,   530,   541,   551,   562,   572,   584,   595,   605,
-     615,   624,   634,   644,   655,   663,   671,   679,   687,   695,
-     703,   711,   719,   729,   739,   750,   764,   772,   782,   790,
-     800,   812,   822,   835,   843,   853,   865,   877,   892,   899,
-     908,   920,   930,   941,   951,   963,   974,   984,   994,  1004,
-    1013,  1022,  1031,  1040,  1049,  1059,  1069,  1079,  1089,  1100,
-    1109,  1118,  1126,  1135,  1145,  1154,  1164,  1174,  1182,  1191,
-    1199,  1207,  1217,  1229,  1239
+       0,    39,    39,    52,    64,    75,    88,    97,   107,   129,
+     145,   151,   157,   163,   169,   177,   184,   195,   210,   220,
+     231,   239,   247,   257,   269,   280,   296,   306,   318,   335,
+     345,   354,   362,   370,   379,   389,   400,   411,   418,   426,
+     442,   452,   464,   480,   496,   504,   512,   520,   532,   545,
+     557,   569,   576,   585,   602,   613,   623,   635,   644,   652,
+     660,   683,   691,   701,   712,   718,   724,   730,   736,   742,
+     748,   754,   760,   768,   778,   789,   803,   811,   821,   829,
+     839,   851,   859,   872,   878,   886,   898,   910,   925,   932,
+     941,   953,   970,   981,   991,  1003,  1014,  1031,  1041,  1053,
+    1064,  1075,  1086,  1097,  1108,  1119,  1131,  1143,  1155,  1167,
+    1178,  1189,  1200,  1211,  1222,  1231,  1241,  1251,  1259,  1268,
+    1276,  1284,  1294,  1306,  1323
 };
 #endif
 
@@ -631,42 +798,44 @@ static const char *const yytname[] =
   "TK_TO", "TK_UNTIL", "TK_UPARROW", "TK_VAR", "TK_WHILE", "TK_SET",
   "TK_STARSTAR", "TK_CHAR", "TK_STRING", "TK_INTEGER", "TK_SYS_CON",
   "TK_SYS_FUNCT", "TK_WITH", "TK_NIL", "ERROR", "TK_PROGRAM_HEAD",
-  "TK_ROUTINE", "TK_ROUTINE_HEAD", "TK_ROUTINE_BODY", "TK_CONST_PART",
-  "TK_CONST_PART_END", "TK_TYPE_PART", "TK_TYPE_PART_END", "TK_VAR_PART",
-  "TK_VAR_PART_END", "TK_ROUTINE_PART_RF", "TK_ROUTINE_PART_RP",
-  "TK_ROUTINE_PART_FUNC", "TK_ROUTINE_PART_PROC", "TK_ROUTINE_PART_NULL",
-  "TK_STMT_LIST", "TK_STMT_LIST_NULL", "TK_STMT", "TK_STMT_END",
-  "TK_CP_STMT", "TK_VAL_PARA_LIST", "TK_NON_LABEL_STMT_ASSIGN",
-  "TK_NON_LABEL_STMT_PROC", "TK_NON_LABEL_STMT_CP", "TK_NON_LABEL_STMT_IF",
-  "TK_NON_LABEL_STMT_REP", "TK_NON_LABEL_STMT_WHILE",
-  "TK_NON_LABEL_STMT_FOR", "TK_NON_LABEL_STMT_CASE",
-  "TK_NON_LABEL_STMT_GOTO", "TK_EXP_LIST", "TK_EXP_LIST_END", "TK_EXP",
-  "TK_TERM", "TK_FACTOR_ID", "TK_FACTOR_ID_ARGS", "TK_FACTOR_SYS_FUNCT",
-  "TK_FACTOR_CONST", "TK_FACTOR_EXP", "TK_FACTOR_NOT", "TK_FACTOR_MINUS",
-  "TK_FACTOR_ID_EXP", "TK_FACTOR_DD", "TK_ARGS_LIST", "TK_ARGS_LIST_END",
-  "TK_CONST_EL", "TK_CONST_EL_END", "TK_TYPE_DL", "TK_TYPE_DL_END",
-  "TK_TYPE_DEF", "TK_TYPE_DECL_SIM", "TK_TYPE_DECL_ARR",
+  "TK_ROUTINE", "TK_ROUTINE_PART", "TK_ROUTINE_HEAD", "TK_ROUTINE_BODY",
+  "TK_CONST_PART", "TK_CONST_PART_END", "TK_TYPE_PART", "TK_TYPE_PART_END",
+  "TK_VAR_PART", "TK_VAR_PART_END", "TK_ROUTINE_PART_RF",
+  "TK_ROUTINE_PART_RP", "TK_ROUTINE_PART_FUNC", "TK_ROUTINE_PART_PROC",
+  "TK_ROUTINE_PART_NULL", "TK_STMT_LIST", "TK_STMT_LIST_NULL", "TK_STMT",
+  "TK_STMT_END", "TK_CP_STMT", "TK_VAL_PARA_LIST",
+  "TK_NON_LABEL_STMT_ASSIGN", "TK_NON_LABEL_STMT_PROC",
+  "TK_NON_LABEL_STMT_CP", "TK_NON_LABEL_STMT_IF", "TK_NON_LABEL_STMT_REP",
+  "TK_NON_LABEL_STMT_WHILE", "TK_NON_LABEL_STMT_FOR",
+  "TK_NON_LABEL_STMT_CASE", "TK_NON_LABEL_STMT_GOTO", "TK_EXP_LIST",
+  "TK_EXP_LIST_END", "TK_EXP", "TK_TERM", "TK_FACTOR_ID",
+  "TK_FACTOR_ID_ARGS", "TK_FACTOR_SYS_FUNCT", "TK_FACTOR_CONST",
+  "TK_FACTOR_EXP", "TK_FACTOR_NOT", "TK_FACTOR_MINUS", "TK_FACTOR_ID_EXP",
+  "TK_FACTOR_DD", "TK_ARGS_LIST", "TK_ARGS_LIST_END", "TK_CONST_EL",
+  "TK_CONST_EL_END", "TK_TYPE_DL", "TK_TYPE_DL_END", "TK_TYPE_DEF",
+  "TK_TYPE_DECL", "TK_TYPE_DECL_SIM", "TK_TYPE_DECL_ARR",
   "TK_TYPE_DECL_REC", "TK_FIELD_DL", "TK_FIELD_DL_END", "TK_FIELD_DECL",
   "TK_NL", "TK_NL_END", "TK_STD_SYS_TYPE", "TK_STD_ID", "TK_STD_NL",
   "TK_STD_DD", "TK_STD_DD_M", "TK_STD_DD_MM", "TK_STD_DD_ID", "TK_DL",
   "TK_DL_END", "TK_VAR_DECL", "TK_FUNC_DECL", "TK_FUNC_HEAD",
-  "TK_PROC_DECL", "TK_PROC_HEAD", "TK_PARA", "TK_PARA_NULL", "TK_PARA_DL",
-  "TK_PARA_DL_END", "TK_PARA_TL", "TK_PARA_TL_END", "TK_PROC",
-  "TK_CASE_EL", "TK_CASE_EL_END", "TK_CASE_EXPR", "TK_CASE_EXPR_END",
-  "TK_EXPR", "TK_ASSIGN_ID", "TK_ASSIGN_ID_EXPR", "TK_ASSIGN_DD",
-  "TK_PROC_ID", "TK_PROC_ID_ARGS", "TK_PROC_SYS", "TK_PROC_SYS_ARGS",
-  "TK_PROC_READ", "$accept", "program", "program_head", "routine",
-  "routine_head", "const_part", "const_expr_list", "const_value",
-  "type_part", "type_decl_list", "type_definition", "type_decl",
-  "array_type_decl", "record_type_decl", "field_decl_list", "field_decl",
-  "name_list", "simple_type_decl", "var_part", "var_decl_list", "var_decl",
-  "routine_part", "function_decl", "function_head", "procedure_decl",
-  "procedure_head", "parameters", "para_decl_list", "para_type_list",
-  "var_para_list", "val_para_list", "routine_body", "stmt_list", "stmt",
-  "non_label_stmt", "assign_stmt", "proc_stmt", "compound_stmt", "if_stmt",
-  "else_clause", "repeat_stmt", "while_stmt", "for_stmt", "direction",
-  "case_stmt", "case_expr_list", "case_expr", "goto_stmt",
-  "expression_list", "expression", "expr", "term", "factor", "args_list", YY_NULLPTR
+  "TK_PROC_DECL", "TK_PROC_HEAD", "TK_PARA", "TK_PARA_TL", "TK_PARA_NULL",
+  "TK_PARA_DL", "TK_PARA_DL_END", "TK_PARA_TL_VAR", "TK_PARA_TL_VAL",
+  "TK_PARA_TL_END", "TK_PROC", "TK_CASE_EL", "TK_CASE_EL_END",
+  "TK_CASE_EXPR", "TK_CASE_EXPR_END", "TK_EXPR", "TK_ASSIGN_ID",
+  "TK_ASSIGN_ID_EXPR", "TK_ASSIGN_DD", "TK_PROC_ID", "TK_PROC_ID_ARGS",
+  "TK_PROC_SYS", "TK_PROC_SYS_ARGS", "TK_PROC_READ", "$accept", "program",
+  "program_head", "routine", "routine_head", "const_part",
+  "const_expr_list", "const_value", "type_part", "type_decl_list",
+  "type_definition", "type_decl", "array_type_decl", "record_type_decl",
+  "field_decl_list", "field_decl", "name_list", "simple_type_decl",
+  "var_part", "var_decl_list", "var_decl", "routine_part", "function_decl",
+  "function_head", "procedure_decl", "procedure_head", "parameters",
+  "para_decl_list", "para_type_list", "var_para_list", "val_para_list",
+  "routine_body", "stmt_list", "stmt", "non_label_stmt", "assign_stmt",
+  "proc_stmt", "compound_stmt", "if_stmt", "else_clause", "repeat_stmt",
+  "while_stmt", "for_stmt", "direction", "case_stmt", "case_expr_list",
+  "case_expr", "goto_stmt", "expression_list", "expression", "expr",
+  "term", "factor", "args_list", YY_NULLPTR
 };
 #endif
 
@@ -691,7 +860,7 @@ static const yytype_uint16 yytoknum[] =
      385,   386,   387,   388,   389,   390,   391,   392,   393,   394,
      395,   396,   397,   398,   399,   400,   401,   402,   403,   404,
      405,   406,   407,   408,   409,   410,   411,   412,   413,   414,
-     415,   416,   417
+     415,   416,   417,   418,   419,   420,   421
 };
 # endif
 
@@ -875,50 +1044,50 @@ static const yytype_uint8 yycheck[] =
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    44,   164,   165,    27,     0,    11,   166,   167,   168,
-      52,    27,   169,    15,    41,   194,   200,     7,   171,    21,
-      27,   195,    27,   172,   173,    59,   181,    46,    63,    64,
-      65,    66,   170,    21,     6,    20,    22,    25,    27,    29,
-      48,    50,    51,    60,    65,   196,   197,   198,   199,   200,
-     201,   203,   204,   205,   207,   210,    21,   173,    27,   179,
-     182,   183,    23,    43,   184,   185,   186,   187,   188,    52,
-     170,    27,    33,    35,    55,    67,   170,   212,   213,   214,
-     215,    27,    65,     5,    15,    31,    33,   212,   195,    33,
-      33,   212,     9,    52,     4,     8,    27,    33,    35,    47,
-     170,   174,   175,   176,   180,     9,    10,   183,    27,    27,
-     185,   187,    52,    52,    52,    15,    31,    33,   212,   215,
-     215,    33,    21,    24,    26,    32,    34,    37,    38,    35,
-      39,    42,     3,    13,    36,    53,     5,   212,    27,   212,
-     212,   216,    54,    57,   211,   212,   215,    14,   197,    31,
-      16,   179,   170,   177,   178,   179,    16,    52,   174,    27,
-      33,   189,   189,   166,   166,    27,   212,   216,    49,   216,
-     213,   213,   213,   213,   213,   213,    27,   170,   208,   209,
-     214,   214,   214,   215,   215,   215,   215,   212,     5,    45,
-      10,    49,   196,   212,    10,    49,    49,   196,   180,    27,
-      49,    16,    20,   178,     9,   170,    52,    59,   179,   190,
-     191,   192,   193,     9,    52,    52,    45,    49,    49,     9,
-       9,    20,   209,    17,    56,   206,   212,     5,   212,    18,
-     202,   212,    45,    35,   170,   174,   179,    49,    52,     9,
-       9,   180,   196,   196,   212,   212,   196,    38,   170,    52,
-     191,   180,   180,    52,    52,    14,   174,   196
+       0,    44,   168,   169,    27,     0,    11,   170,   171,   172,
+      52,    27,   173,    15,    41,   198,   204,     7,   175,    21,
+      27,   199,    27,   176,   177,    59,   185,    46,    63,    64,
+      65,    66,   174,    21,     6,    20,    22,    25,    27,    29,
+      48,    50,    51,    60,    65,   200,   201,   202,   203,   204,
+     205,   207,   208,   209,   211,   214,    21,   177,    27,   183,
+     186,   187,    23,    43,   188,   189,   190,   191,   192,    52,
+     174,    27,    33,    35,    55,    67,   174,   216,   217,   218,
+     219,    27,    65,     5,    15,    31,    33,   216,   199,    33,
+      33,   216,     9,    52,     4,     8,    27,    33,    35,    47,
+     174,   178,   179,   180,   184,     9,    10,   187,    27,    27,
+     189,   191,    52,    52,    52,    15,    31,    33,   216,   219,
+     219,    33,    21,    24,    26,    32,    34,    37,    38,    35,
+      39,    42,     3,    13,    36,    53,     5,   216,    27,   216,
+     216,   220,    54,    57,   215,   216,   219,    14,   201,    31,
+      16,   183,   174,   181,   182,   183,    16,    52,   178,    27,
+      33,   193,   193,   170,   170,    27,   216,   220,    49,   220,
+     217,   217,   217,   217,   217,   217,    27,   174,   212,   213,
+     218,   218,   218,   219,   219,   219,   219,   216,     5,    45,
+      10,    49,   200,   216,    10,    49,    49,   200,   184,    27,
+      49,    16,    20,   182,     9,   174,    52,    59,   183,   194,
+     195,   196,   197,     9,    52,    52,    45,    49,    49,     9,
+       9,    20,   213,    17,    56,   210,   216,     5,   216,    18,
+     206,   216,    45,    35,   174,   178,   183,    49,    52,     9,
+       9,   184,   200,   200,   216,   216,   200,    38,   174,    52,
+     195,   184,   184,    52,    52,    14,   178,   200
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,   163,   164,   165,   166,   167,   168,   168,   169,   169,
-     170,   170,   170,   170,   170,   171,   171,   172,   172,   173,
-     174,   174,   174,   175,   176,   177,   177,   178,   179,   179,
-     180,   180,   180,   180,   180,   180,   180,   181,   181,   182,
-     182,   183,   184,   184,   184,   184,   184,   185,   186,   187,
-     188,   189,   189,   190,   190,   191,   191,   192,   193,   194,
-     195,   195,   196,   196,   197,   197,   197,   197,   197,   197,
-     197,   197,   197,   198,   198,   198,   199,   199,   199,   199,
-     199,   200,   201,   202,   202,   203,   204,   205,   206,   206,
-     207,   208,   208,   209,   209,   210,   211,   211,   212,   212,
-     212,   212,   212,   212,   212,   213,   213,   213,   213,   214,
-     214,   214,   214,   214,   215,   215,   215,   215,   215,   215,
-     215,   215,   215,   216,   216
+       0,   167,   168,   169,   170,   171,   172,   172,   173,   173,
+     174,   174,   174,   174,   174,   175,   175,   176,   176,   177,
+     178,   178,   178,   179,   180,   181,   181,   182,   183,   183,
+     184,   184,   184,   184,   184,   184,   184,   185,   185,   186,
+     186,   187,   188,   188,   188,   188,   188,   189,   190,   191,
+     192,   193,   193,   194,   194,   195,   195,   196,   197,   198,
+     199,   199,   200,   200,   201,   201,   201,   201,   201,   201,
+     201,   201,   201,   202,   202,   202,   203,   203,   203,   203,
+     203,   204,   205,   206,   206,   207,   208,   209,   210,   210,
+     211,   212,   212,   213,   213,   214,   215,   215,   216,   216,
+     216,   216,   216,   216,   216,   217,   217,   217,   217,   218,
+     218,   218,   218,   218,   219,   219,   219,   219,   219,   219,
+     219,   219,   219,   220,   220
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -1625,7 +1794,7 @@ yyreduce:
 
             ROOT = (yyval);
         }
-#line 1629 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1798 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
@@ -1640,7 +1809,7 @@ yyreduce:
             (yyval)->child_number = 0;
             (yyval)->child = NULL;
         }
-#line 1644 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1813 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
@@ -1654,7 +1823,7 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[-1]);
             (yyval)->child[1] = (yyvsp[0]);
         }
-#line 1658 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1827 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
@@ -1670,7 +1839,7 @@ yyreduce:
             (yyval)->child[2] = (yyvsp[-1]);
             (yyval)->child[3] = (yyvsp[0]);
         }
-#line 1674 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1843 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -1684,7 +1853,7 @@ yyreduce:
             (yyval)->child = MALLOC((yyval),1);
             (yyval)->child[0] = (yyvsp[-1]);
         }
-#line 1688 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1857 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -1697,7 +1866,7 @@ yyreduce:
             (yyval)->child_number = 0;
             (yyval)->child = NULL;
         }
-#line 1701 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1870 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -1707,101 +1876,114 @@ yyreduce:
                     if(DEBUG){
                         printf("PARSING CONST EXPR LIST\n");
                     }
-                    (yyval) = NEWNODE(TK_CONST_EL);
-                    (yyval)->child = MALLOC((yyval),3);
-                    (yyval)->child[0] = (yyvsp[-4]);
-                    (yyval)->child[1] = (yyvsp[-3]);
-                    (yyval)->child[2] = (yyvsp[-1]);    
+                    (yyval) = (yyvsp[-4]);
+                    NODE* node = NEWNODE(TK_CONST_EL_END);
+                    node->child = MALLOC(node,2);
+                    node->child[0] = (yyvsp[-3]);
+                    node->child[1] = (yyvsp[-1]);
+
+                    NODE** tmp = (yyval)->child;
+                    int old_child_number = (yyval)->child_number;
+                    (yyval)->child = MALLOC((yyval), (2+old_child_number));
+                    int i;
+                    for(i=0;i<old_child_number;i++){
+                    	(yyval)->child[i] = tmp[i];
+                    }
+                    (yyval)->child[i] = node;
+
+                    free(tmp);
                 }
-#line 1717 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1897 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 118 "syntax.y" /* yacc.c:1646  */
+#line 129 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_EQUAL TK_SEMI
                     if(DEBUG){
                         printf("PARSING CONST EXPR LIST : FIRST ONE\n");
                     }
-                    (yyval) = NEWNODE(TK_CONST_EL_END);
-                    (yyval)->child = MALLOC((yyval),2);
-                    (yyval)->child[0] = (yyvsp[-3]);
-                    (yyval)->child[1] = (yyvsp[-1]);
+                    (yyval) = NEWNODE(TK_CONST_EL);
+                    NODE* node = NEWNODE(TK_CONST_EL_END);
+                    (yyval)->child = MALLOC((yyval),1);
+                    (yyval)->child[0] = node;
+
+                    node->child = MALLOC((yyval),2);
+                    node->child[0] = (yyvsp[-3]);
+                    node->child[1] = (yyvsp[-1]);
                 }
-#line 1732 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1916 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 130 "syntax.y" /* yacc.c:1646  */
+#line 145 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE INTEGER\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1743 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1927 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 136 "syntax.y" /* yacc.c:1646  */
+#line 151 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE REAL\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1754 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1938 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 142 "syntax.y" /* yacc.c:1646  */
+#line 157 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE CHAR\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1765 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1949 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 148 "syntax.y" /* yacc.c:1646  */
+#line 163 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE STRING\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1776 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1960 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 154 "syntax.y" /* yacc.c:1646  */
+#line 169 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE SYS CON\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1787 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1971 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 162 "syntax.y" /* yacc.c:1646  */
+#line 177 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TYPE
             if(DEBUG){
                 printf("PARSING TYPE PART NULL\n");
             }
-            (yyval) = NEWNODE(TK_TYPE_PART);
-            (yyval)->child = MALLOC((yyval),1);
-            (yyval)->child[0] = (yyvsp[0]);
+            (yyval) = (yyvsp[0]);
         }
-#line 1801 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1983 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 171 "syntax.y" /* yacc.c:1646  */
+#line 184 "syntax.y" /* yacc.c:1646  */
     {
               //NOTE: IGNORE TYPE
                   if(DEBUG){
@@ -1811,38 +1993,44 @@ yyreduce:
                 (yyval)->child_number = 0;
                 (yyval)->child = NULL;
         }
-#line 1815 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1997 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 182 "syntax.y" /* yacc.c:1646  */
+#line 195 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING TYPE DECL LIST DEF\n");
                     }
-                    (yyval) = NEWNODE(TK_TYPE_DL);
-                    (yyval)->child = MALLOC((yyval),2);
-                    (yyval)->child[0] = (yyvsp[-1]);
-                    (yyval)->child[1] = (yyvsp[0]);
+                    (yyval) = (yyvsp[-1]);
+
+                    int old_child_number = (yyval)->child_number;
+                    NODE** tmp = (yyval)->child;
+                    (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                    int i;
+                    for(i=0;i<old_child_number;i++){
+                    	(yyval)->child[i] = tmp[i];
+                    }
+                    (yyval)->child[i] = (yyvsp[0]);
                 }
-#line 1829 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2017 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 191 "syntax.y" /* yacc.c:1646  */
+#line 210 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING TYPE DECL LIST\n");
                     }
-                    (yyval) = NEWNODE(TK_TYPE_DL_END);
+                    (yyval) = NEWNODE(TK_TYPE_DL);
                     (yyval)->child = MALLOC((yyval),1);
                     (yyval)->child[0] = (yyvsp[0]);
                }
-#line 1842 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2030 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 201 "syntax.y" /* yacc.c:1646  */
+#line 220 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING TYPE DEF\n");
@@ -1852,50 +2040,50 @@ yyreduce:
                     (yyval)->child[0] = (yyvsp[-3]);
                     (yyval)->child[1] = (yyvsp[-1]);
                 }
-#line 1856 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2044 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 212 "syntax.y" /* yacc.c:1646  */
+#line 231 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
                 }
-                (yyval) = NEWNODE(TK_TYPE_DECL_SIM);
+                (yyval) = NEWNODE(TK_TYPE_DECL);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
           }
-#line 1869 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2057 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 220 "syntax.y" /* yacc.c:1646  */
+#line 239 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
                 }
-                (yyval) = NEWNODE(TK_TYPE_DECL_ARR);
+                (yyval) = NEWNODE(TK_TYPE_DECL);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
           }
-#line 1882 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2070 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 228 "syntax.y" /* yacc.c:1646  */
+#line 247 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
                 }
-                (yyval) = NEWNODE(TK_TYPE_DECL_REC);
+                (yyval) = NEWNODE(TK_TYPE_DECL);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
           }
-#line 1895 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2083 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 238 "syntax.y" /* yacc.c:1646  */
+#line 257 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_LB TK_RB TK_OF
                 if(DEBUG){
@@ -1906,11 +2094,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-3]);
                 (yyval)->child[1] = (yyvsp[0]);
             }
-#line 1910 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2098 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 250 "syntax.y" /* yacc.c:1646  */
+#line 269 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_END
                 if(DEBUG){
@@ -1920,38 +2108,45 @@ yyreduce:
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[-1]);
             }
-#line 1924 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2112 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 261 "syntax.y" /* yacc.c:1646  */
+#line 280 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING FIELD DECL LIST\n");
                 }
-                (yyval) = NEWNODE(TK_FIELD_DL);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-1]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval) = (yyvsp[-1]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
             }
-#line 1938 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2133 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 270 "syntax.y" /* yacc.c:1646  */
+#line 296 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING FIELD DECL LIST : FIRST ONE\n");
                 }
-                (yyval) = NEWNODE(TK_FIELD_DL_END);
+                (yyval) = NEWNODE(TK_FIELD_DL);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
             }
-#line 1951 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2146 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 280 "syntax.y" /* yacc.c:1646  */
+#line 306 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COLON TK_SEMI
                 if(DEBUG){
@@ -1962,39 +2157,46 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-3]);
                 (yyval)->child[1] = (yyvsp[-1]);
             }
-#line 1966 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2161 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 292 "syntax.y" /* yacc.c:1646  */
+#line 318 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: HERE TAG IS SIMPLIFIED AS 'TK_NL', IGNORE TK_COMMA
                 if(DEBUG){
                     printf("PARSING NAME LIST\n");
                 }
-                (yyval) = NEWNODE(TK_NL);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+              	(yyval) = (yyvsp[-2]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
             }
-#line 1981 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2183 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 302 "syntax.y" /* yacc.c:1646  */
+#line 335 "syntax.y" /* yacc.c:1646  */
     {
                   if(DEBUG){
                       printf("PARSING NAME LIST : FIRST ONE\n");
                   }
-                  (yyval) = NEWNODE(TK_NL_END);
+                  (yyval) = NEWNODE(TK_NL);
                   (yyval)->child = MALLOC((yyval),1);
                   (yyval)->child[0] = (yyvsp[0]);
               }
-#line 1994 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2196 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 312 "syntax.y" /* yacc.c:1646  */
+#line 345 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: HERE TAG IS SIMPLIFIED AS 'TK_STD' AND FOLLOWED BY A TYPE
                     if(DEBUG){
@@ -2004,11 +2206,11 @@ yyreduce:
                     (yyval)->child = MALLOC((yyval),1);
                     (yyval)->child[0] = (yyvsp[0]);
                 }
-#line 2008 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2210 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 321 "syntax.y" /* yacc.c:1646  */
+#line 354 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2017,11 +2219,11 @@ yyreduce:
                     (yyval)->child = MALLOC((yyval),1);
                     (yyval)->child[0] = (yyvsp[0]);
                 }
-#line 2021 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2223 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 329 "syntax.y" /* yacc.c:1646  */
+#line 362 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2030,11 +2232,11 @@ yyreduce:
                     (yyval)->child = MALLOC((yyval),1);
                     (yyval)->child[0] = (yyvsp[-1]);
                 }
-#line 2034 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2236 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 337 "syntax.y" /* yacc.c:1646  */
+#line 370 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2044,11 +2246,11 @@ yyreduce:
                     (yyval)->child[0] = (yyvsp[-2]);
                     (yyval)->child[1] = (yyvsp[0]);
                 }
-#line 2048 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2250 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 346 "syntax.y" /* yacc.c:1646  */
+#line 379 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2059,11 +2261,11 @@ yyreduce:
                     (yyval)->child[1] = (yyvsp[-2]);
                     (yyval)->child[2] = (yyvsp[0]);
                 }
-#line 2063 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2265 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 356 "syntax.y" /* yacc.c:1646  */
+#line 389 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2075,11 +2277,11 @@ yyreduce:
                     (yyval)->child[2] = (yyvsp[-1]);
                     (yyval)->child[3] = (yyvsp[0]);
                 }
-#line 2079 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2281 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 367 "syntax.y" /* yacc.c:1646  */
+#line 400 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2089,65 +2291,68 @@ yyreduce:
                     (yyval)->child[0] = (yyvsp[-2]);
                     (yyval)->child[1] = (yyvsp[0]);
                 }
-#line 2093 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2295 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 378 "syntax.y" /* yacc.c:1646  */
+#line 411 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: IGNORE TK_VAR
             if(DEBUG){
                   printf("PARSING VAR PART NOT NULL\n");
               }
-              (yyval) = NEWNODE(TK_VAR_PART);
-            (yyval)->child = MALLOC((yyval),1);
-            (yyval)->child[0] = (yyvsp[0]);
+              (yyval) = (yyvsp[0]);
         }
-#line 2107 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2307 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 387 "syntax.y" /* yacc.c:1646  */
+#line 418 "syntax.y" /* yacc.c:1646  */
     {
               if(DEBUG){
                   printf("PARSING VAR PART NULL\n");
               }
-              (yyval) = NEWNODE(TK_VAR_PART_END);
-            (yyval)->child_number = 0;
-            (yyval)->child = NULL;
+             (yyval) = NULL;
         }
-#line 2120 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2318 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 397 "syntax.y" /* yacc.c:1646  */
+#line 426 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING VAR DECL LIST\n");
                 }
-                (yyval) = NEWNODE(TK_DL);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-1]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval) = (yyvsp[-1]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
             }
-#line 2134 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2339 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 406 "syntax.y" /* yacc.c:1646  */
+#line 442 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING VAR DECL LIST : FIRST ONE\n");
                 }
-                (yyval) = NEWNODE(TK_DL_END);
+                (yyval) = NEWNODE(TK_DL);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
             }
-#line 2147 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2352 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 416 "syntax.y" /* yacc.c:1646  */
+#line 452 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -2158,78 +2363,90 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[-3]);
             (yyval)->child[1] = (yyvsp[-1]);
         }
-#line 2162 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2367 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 428 "syntax.y" /* yacc.c:1646  */
+#line 464 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                (yyval) = NEWNODE(TK_ROUTINE_PART_RF);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-1]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval) = (yyvsp[-1]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
             }
-#line 2176 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2388 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 437 "syntax.y" /* yacc.c:1646  */
+#line 480 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                (yyval) = NEWNODE(TK_ROUTINE_PART_RP);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-1]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval) = (yyvsp[-1]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
             }
-#line 2190 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2409 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 446 "syntax.y" /* yacc.c:1646  */
+#line 496 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                (yyval) = NEWNODE(TK_ROUTINE_PART_FUNC);
+                (yyval) = NEWNODE(TK_ROUTINE_PART);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
             }
-#line 2203 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2422 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 454 "syntax.y" /* yacc.c:1646  */
+#line 504 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
                 }
-                (yyval) = NEWNODE(TK_ROUTINE_PART_PROC);
+                (yyval) = NEWNODE(TK_ROUTINE_PART);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
             }
-#line 2216 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2435 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 462 "syntax.y" /* yacc.c:1646  */
+#line 512 "syntax.y" /* yacc.c:1646  */
     {
                  if(DEBUG){
                      printf("PARSING ROUTINE_PART NULL\n");
                  }
-                 (yyval) = NEWNODE(TK_ROUTINE_PART_NULL);
-                 (yyval)->child_number = 0;
-                 (yyval)->child = NULL;
+                 (yyval) = NULL;
              }
-#line 2229 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2446 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 472 "syntax.y" /* yacc.c:1646  */
+#line 520 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI
                 if(DEBUG){
@@ -2240,11 +2457,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-3]);
                 (yyval)->child[1] = (yyvsp[-1]);
             }
-#line 2244 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2461 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 484 "syntax.y" /* yacc.c:1646  */
+#line 532 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_FUNCTION TK_COLON
                 if(DEBUG){
@@ -2256,11 +2473,11 @@ yyreduce:
                 (yyval)->child[1] = (yyvsp[-2]);
                 (yyval)->child[2] = (yyvsp[0]);
             }
-#line 2260 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2477 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 497 "syntax.y" /* yacc.c:1646  */
+#line 545 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI PROCEDURE_DECL IS 'TK_PROC_DECL'
                 if(DEBUG){
@@ -2271,11 +2488,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-3]);
                 (yyval)->child[1] = (yyvsp[-1]);
             }
-#line 2275 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2492 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 509 "syntax.y" /* yacc.c:1646  */
+#line 557 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_PROCEDURE  PROCEDURE_HEAD IS 'TK_PROC_HEAD'
                 if(DEBUG){
@@ -2286,165 +2503,174 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-1]);
                 (yyval)->child[1] = (yyvsp[0]);
             }
-#line 2290 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2507 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 521 "syntax.y" /* yacc.c:1646  */
+#line 569 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: PARAMETERS IS 'TK_PARA', IGNORE TK_LP TK_RP
                 if(DEBUG){
                     printf("PARSING PARA\n");
                 }
-                (yyval) = NEWNODE(TK_PARA);
-                (yyval)->child = MALLOC((yyval),1);
-                (yyval)->child[0] = (yyvsp[-1]);
+                (yyval) = (yyvsp[-1]);
             }
-#line 2304 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2519 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 530 "syntax.y" /* yacc.c:1646  */
+#line 576 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: PARAMETERS IS 'TK_PARA'
                 if(DEBUG){
                     printf("PARSING PARA NULL\n");
                 }
-                (yyval) = NEWNODE(TK_PARA_NULL);
-                (yyval)->child_number = 0;
-                (yyval)->child = NULL;
+                (yyval) = NULL;
             }
-#line 2318 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2531 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 541 "syntax.y" /* yacc.c:1646  */
+#line 585 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
                 if(DEBUG){
                     printf("PARSING PARA DECL LIST\n");
                 }
-                (yyval) = NEWNODE(TK_PARA_DL);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval) = (yyvsp[-2]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
             }
-#line 2333 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2553 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 551 "syntax.y" /* yacc.c:1646  */
+#line 602 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
                 if(DEBUG){
                     printf("PARSING PARA DECL LIST : FIRST ONE\n");
                 }
-                (yyval) = NEWNODE(TK_PARA_DL_END);
+                (yyval) = NEWNODE(TK_PARA_DL);
                 (yyval)->child = MALLOC((yyval),1);
                 (yyval)->child[0] = (yyvsp[0]);
             }
-#line 2347 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2567 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 562 "syntax.y" /* yacc.c:1646  */
+#line 613 "syntax.y" /* yacc.c:1646  */
     {
                     //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
                     if(DEBUG){
                         printf("PARSING TK_COLON\n");
                     }
-                    (yyval) = NEWNODE(TK_PARA_TL);
+                    (yyval) = NEWNODE(TK_PARA_TL_VAR);
                     (yyval)->child = MALLOC((yyval),2);
                     (yyval)->child[0] = (yyvsp[-2]);
                     (yyval)->child[1] = (yyvsp[0]);
                 }
-#line 2362 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2582 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 572 "syntax.y" /* yacc.c:1646  */
+#line 623 "syntax.y" /* yacc.c:1646  */
     {
                     //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
                     if(DEBUG){
                         printf("PARSING TK_COLON\n");
                     }
-                    (yyval) = NEWNODE(TK_PARA_TL_END);
+                    (yyval) = NEWNODE(TK_PARA_TL_VAL);
                     (yyval)->child = MALLOC((yyval),2);
                     (yyval)->child[0] = (yyvsp[-2]);
                     (yyval)->child[1] = (yyvsp[0]);
                 }
-#line 2377 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2597 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 584 "syntax.y" /* yacc.c:1646  */
+#line 635 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_VAR VAR_PARA_LIST IS "TK_VAR"
                 if(DEBUG){
                     printf("PARSING VAR LIST\n");
                 }
-                (yyval) = NEWNODE(TK_VAR);
-                (yyval)->child = MALLOC((yyval),1);
-                (yyval)->child[0] = (yyvsp[0]);
+                (yyval) = (yyvsp[0]);
             }
-#line 2391 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2609 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 595 "syntax.y" /* yacc.c:1646  */
+#line 644 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING VAL PARA LIST\n");
                 }
-                (yyval) = NEWNODE(TK_VAL_PARA_LIST);
-                (yyval)->child = MALLOC((yyval),1);
-                (yyval)->child[0] = (yyvsp[0]);
+                (yyval) = (yyvsp[0]);
             }
-#line 2404 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2620 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 605 "syntax.y" /* yacc.c:1646  */
+#line 652 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE BODY\n");
                 }
-                (yyval) = NEWNODE(TK_ROUTINE_BODY);
-                (yyval)->child = MALLOC((yyval),1);
-                (yyval)->child[0] = (yyvsp[0]);
+                (yyval) = (yyvsp[0]);
             }
-#line 2417 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2631 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 615 "syntax.y" /* yacc.c:1646  */
+#line 660 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING STMT LIST\n");
             }
-            (yyval) = NEWNODE(TK_STMT_LIST);
-            (yyval)->child = MALLOC((yyval),2);
-            (yyval)->child[0] = (yyvsp[-2]);
-            (yyval)->child[1] = (yyvsp[-1]);
+            if((yyvsp[-2])==NULL){
+          		(yyval) = NEWNODE(TK_STMT_LIST);
+          		(yyval)->child = MALLOC((yyval), 1);
+          		(yyval)->child[0] = (yyvsp[-1]);
+            }
+          	else{
+          		(yyval) = (yyvsp[-2]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[-1]);
+
+                free(tmp);
+          	}
         }
-#line 2431 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2659 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 624 "syntax.y" /* yacc.c:1646  */
+#line 683 "syntax.y" /* yacc.c:1646  */
     {
               if(DEBUG){
                   printf("PARSING STMT LIST NULL\n");
               }
-              (yyval) = NEWNODE(TK_STMT_LIST_NULL);
-              (yyval)->child_number = 0;
-              (yyval)->child = NULL;
+              (yyval)=NULL;
         }
-#line 2444 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2670 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 634 "syntax.y" /* yacc.c:1646  */
+#line 691 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: IGNORE TK_COLON
         if(DEBUG){
@@ -2455,11 +2681,11 @@ yyreduce:
          (yyval)->child[0] = (yyvsp[-2]);
          (yyval)->child[1] = (yyvsp[0]);
     }
-#line 2459 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2685 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 644 "syntax.y" /* yacc.c:1646  */
+#line 701 "syntax.y" /* yacc.c:1646  */
     {
          //NOTE: IGNORE TK_COLON
          if(DEBUG){
@@ -2469,128 +2695,110 @@ yyreduce:
          (yyval)->child = MALLOC((yyval),1);
          (yyval)->child[0] = (yyvsp[0]);
      }
-#line 2473 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2699 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 655 "syntax.y" /* yacc.c:1646  */
+#line 712 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING ASSIGN STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_ASSIGN);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2486 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2710 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 663 "syntax.y" /* yacc.c:1646  */
+#line 718 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING PROC STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_PROC);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2499 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2721 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 671 "syntax.y" /* yacc.c:1646  */
+#line 724 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING CP STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_CP);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2512 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2732 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 679 "syntax.y" /* yacc.c:1646  */
+#line 730 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING IF STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_IF);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2525 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2743 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 687 "syntax.y" /* yacc.c:1646  */
+#line 736 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING REPEAT STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_REP);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2538 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2754 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 695 "syntax.y" /* yacc.c:1646  */
+#line 742 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING WHILE STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_WHILE);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2551 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2765 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 703 "syntax.y" /* yacc.c:1646  */
+#line 748 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING FOR STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_FOR);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2564 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2776 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 711 "syntax.y" /* yacc.c:1646  */
+#line 754 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING CASE STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_CASE);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2577 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2787 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 719 "syntax.y" /* yacc.c:1646  */
+#line 760 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING GOTO STMT\n");
                     }
-                    (yyval) = NEWNODE(TK_NON_LABEL_STMT_GOTO);
-                    (yyval)->child = MALLOC((yyval),1);
-                    (yyval)->child[0] = (yyvsp[0]);
+                    (yyval) = (yyvsp[0]);
                 }
-#line 2590 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2798 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 729 "syntax.y" /* yacc.c:1646  */
+#line 768 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_ASSIGN
                 if(DEBUG){
@@ -2601,11 +2809,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-2]);
                 (yyval)->child[1] = (yyvsp[0]);
             }
-#line 2605 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2813 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 739 "syntax.y" /* yacc.c:1646  */
+#line 778 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
                 if(DEBUG){
@@ -2617,11 +2825,11 @@ yyreduce:
                 (yyval)->child[1] = (yyvsp[-3]);
                 (yyval)->child[2] = (yyvsp[0]);
             }
-#line 2621 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2829 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 750 "syntax.y" /* yacc.c:1646  */
+#line 789 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
                 if(DEBUG){
@@ -2634,11 +2842,11 @@ yyreduce:
 
                 (yyvsp[-4])->record = (yyvsp[-2]);
             }
-#line 2638 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2846 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 764 "syntax.y" /* yacc.c:1646  */
+#line 803 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                printf("PARSING PROC STMT\n");
@@ -2647,11 +2855,11 @@ yyreduce:
            (yyval)->child = MALLOC((yyval),1);
            (yyval)->child[0] = (yyvsp[0]);
         }
-#line 2651 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2859 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 772 "syntax.y" /* yacc.c:1646  */
+#line 811 "syntax.y" /* yacc.c:1646  */
     {
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -2662,11 +2870,11 @@ yyreduce:
            (yyval)->child[0] = (yyvsp[-3]);
            (yyval)->child[1] = (yyvsp[-1]);
           }
-#line 2666 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2874 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 782 "syntax.y" /* yacc.c:1646  */
+#line 821 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                printf("PARSING PROC STMT\n");
@@ -2675,11 +2883,11 @@ yyreduce:
            (yyval)->child = MALLOC((yyval),1);
            (yyval)->child[0] = (yyvsp[0]);
         }
-#line 2679 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2887 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 790 "syntax.y" /* yacc.c:1646  */
+#line 829 "syntax.y" /* yacc.c:1646  */
     {
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -2690,11 +2898,11 @@ yyreduce:
            (yyval)->child[0] = (yyvsp[-3]);
            (yyval)->child[1] = (yyvsp[-1]);
           }
-#line 2694 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2902 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 800 "syntax.y" /* yacc.c:1646  */
+#line 839 "syntax.y" /* yacc.c:1646  */
     {
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -2705,24 +2913,22 @@ yyreduce:
            (yyval)->child[0] = (yyvsp[-3]);
            (yyval)->child[1] = (yyvsp[-1]);
           }
-#line 2709 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2917 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 812 "syntax.y" /* yacc.c:1646  */
+#line 851 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING CP STMT\n");
             }
-            (yyval) = NEWNODE(TK_CP_STMT);
-            (yyval)->child = MALLOC((yyval),1);
-            (yyval)->child[0] = (yyvsp[-1]);
+            (yyval) = (yyvsp[-1]);
         }
-#line 2722 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2928 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 822 "syntax.y" /* yacc.c:1646  */
+#line 859 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_IF TK_THEN
             if(DEBUG){
@@ -2734,37 +2940,33 @@ yyreduce:
             (yyval)->child[1] = (yyvsp[-1]);
             (yyval)->child[2] = (yyvsp[0]);
         }
-#line 2738 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2944 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 835 "syntax.y" /* yacc.c:1646  */
+#line 872 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ELSE CLAUSE\n");
                 }
-                (yyval) = NEWNODE(TK_ELSE);
-                (yyval)->child = MALLOC((yyval),1);
-                (yyval)->child[0] = (yyvsp[0]);
+                (yyval) = (yyvsp[0]);
             }
-#line 2751 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2955 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 843 "syntax.y" /* yacc.c:1646  */
+#line 878 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ELSE CLAUSE NULL\n");
                 }
-                (yyval) = NEWNODE(TK_ELSE_NULL);
-                (yyval)->child_number = 0;
-                (yyval)->child = NULL;
+                (yyval) = NULL;
             }
-#line 2764 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2966 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 853 "syntax.y" /* yacc.c:1646  */
+#line 886 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_REPEAR TK_UNTIL
                 if(DEBUG){
@@ -2775,11 +2977,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-2]);
                 (yyval)->child[1] = (yyvsp[0]);
             }
-#line 2779 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2981 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 865 "syntax.y" /* yacc.c:1646  */
+#line 898 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_WHILE TK_DO
                 if(DEBUG){
@@ -2790,11 +2992,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[-2]);
                 (yyval)->child[1] = (yyvsp[0]);
             }
-#line 2794 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2996 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 877 "syntax.y" /* yacc.c:1646  */
+#line 910 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
             if(DEBUG){
@@ -2808,11 +3010,11 @@ yyreduce:
             (yyval)->child[3] = (yyvsp[-2]);
             (yyval)->child[4] = (yyvsp[0]);
         }
-#line 2812 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3014 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 892 "syntax.y" /* yacc.c:1646  */
+#line 925 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: THERE IS NO DIR
             if(DEBUG){
@@ -2820,11 +3022,11 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 2824 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3026 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 899 "syntax.y" /* yacc.c:1646  */
+#line 932 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: THERE IS NO DIR
             if(DEBUG){
@@ -2832,11 +3034,11 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 2836 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3038 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 908 "syntax.y" /* yacc.c:1646  */
+#line 941 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_CASE TK_OF TK_END
             if(DEBUG){
@@ -2847,40 +3049,47 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[-3]);
             (yyval)->child[1] = (yyvsp[-1]);
         }
-#line 2851 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3053 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 920 "syntax.y" /* yacc.c:1646  */
+#line 953 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
             if(DEBUG){
                 printf("PARSING CASE EXPR LIST\n");
             }
-            (yyval) = NEWNODE(TK_CASE_EL);
-            (yyval)->child = MALLOC((yyval),2);
-            (yyval)->child[0] = (yyvsp[-1]);
-            (yyval)->child[1] = (yyvsp[0]);
+            	(yyval) = (yyvsp[-1]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[0]);
+
+                free(tmp);
         }
-#line 2866 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3075 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 930 "syntax.y" /* yacc.c:1646  */
+#line 970 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
             if(DEBUG){
                 printf("PARSING CASE EXPR LIST : FIRST ONE\n");
             }
-            (yyval) = NEWNODE(TK_CASE_EL_END);
+            (yyval) = NEWNODE(TK_CASE_EL);
             (yyval)->child = MALLOC((yyval),1);
             (yyval)->child[0] = (yyvsp[0]);
         }
-#line 2880 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3089 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 941 "syntax.y" /* yacc.c:1646  */
+#line 981 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -2891,11 +3100,11 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[-3]);
             (yyval)->child[1] = (yyvsp[-1]);
         }
-#line 2895 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3104 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 951 "syntax.y" /* yacc.c:1646  */
+#line 991 "syntax.y" /* yacc.c:1646  */
     {
          //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -2906,11 +3115,11 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[-3]);
             (yyval)->child[1] = (yyvsp[-1]);
         }
-#line 2910 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3119 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 963 "syntax.y" /* yacc.c:1646  */
+#line 1003 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: GOTO STMT IS ACTUALLY TK_INTEGER
             if(DEBUG){
@@ -2920,264 +3129,301 @@ yyreduce:
             (yyval)->type = TK_GOTO;
            	setName((yyval), TK_GOTO);
         }
-#line 2924 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3133 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 974 "syntax.y" /* yacc.c:1646  */
+#line 1014 "syntax.y" /* yacc.c:1646  */
     {
                     //NOTE: IGNORE TK_COMMA
                     if(DEBUG){
                         printf("PARSING EXP LIST\n");
                     }
-                    (yyval) = NEWNODE(TK_EXP_LIST);
-                    (yyval)->child = MALLOC((yyval),2);
-                    (yyval)->child[0] = (yyvsp[-2]);
-                    (yyval)->child[1] = (yyvsp[0]);
+                    (yyval) = (yyvsp[-2]);
+                	int old_child_number = (yyval)->child_number;
+                	NODE** tmp = (yyval)->child;
+                	(yyval)->child = MALLOC((yyval), (1+old_child_number));
+                	int i;
+                	for(i=0;i<old_child_number;i++){
+                		(yyval)->child[i] = tmp[i];
+                	}
+                	(yyval)->child[i] = (yyvsp[0]);
+
+                	free(tmp);
                 }
-#line 2939 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3155 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 984 "syntax.y" /* yacc.c:1646  */
+#line 1031 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING EXP LIST : FIRST ONE\n");
                     }
-                    (yyval) = NEWNODE(TK_EXP_LIST_END);
+                    (yyval) = NEWNODE(TK_EXP_LIST);
                     (yyval)->child = MALLOC((yyval),1);
                     (yyval)->child[0] = (yyvsp[0]);
                 }
-#line 2952 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3168 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 994 "syntax.y" /* yacc.c:1646  */
+#line 1041 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_GE TK_GT TK_LE TK_LT TK_EQUAL TK_UNEQUAL
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_GE);
+                (yyvsp[-2])->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
            }
-#line 2967 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3185 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 1004 "syntax.y" /* yacc.c:1646  */
+#line 1053 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_GT);
+                (yyvsp[-2])->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
            }
-#line 2981 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3201 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 1013 "syntax.y" /* yacc.c:1646  */
+#line 1064 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_LE);
+                (yyvsp[-2])->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
            }
-#line 2995 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3217 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 1022 "syntax.y" /* yacc.c:1646  */
+#line 1075 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_LT);
+                (yyvsp[-2])->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
            }
-#line 3009 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3233 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 1031 "syntax.y" /* yacc.c:1646  */
+#line 1086 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_EQUAL);
+                (yyvsp[-2])->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
            }
-#line 3023 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3249 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 1040 "syntax.y" /* yacc.c:1646  */
+#line 1097 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_UNEQUAL);
+                (yyvsp[-2])->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[-2]);
-                (yyval)->child[1] = (yyvsp[0]);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
            }
-#line 3037 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3265 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 1049 "syntax.y" /* yacc.c:1646  */
+#line 1108 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION : FIRST ONE\n");
                 }
                 (yyval) = NEWNODE(TK_EXP);
-                (yyval)->child = MALLOC((yyval),1);
+                (yyval)->child = MALLOC((yyval),2);
                 (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
            }
-#line 3050 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3279 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 1059 "syntax.y" /* yacc.c:1646  */
+#line 1119 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_PLUS
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_PLUS);
+         (yyvsp[-2])->child[1] = (yyval);
          (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+         (yyval)->child[0] = (yyvsp[0]);
+         (yyval)->child[1] = NULL;
+         (yyval) = (yyvsp[-2]);
      }
-#line 3065 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3296 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 1069 "syntax.y" /* yacc.c:1646  */
+#line 1131 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_MINUS);
-         (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+         (yyvsp[-2])->child[1] = (yyval);
+                (yyval)->child = MALLOC((yyval),2);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
      }
-#line 3080 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3313 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 1079 "syntax.y" /* yacc.c:1646  */
+#line 1143 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_OR);
-         (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+         (yyvsp[-2])->child[1] = (yyval);
+                (yyval)->child = MALLOC((yyval),2);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
      }
-#line 3095 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3330 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 1089 "syntax.y" /* yacc.c:1646  */
+#line 1155 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_EXPR);
-         (yyval)->child = MALLOC((yyval),1);
+         (yyval)->child = MALLOC((yyval),2);
          (yyval)->child[0] = (yyvsp[0]);
+         (yyval)->child[1] = NULL;
      }
-#line 3109 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3345 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 1100 "syntax.y" /* yacc.c:1646  */
+#line 1167 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MUL\n");
          }
          (yyval) = NEWNODE(TK_MUL);
-         (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+         (yyvsp[-2])->child[1] = (yyval);
+                (yyval)->child = MALLOC((yyval),2);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
      }
-#line 3123 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3361 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 1109 "syntax.y" /* yacc.c:1646  */
+#line 1178 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_DIV\n");
          }
          (yyval) = NEWNODE(TK_DIV);
-         (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+        	(yyvsp[-2])->child[1] = (yyval);
+                (yyval)->child = MALLOC((yyval),2);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
      }
-#line 3137 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3377 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 1118 "syntax.y" /* yacc.c:1646  */
+#line 1189 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MOD\n");
          }
          (yyval) = NEWNODE(TK_MOD);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+        (yyvsp[-2])->child[1] = (yyval);
+                (yyval)->child = MALLOC((yyval),2);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
      }
-#line 3150 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3393 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 1126 "syntax.y" /* yacc.c:1646  */
+#line 1200 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_AND\n");
          }
          (yyval) = NEWNODE(TK_AND);
-         (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[-2]);
-         (yyval)->child[1] = (yyvsp[0]);
+         (yyvsp[-2])->child[1] = (yyval);
+                (yyval)->child = MALLOC((yyval),2);
+                (yyval)->child[0] = (yyvsp[0]);
+                (yyval)->child[1] = NULL;
+                (yyval) = (yyvsp[-2]);
      }
-#line 3164 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3409 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 1135 "syntax.y" /* yacc.c:1646  */
+#line 1211 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TERM : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_TERM);
-         (yyval)->child = MALLOC((yyval),1);
+         (yyval)->child = MALLOC((yyval),2);
          (yyval)->child[0] = (yyvsp[0]);
+         (yyval)->child[1] = NULL;
      }
-#line 3177 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3423 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 1145 "syntax.y" /* yacc.c:1646  */
+#line 1222 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: THERE IS NO TK_FACTOR BUT 'TK_FACTOR' FOLLOWED BY A TYPE
         if(DEBUG){
@@ -3187,11 +3433,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3191 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3437 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 1154 "syntax.y" /* yacc.c:1646  */
+#line 1231 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3202,11 +3448,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-3]);
         (yyval)->child[1] = (yyvsp[-1]);
     }
-#line 3206 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3452 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 1164 "syntax.y" /* yacc.c:1646  */
+#line 1241 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3217,11 +3463,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-3]);
         (yyval)->child[1] = (yyvsp[-1]);
     }
-#line 3221 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3467 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 1174 "syntax.y" /* yacc.c:1646  */
+#line 1251 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3230,11 +3476,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3234 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3480 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 1182 "syntax.y" /* yacc.c:1646  */
+#line 1259 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3244,11 +3490,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[-1]);
     }
-#line 3248 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3494 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 1191 "syntax.y" /* yacc.c:1646  */
+#line 1268 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3257,11 +3503,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3261 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3507 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 1199 "syntax.y" /* yacc.c:1646  */
+#line 1276 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3270,11 +3516,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3274 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3520 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 1207 "syntax.y" /* yacc.c:1646  */
+#line 1284 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LB TK_RB
         if(DEBUG){
@@ -3285,11 +3531,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-3]);
         (yyval)->child[1] = (yyvsp[-1]);
     }
-#line 3289 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3535 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 1217 "syntax.y" /* yacc.c:1646  */
+#line 1294 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: ID->ID IS IN ONE NODE
         if(DEBUG){
@@ -3300,39 +3546,46 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-2]);
         (yyvsp[-2])->record = (yyvsp[-1]);
     }
-#line 3304 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3550 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 1229 "syntax.y" /* yacc.c:1646  */
+#line 1306 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COMMA
             if(DEBUG){
                 printf("PARSING ARGS LIST\n");
             }
-            (yyval) = NEWNODE(TK_ARGS_LIST);
-            (yyval)->child = MALLOC((yyval),2);
-            (yyval)->child[0] = (yyvsp[-2]);
-            (yyval)->child[1] = (yyvsp[-1]);
+            	(yyval) = (yyvsp[-2]);
+                int old_child_number = (yyval)->child_number;
+                NODE** tmp = (yyval)->child;
+                (yyval)->child = MALLOC((yyval), (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                	(yyval)->child[i] = tmp[i];
+                }
+                (yyval)->child[i] = (yyvsp[-1]);
+
+                free(tmp);
         }
-#line 3319 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3572 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 1239 "syntax.y" /* yacc.c:1646  */
+#line 1323 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING ARGS LIST : FIRST ONE\n");
             }
-            (yyval) = NEWNODE(TK_ARGS_LIST_END);
+            (yyval) = NEWNODE(TK_ARGS_LIST);
             (yyval)->child = MALLOC((yyval),1);
             (yyval)->child[0] = (yyvsp[0]);
         }
-#line 3332 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3585 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 3336 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3589 "yy.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3560,7 +3813,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1249 "syntax.y" /* yacc.c:1906  */
+#line 1333 "syntax.y" /* yacc.c:1906  */
 
 
 int yyerror(string s){

@@ -5,6 +5,7 @@ extern int DEBUG;
 extern NODE* ROOT;
 
 void preorder(NODE* root){
+    if(root==NULL) return;
     int i;
     printf("TYPE:%d; CHILDREN:%d\n", root->type, root->child_number);
     for(i=0;i<root->child_number;i++){
@@ -13,18 +14,19 @@ void preorder(NODE* root){
 }
 
 int main(int argc, char** argv){
-    char FILENAME[100];
-    printf("Please input the test file: ");
-    scanf("%s", FILENAME);
+//    char FILENAME[100];
+//    printf("Please input the test file: ");
+//    scanf("%s", FILENAME);
 
-    FILE* file = fopen(FILENAME, "r");
+    FILE* file = fopen("/home/stephen/Github/MIPS_Compiler/TestCases/test4.pas", "r");
     yyin = file;
 
     init();
     yyparse();
 
     if(DEBUG){
-     preorder(ROOT);
+        NODE* tmp = ROOT;
+        preorder(ROOT);
     }
 
     return 0;
