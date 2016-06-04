@@ -1,5 +1,6 @@
 #include "common.h"
 #include "yy.tab.hpp"
+map<int, string> NODE_NAMES;
 
 NODE* NEWNODE(int type){
 	NODE* node = (NODE*)malloc(NODE_SIZE);
@@ -8,8 +9,8 @@ NODE* NEWNODE(int type){
 	node->child_number = 0;
 	node->child = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		printf("%d\n",NODE_NAMES[type].length());
-		node->name = NODE_NAMES[type];
+		node->name = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+		strcpy(node->name, NODE_NAMES[type].c_str());
 	}
 	return node;
 } 
@@ -21,21 +22,21 @@ void cpString(char** str1, char** str2){
 
 void setName(NODE* node, int type){
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		node->name = NODE_NAMES[type];
+		node->name = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+		strcpy(node->name, NODE_NAMES[type].c_str());
 	}
 }
 
 void init(){
 
+	NODE_NAMES[TK_PROGRAM] = "TK_PROGRAM";
 	NODE_NAMES[TK_PROGRAM_HEAD] = "TK_PROGRAM_HEAD";
 	NODE_NAMES[TK_ROUTINE] = "TK_ROUTINE";
 	NODE_NAMES[TK_ROUTINE_HEAD] = "TK_ROUTINE_HEAD";
 	NODE_NAMES[TK_CONST_PART] = "TK_CONST_PART";
-	NODE_NAMES[TK_CONST_PART_END] = "TK_CONST_PART_END";
 	NODE_NAMES[TK_CONST_EL] = "TK_CONST_EL";
 	NODE_NAMES[TK_CONST_EL_END] = "TK_CONST_EL_END";
 	NODE_NAMES[TK_TYPE_PART] = "TK_TYPE_PART";
-	NODE_NAMES[TK_TYPE_PART_END] = "TK_TYPE_PART_END";
 	NODE_NAMES[TK_TYPE_DL] = "TK_TYPE_DL";
 	NODE_NAMES[TK_TYPE_DL_END] = "TK_TYPE_DL_END";
 	NODE_NAMES[TK_TYPE_DEF] = "TK_TYPE_DEF";
@@ -58,12 +59,11 @@ void init(){
 	NODE_NAMES[TK_STD_DD_ID] = "TK_STD_DD_ID";
 
 	NODE_NAMES[TK_VAR_PART] = "TK_VAR_PART";
-	NODE_NAMES[TK_VAR_PART_END] = "TK_VAR_PART_END";
 	NODE_NAMES[TK_DL] = "TK_DL";
 	NODE_NAMES[TK_DL_END] = "TK_DL_END";
 	NODE_NAMES[TK_VAR_DECL] = "TK_VAR_DECL";
 
-	NODE_NAMES[TK_ROUTINE_PART_RF] = "TK_ROUTINE_PART_RB";
+	NODE_NAMES[TK_ROUTINE_PART_RF] = "TK_ROUTINE_PART_RF";
 	NODE_NAMES[TK_ROUTINE_PART_RP] = "TK_ROUTINE_PART_RP";
 	NODE_NAMES[TK_ROUTINE_PART_FUNC] = "TK_ROUTINE_PART_FUNC";
 	NODE_NAMES[TK_ROUTINE_PART_PROC] = "TK_ROUTINE_PART_PROC";
@@ -85,7 +85,6 @@ void init(){
 	NODE_NAMES[TK_STMT_LIST] = "TK_STMT_LIST";
 	NODE_NAMES[TK_STMT_LIST_NULL] = "TK_STMT_LIST_NULL";
 	NODE_NAMES[TK_STMT] = "TK_STMT";
-	NODE_NAMES[TK_STMT_END] = "TK_STMT_END";
 
 	NODE_NAMES[TK_NON_LABEL_STMT_ASSIGN] = "TK_NON_LABEL_STMT_ASSIGN";
 	NODE_NAMES[TK_NON_LABEL_STMT_PROC] = "TK_NON_LABEL_STMT_PROC";
@@ -159,7 +158,12 @@ void init(){
 	NODE_NAMES[TK_ARGS_LIST] = "TK_ARGS_LIST";
 	NODE_NAMES[TK_ARGS_LIST_END] = "TK_ARGS_LIST_END";
 
-	string s;
-	s=NODE_NAMES[TK_ARGS_LIST_END];
+	NODE_NAMES[TK_TYPE_DECL] = "TK_TYPE_DECL";
+	NODE_NAMES[TK_ROUTINE_PART] = "TK_ROUTINE_PART";
+
+
+	NODE_NAMES[TK_STMT_ASSIGN] = "TK_STMT_ASSIGN";
+	NODE_NAMES[TK_STMT_PROC] = "TK_STMT_PROC";
+	NODE_NAMES[TK_STMT_CP] = "TK_STMT_CP";
 
 }
