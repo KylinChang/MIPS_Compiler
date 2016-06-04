@@ -9,8 +9,8 @@
 using namespace std;
 
 typedef struct NODE{
-    string name;
-    string str;
+    char* name;
+    char* str;
     char ch;
     int type;
 	int is_ref;
@@ -25,7 +25,6 @@ typedef struct NODE{
 #define NODE_POINTER_SIZE sizeof(NODE*)
 #define MALLOC(pointer,num) (NODE**)malloc(NODE_POINTER_SIZE*(pointer->child_number=num))
 
-extern map<int, string> NODE_NAMES;
 NODE* NEWNODE(int type);
 void cpString(char** str1, char** str2);
 void setName(NODE* node, int type);

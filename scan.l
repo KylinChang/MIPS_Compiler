@@ -132,7 +132,7 @@ ID [A-Z]([_A-Z0-9])*
 {STRING} {
 	yylval = NEWNODE(TK_STRING);
 	yytext[min(256, yyleng-1)]=0;
-	yylval->str = string(genString(yytext+1, min(255, yyleng-2)));
+	yylval->str = genString(yytext+1, min(255, yyleng-2));
 	return TK_STRING;
 }  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
 
@@ -159,7 +159,7 @@ ID [A-Z]([_A-Z0-9])*
 {ASSIGN} { return TK_ASSIGN; }
 {SYS_PROC} {
 	yylval = NEWNODE(TK_SYS_PROC);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_PROC;
 }
 {READ} { return TK_READ; }
@@ -188,32 +188,32 @@ ID [A-Z]([_A-Z0-9])*
 {MUL} { return TK_MUL; }
 {DIV} {
 	yylval = NEWNODE(TK_DIV);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_DIV;
 }
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
 {SYS_FUNCT} {
 	yylval = NEWNODE(TK_SYS_FUNCT);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_FUNCT;
 }
 {NOT} { return TK_NOT; }
 
 {SYS_CON} {
 	yylval = NEWNODE(TK_SYS_CON);
-	yylval->name =string(genString(yytext, yyleng));
+	yylval->name =genString(yytext, yyleng);
 	return TK_SYS_CON;
 }
 {SYS_TYPE} {
 	yylval = NEWNODE(TK_SYS_TYPE);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_TYPE;
 }
 
 {ID} {
 	yylval = NEWNODE(TK_ID);
-	yylval->name = string(yytext);
+	cpString(&yylval->name, &yytext);
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 

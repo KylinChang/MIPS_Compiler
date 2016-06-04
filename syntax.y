@@ -4,7 +4,6 @@
 #include <stdlib.h>
 int DEBUG = 1;
 NODE* ROOT;
-map<int, string> NODE_NAMES;
 
 %}
 
@@ -53,7 +52,7 @@ program : program_head routine TK_DOT{
 program_head : TK_PROGRAM TK_ID TK_SEMI{
         //NOTE: PROGRAM HEAD ACTUALLY IS TK_ID
             if(DEBUG){
-                printf("PROGRAM HEAD:%s\n", $2->name.c_str());
+                printf("PROGRAM HEAD:%s\n", $2->name);
             }
             $$ = $2;
             $$->type = TK_PROGRAM_HEAD;

@@ -1102,7 +1102,7 @@ YY_RULE_SETUP
 {
 	yylval = NEWNODE(TK_STRING);
 	yytext[min(256, yyleng-1)]=0;
-	yylval->str = string(genString(yytext+1, min(255, yyleng-2)));
+	yylval->str = genString(yytext+1, min(255, yyleng-2));
 	return TK_STRING;
 }  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
 	YY_BREAK
@@ -1200,7 +1200,7 @@ YY_RULE_SETUP
 #line 160 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_PROC);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_PROC;
 }
 	YY_BREAK
@@ -1321,7 +1321,7 @@ YY_RULE_SETUP
 #line 189 "scan.l"
 {
 	yylval = NEWNODE(TK_DIV);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_DIV;
 }
 	YY_BREAK
@@ -1340,7 +1340,7 @@ YY_RULE_SETUP
 #line 196 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_FUNCT);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_FUNCT;
 }
 	YY_BREAK
@@ -1354,7 +1354,7 @@ YY_RULE_SETUP
 #line 203 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_CON);
-	yylval->name =string(genString(yytext, yyleng));
+	yylval->name =genString(yytext, yyleng);
 	return TK_SYS_CON;
 }
 	YY_BREAK
@@ -1363,7 +1363,7 @@ YY_RULE_SETUP
 #line 208 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_TYPE);
-	yylval->name = string(genString(yytext, yyleng));
+	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_TYPE;
 }
 	YY_BREAK
@@ -1372,7 +1372,7 @@ YY_RULE_SETUP
 #line 214 "scan.l"
 {
 	yylval = NEWNODE(TK_ID);
-	//yylval->name = string(yytext);
+	cpString(&yylval->name, &yytext);
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 	YY_BREAK

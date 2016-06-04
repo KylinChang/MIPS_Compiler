@@ -1,5 +1,6 @@
 #include "common.h"
 #include "yy.tab.hpp"
+map<int, string> NODE_NAMES;
 
 NODE* NEWNODE(int type){
 	NODE* node = (NODE*)malloc(NODE_SIZE);
@@ -8,8 +9,8 @@ NODE* NEWNODE(int type){
 	node->child_number = 0;
 	node->child = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		printf("%d\n",NODE_NAMES[type].length());
-		node->name = NODE_NAMES[type];
+		node->name = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+		strcpy(node->name, NODE_NAMES[type].c_str());
 	}
 	return node;
 } 
@@ -21,7 +22,8 @@ void cpString(char** str1, char** str2){
 
 void setName(NODE* node, int type){
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		node->name = NODE_NAMES[type];
+		node->name = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+		strcpy(node->name, NODE_NAMES[type].c_str());
 	}
 }
 
