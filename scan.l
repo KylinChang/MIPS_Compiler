@@ -31,6 +31,7 @@ char *genString(char *s, int len) {
 	strcpy(ss, s);
 	return ss;
 }
+extern FILE* yyout;
 void endlessComment();  /*  用于处理注释只有前面一半的情况  */
 %}
 
@@ -131,7 +132,7 @@ ID [A-Z]([_A-Z0-9])*
 {STRING} {
 	yylval = NEWNODE(TK_STRING);
 	yytext[min(256, yyleng-1)]=0;
-	yylval->str = genString(yytext+1, min(255, yyleng-2));
+	yylval->str = string(genString(yytext+1, min(255, yyleng-2)));
 	return TK_STRING;
 }  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
 
@@ -158,14 +159,10 @@ ID [A-Z]([_A-Z0-9])*
 {ASSIGN} { return TK_ASSIGN; }
 {SYS_PROC} {
 	yylval = NEWNODE(TK_SYS_PROC);
-	yylval->name = genString(yytext, yyleng);
+	yylval->name = string(genString(yytext, yyleng));
 	return TK_SYS_PROC;
 }
-{READ} {
-	yylval = NEWNODE(TK_READ);
-	yylval->name = genString(yytext, yyleng);
-	return TK_READ;
-}
+{READ} { return TK_READ; }
 {BEGIN} {
 	return TK_BEGIN;
 }
@@ -177,16 +174,8 @@ ID [A-Z]([_A-Z0-9])*
 {WHILE} { return TK_WHILE; }
 {DO} { return TK_DO; }
 {FOR} { return TK_FOR; }
-{TO} {
-	yylval = NEWNODE(TK_TO);
-	yylval->name = genString(yytext, yyleng);
-	return TK_TO;
-}
-{DOWNTO} {
-	yylval = NEWNODE(TK_DOWNTO);
-	yylval->name = genString(yytext, yyleng);
-	return TK_DOWNTO;
-}
+{TO} { return TK_TO; }
+{DOWNTO} { return TK_DOWNTO; }
 {CASE} { return TK_CASE; }
 {GOTO} { return TK_GOTO; }
 {GE} { return TK_GE; }
@@ -199,32 +188,32 @@ ID [A-Z]([_A-Z0-9])*
 {MUL} { return TK_MUL; }
 {DIV} {
 	yylval = NEWNODE(TK_DIV);
-	yylval->name = genString(yytext, yyleng);
+	yylval->name = string(genString(yytext, yyleng));
 	return TK_DIV;
 }
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
 {SYS_FUNCT} {
 	yylval = NEWNODE(TK_SYS_FUNCT);
-	yylval->name = genString(yytext, yyleng);
+	yylval->name = string(genString(yytext, yyleng));
 	return TK_SYS_FUNCT;
 }
 {NOT} { return TK_NOT; }
 
 {SYS_CON} {
 	yylval = NEWNODE(TK_SYS_CON);
-	yylval->name = genString(yytext, yyleng);
+	yylval->name =string(genString(yytext, yyleng));
 	return TK_SYS_CON;
 }
 {SYS_TYPE} {
 	yylval = NEWNODE(TK_SYS_TYPE);
-	yylval->name = genString(yytext, yyleng);
+	yylval->name = string(genString(yytext, yyleng));
 	return TK_SYS_TYPE;
 }
 
 {ID} {
 	yylval = NEWNODE(TK_ID);
-	cpString(&yylval->name, &yytext);
+	yylval->name = string(yytext);
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 
@@ -232,7 +221,7 @@ ID [A-Z]([_A-Z0-9])*
 	char c;
 	while ((c=yyinput())!='}') {
 		if (!(~c)) endlessComment();
-		if (c=='\n') yylineno++;
+		//if (c=='\n') yylineno++;
 	}
 }
 "(*" {
@@ -240,17 +229,17 @@ ID [A-Z]([_A-Z0-9])*
 	do {
 		while ((c=yyinput())!='*') {
 			if (!(~c)) endlessComment();		
-			if (c=='\n') yylineno++;
+			//if (c=='\n') yylineno++;
 		}
 		while ((c=yyinput())=='*');
 		if (!(~c)) endlessComment();
-		if (c=='\n') yylineno++;
+		//if (c=='\n') yylineno++;
 		if (c==')') break;
 	} while (1);
 }
 
 \n {
-	++yylineno;
+	//++yylineno;
 }
 \r {
 }
@@ -261,7 +250,7 @@ ID [A-Z]([_A-Z0-9])*
 %%
 void endlessComment() {
 	fprintf(yyout, "Unexpected EOF inside comment\n");
-	exit(1);
+//	exit(1);
 }
 int yywrap() {
 	return 1;

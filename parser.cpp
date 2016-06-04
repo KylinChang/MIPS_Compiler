@@ -1,6 +1,6 @@
 #include "common.h"
 
-extern void yyparse();
+extern int yyparse();
 extern int DEBUG;
 extern NODE* ROOT;
 
@@ -12,13 +12,15 @@ void preorder(NODE* root){
     }
 }
 
-int main(){
-    char FILENAME[100];
-    printf("Please input the test file: ");
-    scanf("%s", FILENAME);
-    FILE* file = fopen(FILENAME, "r");
+int main(int argc, char** argv){
+//    char FILENAME[100];
+//    printf("Please input the test file: ");
+//    scanf("%s", FILENAME);
+
+    FILE* file = fopen("/home/stephen/Github/MIPS_Compiler/TestCases/test1.pas", "r");
     yyin = file;
 
+    init();
     yyparse();
 
     if(DEBUG){
