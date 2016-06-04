@@ -1,8 +1,10 @@
-#ifndef __NODE__
-#define __NODE__
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef __COMMON_H__
+#define __COMMON_H__
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+
 typedef struct NODE{
     int type;
     
@@ -13,7 +15,6 @@ typedef struct NODE{
     double dval;
     int child_number;
     struct NODE** child;
-
     struct NODE* attr;
 }NODE;
 
@@ -23,5 +24,17 @@ typedef struct NODE{
 
 NODE* NEWNODE(int type);
 void cpString(char** str1, char** str2);
+
+extern "C" {
+	extern int yylex();
+}
+
+int yyerror(char* s);
+
+#define YYSTYPE NODE*
+
+extern char* yytext;
+//extern int yylineno;
+extern FILE* yyin;
 
 #endif

@@ -1,4 +1,4 @@
-#include "node.h"
+#include "common.h"
 
 NODE* NEWNODE(int type){
 	NODE* node = (NODE*)malloc(NODE_SIZE);

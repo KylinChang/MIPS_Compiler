@@ -21,19 +21,16 @@
 		* 修改了CHAR和STRING的判断条件，STRING可判断多单引号情况，且将空字符归为STRING(ubuntu上的free pascal是这样)
 */
 
-#include "node.h"
-#include "y.tab.h"
+ 
+#include "common.h"
+#include "yy.tab.hpp"
 #define min(a,b) ( ((a)>(b)) ? (b):(a) )
-
 extern int DEBUG;
-
-extern void cpString(char** str1, char** str2);
 char *genString(char *s, int len) {
 	char *ss = (char*)malloc(sizeof(char) * (len + 1));
 	strcpy(ss, s);
 	return ss;
 }
-
 void endlessComment();  /*  用于处理注释只有前面一半的情况  */
 %}
 
@@ -233,7 +230,7 @@ ID [A-Z]([_A-Z0-9])*
 
 "{" {
 	char c;
-	while ((c=input())!='}') {
+	while ((c=yyinput())!='}') {
 		if (!(~c)) endlessComment();
 		if (c=='\n') yylineno++;
 	}
@@ -241,11 +238,11 @@ ID [A-Z]([_A-Z0-9])*
 "(*" {
 	char c;
 	do {
-		while ((c=input())!='*') {
+		while ((c=yyinput())!='*') {
 			if (!(~c)) endlessComment();		
 			if (c=='\n') yylineno++;
 		}
-		while ((c=input())=='*');
+		while ((c=yyinput())=='*');
 		if (!(~c)) endlessComment();
 		if (c=='\n') yylineno++;
 		if (c==')') break;
