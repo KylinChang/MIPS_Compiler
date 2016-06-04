@@ -20,7 +20,7 @@ NODE* ROOT;
 %token     ERROR 
 
 %token     TK_PROGRAM_HEAD TK_ROUTINE TK_ROUTINE_PART TK_ROUTINE_HEAD TK_ROUTINE_BODY TK_CONST_PART TK_CONST_PART_END
-        TK_TYPE_PART TK_TYPE_PART_END TK_VAR_PART TK_VAR_PART_END TK_ROUTINE_PART_RF TK_ROUTINE_PART_RP TK_ROUTINE_PART_FUNC TK_ROUTINE_PART_PROC TK_ROUTINE_PART_NULL TK_STMT_LIST TK_STMT_LIST_NULL TK_STMT TK_STMT_END TK_CP_STMT
+        TK_TYPE_PART TK_TYPE_PART_END TK_VAR_PART TK_VAR_PART_END TK_ROUTINE_PART_RF TK_ROUTINE_PART_RP TK_ROUTINE_PART_FUNC TK_ROUTINE_PART_PROC TK_ROUTINE_PART_NULL TK_STMT_LIST TK_STMT_LIST_NULL TK_STMT_LABEL TK_STMT TK_CP_STMT
 
 %token     TK_VAL_PARA_LIST TK_NON_LABEL_STMT_ASSIGN TK_NON_LABEL_STMT_PROC TK_NON_LABEL_STMT_CP 	
 		TK_NON_LABEL_STMT_IF TK_NON_LABEL_STMT_REP TK_NON_LABEL_STMT_WHILE TK_NON_LABEL_STMT_FOR
@@ -34,6 +34,7 @@ NODE* ROOT;
         TK_PROC_DECL TK_PROC_HEAD TK_PARA  TK_PARA_TL TK_PARA_NULL TK_PARA_DL TK_PARA_DL_END TK_PARA_TL_VAR TK_PARA_TL_VAL TK_PARA_TL_END TK_PROC
         TK_CASE_EL TK_CASE_EL_END TK_CASE_EXPR TK_CASE_EXPR_END TK_EXPR TK_ASSIGN_ID TK_ASSIGN_ID_EXPR TK_ASSIGN_DD
         TK_PROC_ID TK_PROC_ID_ARGS TK_PROC_SYS TK_PROC_SYS_ARGS TK_PROC_READ
+        TK_STMT_ASSIGN TK_STMT_PROC TK_STMT_CP
 
 %%
 program : program_head routine TK_DOT{
@@ -186,10 +187,8 @@ type_part : TK_TYPE type_decl_list{
                   if(DEBUG){
                       printf("PARSING TYPE PART NULL\n");
                   }
-                  $$ = NEWNODE(TK_TYPE_PART_END);
-                $$->child_number = 0;
-                $$->child = NULL;
-        }
+                $$=NULL;
+                }
         ;
 
 type_decl_list : type_decl_list type_definition{
@@ -693,7 +692,7 @@ stmt : TK_INTEGER TK_COLON non_label_stmt{
         if(DEBUG){
             printf("PARSING STMT\n");
         }
-        $$ = NEWNODE(TK_STMT);
+        $$ = NEWNODE(TK_STMT_LABEL);
          $$->child = MALLOC($$,2);
          $$->child[0] = $1;
          $$->child[1] = $3;
@@ -703,7 +702,7 @@ stmt : TK_INTEGER TK_COLON non_label_stmt{
          if(DEBUG){
              printf("PARSING NON LABEL STMT\n");
          }
-         $$ = NEWNODE(TK_STMT_END);
+         $$ = NEWNODE(TK_STMT);
          $$->child = MALLOC($$,1);
          $$->child[0] = $1;
      }
@@ -713,19 +712,25 @@ non_label_stmt : assign_stmt{
                     if(DEBUG){
                         printf("PARSING ASSIGN STMT\n");
                     }
-                    $$ = $1;
+                    $$ = NEWNODE(TK_STMT_ASSIGN);
+                    $$->child = MALLOC($$, 1);
+                    $$->child[0] = $1;
                 }
                | proc_stmt{
                     if(DEBUG){
                         printf("PARSING PROC STMT\n");
                     }
-                    $$ = $1;
+                    $$ = NEWNODE(TK_STMT_PROC);
+                    $$->child = MALLOC($$, 1);
+                    $$->child[0] = $1;
                 }
                | compound_stmt{
                     if(DEBUG){
                         printf("PARSING CP STMT\n");
                     }
-                    $$ = $1;
+                    $$ = NEWNODE(TK_STMT_CP);
+                    $$->child = MALLOC($$, 1);
+                    $$->child[0] = $1;
                 }
                | if_stmt{
                     if(DEBUG){
