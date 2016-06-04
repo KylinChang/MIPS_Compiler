@@ -1,4 +1,10 @@
-a.exe
+
+/lex.yy.c
+/y.tab.h
+/y.tab.c
+*.bak
+
+
 ### C++ template
 # Compiled Object files
 *.slo

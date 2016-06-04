@@ -8,8 +8,8 @@ NODE* NEWNODE(int type){
 	node->child_number = 0;
 	node->child = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		cout<<NODE_NAMES[type]<<endl;
-		node->name = string(NODE_NAMES[type].c_str());
+		printf("%d\n",NODE_NAMES[type].length());
+		node->name = NODE_NAMES[type];
 	}
 	return node;
 } 

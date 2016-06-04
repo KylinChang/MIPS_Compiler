@@ -1,5 +1,7 @@
 %option caseless
 %{
+#include "node.h"
+#include "y.tab.h"
 /*
 	* <del>TK_MUL有修改成TK_STAR</del>
 	* <del>不知道文档里的DIV表示"/"还是"DIV"，我就当实数除"/"处理了</del>
@@ -21,18 +23,9 @@
 		* 修改了CHAR和STRING的判断条件，STRING可判断多单引号情况，且将空字符归为STRING(ubuntu上的free pascal是这样)
 */
 
- 
-#include "common.h"
-#include "yy.tab.hpp"
-#define min(a,b) ( ((a)>(b)) ? (b):(a) )
-extern int DEBUG;
-char *genString(char *s, int len) {
-	char *ss = (char*)malloc(sizeof(char) * (len + 1));
-	strcpy(ss, s);
-	return ss;
-}
-extern FILE* yyout;
 void endlessComment();  /*  用于处理注释只有前面一半的情况  */
+
+extern int DEBUG;
 %}
 
 DOT "."
@@ -43,7 +36,7 @@ EQUAL "="
 
 DIGITS ([0-9])+
 INTEGER_10 ("+"|"-")?{DIGITS}
-INTEGER ("+"|"-")?$?{DIGITS}
+INTEGER $?("+"|"-")?{DIGITS}
 REAL {INTEGER_10}"."{DIGITS}(E{INTEGER_10})?
 CHAR '([^'\n]|'')'
 STRING '([^\'\n]|'')*'
@@ -94,47 +87,47 @@ AND "AND"
 SYS_FUNCT "abs"|"chr"|"odd"|"ord"|"pred"|"sqr"|"sqrt"|"succ"
 NOT "NOT"
 
+EXTERNAL "EXTERNAL"|"EXTERN"
+FORWARD "FORWARD"
+IN "IN"
+LABEL "LABEL"
+NIL "NIL"
+OTHERWISE "OTHERWISE"
+PACKED "PACKED"
+FILE "FILE"
+SET "SET"
+WITH "WITH"
+STARSTAR "**"
+UPARROW "->"|"^"
+
+
 SYS_CON "maxint"|"maxlongint"|"true"|"false"
 SYS_TYPE "shortint"|"smallint"|"longint"|"int64"|"integer"|"single"|"double"|"extended"|"comp"|"currency"|"real"|"ansichar"|"widechar"|"char"|"string"|"bytebool"|"wordbool"|"longbool"|"boolean"|"byte"|"word"|"dword"|"longword"|"cardinal"|"text"|"TDateTime"
 
 ID [A-Z]([_A-Z0-9])*
 
 %%
-{DOT} { return TK_DOT; }
-{PROGRAM} { return TK_PROGRAM; }
-{SEMI} { return TK_SEMI; }
+{DOT} {
+	return TK_DOT;
+}
+{PROGRAM} {
+	return TK_PROGRAM;
+}
+{SEMI} {
+	return TK_SEMI;
+}
 {CONST} { return TK_CONST; }
 {EQUAL} { return TK_EQUAL; }
 
-{REAL} {
-	yylval = NEWNODE(TK_REAL);
-	sscanf(yytext, "%lf", &yylval->dval);
-	return TK_REAL;
-}  /*  实数类型应写在整数类型之上  */
-{INTEGER} {
+{REAL} { return TK_REAL; }  /*  实数类型应写在整数类型之上  */
+{INTEGER} {	
 	yylval = NEWNODE(TK_INTEGER);
-	char *ts = yytext;
-	int sign = 1;
-	if (*ts == '+' || *ts == '-') {
-		sign = (*ts=='+') ? 1 : -1;
-		ts++;
-	}
-	if (*ts == '$') sscanf(++ts, "%x", &yylval->ival);
-	else            sscanf(ts, "%d", &yylval->ival);
-	yylval->ival *= sign;
+	sscanf(yytext, "%d", &yylval->ival);
+	yylval->child =  NULL;
 	return TK_INTEGER;
 }
-{CHAR} {
-	yylval = NEWNODE(TK_CHAR);
-	sscanf(yytext+1, "%c", &yylval->ch);  /*  单引号的情况也可处理  */
-	return TK_CHAR;
-}  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
-{STRING} {
-	yylval = NEWNODE(TK_STRING);
-	yytext[min(256, yyleng-1)]=0;
-	yylval->str = string(genString(yytext+1, min(255, yyleng-2)));
-	return TK_STRING;
-}  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
+{CHAR} { return TK_CHAR; }  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
+{STRING} { return TK_STRING; }
 
 {TYPE} { return TK_TYPE; }
 {ARRAY} { return TK_ARRAY; }
@@ -157,11 +150,7 @@ ID [A-Z]([_A-Z0-9])*
 {FUNCTION} { return TK_FUNCTION; }
 {PROCEDURE} { return TK_PROCEDURE; }
 {ASSIGN} { return TK_ASSIGN; }
-{SYS_PROC} {
-	yylval = NEWNODE(TK_SYS_PROC);
-	yylval->name = string(genString(yytext, yyleng));
-	return TK_SYS_PROC;
-}
+{SYS_PROC} { return TK_SYS_PROC; }
 {READ} { return TK_READ; }
 {BEGIN} {
 	return TK_BEGIN;
@@ -186,60 +175,62 @@ ID [A-Z]([_A-Z0-9])*
 {PLUS} { return TK_PLUS; }
 {OR} { return TK_OR; }
 {MUL} { return TK_MUL; }
-{DIV} {
-	yylval = NEWNODE(TK_DIV);
-	yylval->name = string(genString(yytext, yyleng));
-	return TK_DIV;
-}
+{DIV} { return TK_DIV; }
+{SLASH} { return TK_SLASH; }
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
-{SYS_FUNCT} {
-	yylval = NEWNODE(TK_SYS_FUNCT);
-	yylval->name = string(genString(yytext, yyleng));
-	return TK_SYS_FUNCT;
-}
+{SYS_FUNCT} { return TK_SYS_FUNCT; }
 {NOT} { return TK_NOT; }
 
-{SYS_CON} {
-	yylval = NEWNODE(TK_SYS_CON);
-	yylval->name =string(genString(yytext, yyleng));
-	return TK_SYS_CON;
-}
-{SYS_TYPE} {
-	yylval = NEWNODE(TK_SYS_TYPE);
-	yylval->name = string(genString(yytext, yyleng));
-	return TK_SYS_TYPE;
-}
+{EXTERNAL} { return EXTERNAL; }
+{FORWARD} { return FORWARD; }
+{IN} { return TK_IN; }  /*  ??  */
+{LABEL} { return LABEL; }
+{NIL} { return NIL; }
+{OTHERWISE} { return TK_OTHERWISE; }
+{PACKED} { return PACKED; }
+{FILE} { return PFILE; }
+{SET} { return SET; }
+{WITH} { return WITH; }
+{STARSTAR} { return STARSTAR; }
+{UPARROW} { return TK_UPARROW; }
 
-{ID} {
+
+{SYS_CON} { return TK_SYS_CON; }
+{SYS_TYPE} { return TK_SYS_TYPE; }
+
+[a-zA-Z]([_a-zA-Z0-9])* {
 	yylval = NEWNODE(TK_ID);
-	yylval->name = string(yytext);
+	cpString(&yylval->name, &yytext);
+	yylval->child_number = 0;
+	yylval->child = NULL;
+	yylval->attr = NULL;
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 
 "{" {
 	char c;
-	while ((c=yyinput())!='}') {
+	while ((c=input())!='}') {
 		if (!(~c)) endlessComment();
-		//if (c=='\n') yylineno++;
+		if (c=='\n') yylineno++;
 	}
 }
 "(*" {
 	char c;
 	do {
-		while ((c=yyinput())!='*') {
+		while ((c=input())!='*') {
 			if (!(~c)) endlessComment();		
-			//if (c=='\n') yylineno++;
+			if (c=='\n') yylineno++;
 		}
-		while ((c=yyinput())=='*');
+		while ((c=input())=='*');
 		if (!(~c)) endlessComment();
-		//if (c=='\n') yylineno++;
+		if (c=='\n') yylineno++;
 		if (c==')') break;
 	} while (1);
 }
 
 \n {
-	//++yylineno;
+	++yylineno;
 }
 \r {
 }
@@ -250,7 +241,7 @@ ID [A-Z]([_A-Z0-9])*
 %%
 void endlessComment() {
 	fprintf(yyout, "Unexpected EOF inside comment\n");
-//	exit(1);
+	exit(1);
 }
 int yywrap() {
 	return 1;
