@@ -13,7 +13,6 @@ typedef struct NODE{
     char* str;
     char ch;
     int type;
-	int is_ref;
     int ival;
     double dval;
     int child_number;

@@ -5,7 +5,6 @@ map<int, string> NODE_NAMES;
 NODE* NEWNODE(int type){
 	NODE* node = (NODE*)malloc(NODE_SIZE);
 	node->type = type;
-	node->is_ref = type==TK_REF?1 : 0;
 	node->child_number = 0;
 	node->child = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
@@ -34,8 +33,8 @@ void node_init(){
 	NODE_NAMES[TK_ROUTINE] = "TK_ROUTINE";
 	NODE_NAMES[TK_ROUTINE_HEAD] = "TK_ROUTINE_HEAD";
 	NODE_NAMES[TK_CONST_PART] = "TK_CONST_PART";
-	NODE_NAMES[TK_CONST_EL] = "TK_CONST_EL";
-	NODE_NAMES[TK_CONST_EL_END] = "TK_CONST_EL_END";
+	NODE_NAMES[TK_CONST_DL] = "TK_CONST_DL";
+	NODE_NAMES[TK_CONST_DL_END] = "TK_CONST_DL_END";
 	NODE_NAMES[TK_TYPE_PART] = "TK_TYPE_PART";
 	NODE_NAMES[TK_TYPE_DL] = "TK_TYPE_DL";
 	NODE_NAMES[TK_TYPE_DL_END] = "TK_TYPE_DL_END";
@@ -168,5 +167,7 @@ void node_init(){
 	NODE_NAMES[TK_STMT_LABEL] = "TK_STMT_LABEL";
 
 	NODE_NAMES[TK_INTEGER] = "TK_INTEGER";
+	NODE_NAMES[TK_REAL] = "TK_REAL";
+	NODE_NAMES[TK_CHAR] = "TK_CHAR";
 
 }

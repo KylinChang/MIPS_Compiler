@@ -29,7 +29,7 @@ extern int yylineno;
 		TK_EXP_LIST TK_EXP_LIST_END TK_EXP TK_TERM 
         TK_FACTOR_ID TK_FACTOR_ID_ARGS TK_FACTOR_SYS_FUNCT TK_FACTOR_CONST TK_FACTOR_EXP TK_FACTOR_NOT
         TK_FACTOR_MINUS TK_FACTOR_ID_EXP TK_FACTOR_DD TK_ARGS_LIST TK_ARGS_LIST_END
-        TK_CONST_EL TK_CONST_EL_END TK_TYPE_DL TK_TYPE_DL_END TK_TYPE_DEF TK_TYPE_DECL TK_TYPE_DECL_SIM TK_TYPE_DECL_ARR TK_TYPE_DECL_REC
+        TK_CONST_DL TK_CONST_DL_END TK_TYPE_DL TK_TYPE_DL_END TK_TYPE_DEF TK_TYPE_DECL TK_TYPE_DECL_SIM TK_TYPE_DECL_ARR TK_TYPE_DECL_REC
         TK_FIELD_DL TK_FIELD_DL_END TK_FIELD_DECL TK_NL TK_NL_END
         TK_STD_SYS_TYPE TK_STD_ID TK_STD_NL TK_STD_DD TK_STD_DD_M TK_STD_DD_MM TK_STD_DD_ID TK_DL TK_DL_END TK_VAR_DECL TK_FUNC_DECL TK_FUNC_HEAD 
         TK_PROC_DECL TK_PROC_HEAD TK_PARA  TK_PARA_TL TK_PARA_NULL TK_PARA_DL TK_PARA_DL_END TK_PARA_TL_VAR TK_PARA_TL_VAL TK_PARA_TL_END TK_PROC
@@ -108,7 +108,7 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
                         printf("PARSING CONST EXPR LIST\n");
                     }
                     $$ = $1;
-                    NODE* node = NEWNODE(TK_CONST_EL_END);
+                    NODE* node = NEWNODE(TK_CONST_DL_END);
                     node->child = MALLOC(node,2);
                     node->child[0] = $2;
                     node->child[1] = $4;
@@ -129,8 +129,8 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
                     if(DEBUG){
                         printf("PARSING CONST EXPR LIST : FIRST ONE\n");
                     }
-                    $$ = NEWNODE(TK_CONST_EL);
-                    NODE* node = NEWNODE(TK_CONST_EL_END);
+                    $$ = NEWNODE(TK_CONST_DL);
+                    NODE* node = NEWNODE(TK_CONST_DL_END);
 
                     node->child = MALLOC(node,2);
                     node->child[0] = $1;
@@ -270,9 +270,7 @@ record_type_decl : TK_RECORD field_decl_list TK_END{
                 if(DEBUG){
                     printf("PARSING RECORD TYPE DECL\n");
                 }
-                $$ = NEWNODE(TK_RECORD);
-                $$->child = MALLOC($$,1);
-                $$->child[0] = $2;
+                $$ = $2;
             }
             ;
 
