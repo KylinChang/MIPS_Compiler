@@ -25,10 +25,15 @@
 #include "common.h"
 #include "yy.tab.hpp"
 #define min(a,b) ( ((a)>(b)) ? (b):(a) )
+#define TO_LOWER_CASE(ch) (ch<='A' && ch>='a')?(ch-'A'+'a') : ch;
 extern int DEBUG;
 char *genString(char *s, int len) {
 	char *ss = (char*)malloc(sizeof(char) * (len + 1));
 	strcpy(ss, s);
+	int i;
+	for(i=0;i<len;i++){
+	    ss[i] = TO_LOWER_CASE(ss[i]);
+	}
 	return ss;
 }
 extern FILE* yyout;

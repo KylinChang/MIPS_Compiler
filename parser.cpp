@@ -8,7 +8,6 @@ void preorder(NODE* root){
         preorder(root->child[i]);
     }
 }
-
 //int main(int argc, char** argv){
 ////    char FILENAME[100];
 ////    printf("Please input the test file: ");
@@ -27,3 +26,4 @@ void preorder(NODE* root){
 //
 //    return 0;
 //}
+
