@@ -108,11 +108,13 @@ ID [A-Z]([_A-Z0-9])*
 
 {REAL} {
 	yylval = NEWNODE(TK_REAL);
+	yylval->lineno = yylineno;
 	sscanf(yytext, "%lf", &yylval->dval);
 	return TK_REAL;
 }  /*  实数类型应写在整数类型之上  */
 {INTEGER} {
 	yylval = NEWNODE(TK_INTEGER);
+	yylval->lineno = yylineno;
 	char *ts = yytext;
 	int sign = 1;
 	if (*ts == '+' || *ts == '-') {
@@ -126,11 +128,13 @@ ID [A-Z]([_A-Z0-9])*
 }
 {CHAR} {
 	yylval = NEWNODE(TK_CHAR);
+	yylval->lineno = yylineno;
 	sscanf(yytext+1, "%c", &yylval->ch);  /*  单引号的情况也可处理  */
 	return TK_CHAR;
 }  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
 {STRING} {
 	yylval = NEWNODE(TK_STRING);
+	yylval->lineno = yylineno;
 	yytext[min(256, yyleng-1)]=0;
 	yylval->str = genString(yytext+1, min(255, yyleng-2));
 	return TK_STRING;
@@ -159,11 +163,13 @@ ID [A-Z]([_A-Z0-9])*
 {ASSIGN} { return TK_ASSIGN; }
 {SYS_PROC} {
 	yylval = NEWNODE(TK_SYS_PROC);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_PROC;
 }
 {READ} {
 	yylval = NEWNODE(TK_READ);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_READ;
 }
@@ -180,11 +186,13 @@ ID [A-Z]([_A-Z0-9])*
 {FOR} { return TK_FOR; }
 {TO} {
 	yylval = NEWNODE(TK_TO);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_TO;
 }
 {DOWNTO} {
 	yylval = NEWNODE(TK_DOWNTO);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_DOWNTO;
 }
@@ -200,6 +208,7 @@ ID [A-Z]([_A-Z0-9])*
 {MUL} { return TK_MUL; }
 {DIV} {
 	yylval = NEWNODE(TK_DIV);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_DIV;
 }
@@ -207,6 +216,7 @@ ID [A-Z]([_A-Z0-9])*
 {AND} { return TK_AND; }
 {SYS_FUNCT} {
 	yylval = NEWNODE(TK_SYS_FUNCT);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_FUNCT;
 }
@@ -214,17 +224,20 @@ ID [A-Z]([_A-Z0-9])*
 
 {SYS_CON} {
 	yylval = NEWNODE(TK_SYS_CON);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_CON;
 }
 {SYS_TYPE} {
 	yylval = NEWNODE(TK_SYS_TYPE);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_TYPE;
 }
 
 {ID} {
 	yylval = NEWNODE(TK_ID);
+	yylval->lineno = yylineno;
 	cpString(&yylval->name, &yytext);
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
