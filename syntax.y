@@ -47,6 +47,8 @@ program : program_head routine TK_DOT{
             $$->child[0] = $1;
             $$->child[1] = $2;
 
+            $$->lineno = MIN($1,$2);
+
             ROOT = $$;
         }
         ;
@@ -71,6 +73,8 @@ routine : routine_head routine_body{
             $$->child = MALLOC($$,2);
             $$->child[0] = $1;
             $$->child[1] = $2;
+
+            $$->lineno = MIN($1,$2);
         }
         ;
 
@@ -84,6 +88,10 @@ routine_head : const_part type_part var_part routine_part{
             $$->child[1] = $2;
             $$->child[2] = $3;
             $$->child[3] = $4;
+
+            $$->lineno = MIN($1,$2);
+            $$->lineno = MIN($$,$3);
+            $$->lineno = MIN($$,$4);
         }
         ;
 
@@ -135,6 +143,7 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
                     node->child = MALLOC(node,2);
                     node->child[0] = $1;
                     node->child[1] = $3;
+                    $$->lineno = node->lineno = MIN($1, $3);
 
                     $$->child = MALLOC($$,1);
                     $$->child[0] = node;
@@ -213,6 +222,7 @@ type_decl_list : type_decl_list type_definition{
                     $$ = NEWNODE(TK_TYPE_DL);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $1;
+                    $$->lineno = $1->lineno;
                }
                ;
 
@@ -224,6 +234,8 @@ type_definition : TK_ID TK_EQUAL type_decl TK_SEMI{
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
+
+                    $$->lineno = MIN($1,$3);
                 }
                 ;
 
@@ -234,6 +246,7 @@ type_decl : simple_type_decl{
                 $$ = NEWNODE(TK_TYPE_DECL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+                $$->lineno = $1->lineno;
           }
           | array_type_decl{
                 if(DEBUG){
@@ -242,6 +255,7 @@ type_decl : simple_type_decl{
                 $$ = NEWNODE(TK_TYPE_DECL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+                $$->lineno = $1->lineno;
           }
           | record_type_decl{
                 if(DEBUG){
@@ -250,6 +264,7 @@ type_decl : simple_type_decl{
                 $$ = NEWNODE(TK_TYPE_DECL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+                $$->lineno = $1->lineno;
           }
           ;
 
@@ -262,6 +277,8 @@ array_type_decl : TK_ARRAY TK_LB simple_type_decl TK_RB TK_OF type_decl{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = $6;
+
+                $$->lineno = MIN($3, $6);
             }
             ;
 
@@ -297,6 +314,8 @@ field_decl_list : field_decl_list field_decl{
                 $$ = NEWNODE(TK_FIELD_DL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+
+                $$->lineno = $1->lineno;
             }
             ;
 
@@ -309,6 +328,8 @@ field_decl : name_list TK_COLON type_decl TK_SEMI{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1,$3);
             }
             ;
 
@@ -336,6 +357,8 @@ name_list : name_list TK_COMMA TK_ID{
                   $$ = NEWNODE(TK_NL);
                   $$->child = MALLOC($$,1);
                   $$->child[0] = $1;
+
+                  $$->lineno = $1->lineno;
               }
               ;
 
@@ -347,6 +370,8 @@ simple_type_decl : TK_SYS_TYPE{
                     $$ = NEWNODE(TK_STD_SYS_TYPE);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $1;
+
+                    $$->lineno = $1->lineno;
                 }
                  | TK_ID{
                     if(DEBUG){
@@ -355,6 +380,8 @@ simple_type_decl : TK_SYS_TYPE{
                     $$ = NEWNODE(TK_STD_ID);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $1;
+
+                    $$->lineno = $1->lineno;
                 }
                  | TK_LP name_list TK_RP{
                      if(DEBUG){
@@ -363,6 +390,8 @@ simple_type_decl : TK_SYS_TYPE{
                     $$ = NEWNODE(TK_STD_NL);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $2;
+
+                    $$->lineno = $1->lineno;
                 }
                  | const_value TK_DOTDOT const_value{
                      if(DEBUG){
@@ -372,6 +401,8 @@ simple_type_decl : TK_SYS_TYPE{
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
+
+                    $$->lineno = $1->lineno;
                 }
                  | TK_ID TK_DOTDOT TK_ID{
                      if(DEBUG){
@@ -381,6 +412,8 @@ simple_type_decl : TK_SYS_TYPE{
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
+
+                    $$->lineno = $1->lineno;
                 }
                  ;
 
@@ -422,6 +455,8 @@ var_decl_list : var_decl_list var_decl{
                 $$ = NEWNODE(TK_DL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+
+                $$->lineno = $1->lineno;
             }
             ;
 
@@ -434,6 +469,8 @@ var_decl : name_list TK_COLON type_decl TK_SEMI{
             $$->child = MALLOC($$,2);
             $$->child[0] = $1;
             $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
         }
         ;
 
@@ -476,6 +513,8 @@ routine_part : routine_part function_decl{
                 $$ = NEWNODE(TK_ROUTINE_PART);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+
+                $$->lineno = $1->lineno;
             }
              | procedure_decl{
                 if(DEBUG){
@@ -484,6 +523,8 @@ routine_part : routine_part function_decl{
                 $$ = NEWNODE(TK_ROUTINE_PART);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+
+                $$->lineno = $1->lineno;
             }
              |{
                  if(DEBUG){
@@ -502,6 +543,8 @@ function_decl : function_head TK_SEMI routine TK_SEMI{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
             }
             ;
 
@@ -515,6 +558,10 @@ function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl{
                 $$->child[0] = $2;
                 $$->child[1] = $3;
                 $$->child[2] = $5;
+
+                $$->lineno = MIN($2,$3);
+                $$->lineno = MIN($$,$5);
+
             }
             ;
 
@@ -527,6 +574,8 @@ procedure_decl : procedure_head TK_SEMI routine TK_SEMI{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
             }
             ;
 
@@ -539,6 +588,8 @@ procedure_head : TK_PROCEDURE TK_ID parameters{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $2;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($2, $3);
             }
             ;
 
@@ -583,6 +634,8 @@ para_decl_list : para_decl_list TK_SEMI para_type_list{
                 $$ = NEWNODE(TK_PARA_DL);
                 $$->child = MALLOC($$,1);
                 $$->child[0] = $1;
+
+                $$->lineno = $1->lineno;
             }
             ;
 
@@ -595,6 +648,8 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
+
+                    $$->lineno = MIN($1, $3);
                 }
                | val_para_list TK_COLON simple_type_decl{
                     //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
@@ -605,6 +660,8 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
                     $$->child[1] = $3;
+
+                    $$->lineno = MIN($1, $3);
                 }
                ;
 
@@ -641,6 +698,8 @@ stmt_list : stmt_list stmt TK_SEMI{
           		$$ = NEWNODE(TK_STMT_LIST);
           		$$->child = MALLOC($$, 1);
           		$$->child[0] = $2;
+
+          		$$->lineno = $2->lineno;
             }
           	else{
           		$$ = $1;
@@ -673,6 +732,8 @@ stmt : TK_INTEGER TK_COLON non_label_stmt{
          $$->child = MALLOC($$,2);
          $$->child[0] = $1;
          $$->child[1] = $3;
+
+         $$->lineno = MIN($1, $3);
     }    
      | non_label_stmt{
          //NOTE: IGNORE TK_COLON
@@ -682,6 +743,8 @@ stmt : TK_INTEGER TK_COLON non_label_stmt{
          $$ = NEWNODE(TK_STMT);
          $$->child = MALLOC($$,1);
          $$->child[0] = $1;
+
+         $$->lineno = $1->lineno;
      }
      ;
 
@@ -692,6 +755,8 @@ non_label_stmt : assign_stmt{
                     $$ = NEWNODE(TK_STMT_ASSIGN);
                     $$->child = MALLOC($$, 1);
                     $$->child[0] = $1;
+
+                    $$->lineno = $1->lineno;
                 }
                | proc_stmt{
                     if(DEBUG){
@@ -700,6 +765,8 @@ non_label_stmt : assign_stmt{
                     $$ = NEWNODE(TK_STMT_PROC);
                     $$->child = MALLOC($$, 1);
                     $$->child[0] = $1;
+
+                    $$->lineno = $1->lineno;
                 }
                | compound_stmt{
                     if(DEBUG){
@@ -708,6 +775,8 @@ non_label_stmt : assign_stmt{
                     $$ = NEWNODE(TK_STMT_CP);
                     $$->child = MALLOC($$, 1);
                     $$->child[0] = $1;
+
+                    $$->lineno = $1->lineno;
                 }
                | if_stmt{
                     if(DEBUG){
@@ -756,6 +825,8 @@ assign_stmt : TK_ID TK_ASSIGN expression{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
             }
             | TK_ID TK_LB expression TK_RB TK_ASSIGN expression{
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
@@ -767,6 +838,9 @@ assign_stmt : TK_ID TK_ASSIGN expression{
                 $$->child[0] = $1;
                 $$->child[1] = $3;
                 $$->child[2] = $6;
+
+                $$->lineno = MIN($1, $3);
+                $$->lineno = MIN($$, $6);
             }
             | TK_ID TK_DOT TK_ID TK_ASSIGN expression{
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
@@ -777,6 +851,8 @@ assign_stmt : TK_ID TK_ASSIGN expression{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $5;
+
+                $$->lineno = MIN($1, $5);
 
                 $1->record = $3;
             }
@@ -789,6 +865,8 @@ proc_stmt : TK_ID{
            $$ = NEWNODE(TK_PROC_ID);
            $$->child = MALLOC($$,1);
            $$->child[0] = $1;
+
+           $$->lineno = $1->lineno;
         }
           | TK_ID TK_LP args_list TK_RP{
            //NOTE: IGNROE TK_LP TK_RP
@@ -799,6 +877,8 @@ proc_stmt : TK_ID{
            $$->child = MALLOC($$,2);
            $$->child[0] = $1;
            $$->child[1] = $3;
+
+           $$->lineno = MIN($1, $3);
           }
           | TK_SYS_PROC{
             if(DEBUG){
@@ -807,6 +887,8 @@ proc_stmt : TK_ID{
            $$ = NEWNODE(TK_PROC_SYS);
            $$->child = MALLOC($$,1);
            $$->child[0] = $1;
+
+           $$->lineno = $1->lineno;
         }
           | TK_SYS_PROC TK_LP expression_list TK_RP{
            //NOTE: IGNROE TK_LP TK_RP
@@ -817,6 +899,8 @@ proc_stmt : TK_ID{
            $$->child = MALLOC($$,2);
            $$->child[0] = $1;
            $$->child[1] = $3;
+
+           $$->lineno = MIN($1, $3);
           }
           | TK_READ TK_LP factor TK_RP{
            //NOTE: IGNROE TK_LP TK_RP
@@ -827,6 +911,8 @@ proc_stmt : TK_ID{
            $$->child = MALLOC($$,2);
            $$->child[0] = $1;
            $$->child[1] = $3;
+
+           $$->lineno = MIN($1, $3);
           }
           ;
 
@@ -874,6 +960,8 @@ repeat_stmt : TK_REPEAT stmt_list TK_UNTIL expression{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $2;
                 $$->child[1] = $4;
+
+                $$->lineno = MIN($2, $4);
             }
             ;
 
@@ -886,6 +974,8 @@ while_stmt : TK_WHILE expression TK_DO stmt{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $2;
                 $$->child[1] = $4;
+
+                $$->lineno = MIN($2, $4);
             }
             ;
 
@@ -901,6 +991,11 @@ for_stmt : TK_FOR TK_ID TK_ASSIGN expression direction expression TK_DO stmt{
             $$->child[2] = $5;
             $$->child[3] = $6;
             $$->child[4] = $8;
+
+            $$->lineno = MIN($2, $4);
+            $$->lineno = MIN($$, $5);
+            $$->lineno = MIN($$, $6);
+            $$->lineno = MIN($$, $8);
         }
         ;
 
@@ -929,6 +1024,9 @@ case_stmt : TK_CASE expression TK_OF case_expr_list TK_END{
             $$->child = MALLOC($$,2);
             $$->child[0] = $2;
             $$->child[1] = $4;
+
+            $$->lineno = MIN($2, $4);
+
         }
         ;
 
@@ -957,6 +1055,8 @@ case_expr_list : case_expr_list case_expr{
             $$ = NEWNODE(TK_CASE_EL);
             $$->child = MALLOC($$,1);
             $$->child[0] = $1;
+
+            $$->lineno = $1->lineno;
         }
         ;
 
@@ -969,6 +1069,9 @@ case_expr : const_value TK_COLON stmt TK_SEMI{
             $$->child = MALLOC($$,2);
             $$->child[0] = $1;
             $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
+
         }
         | TK_ID TK_COLON stmt TK_SEMI{
          //NOTE: IGNORE TK_COLON TK_SEMI
@@ -979,6 +1082,8 @@ case_expr : const_value TK_COLON stmt TK_SEMI{
             $$->child = MALLOC($$,2);
             $$->child[0] = $1;
             $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
         }
         ;
 
@@ -1017,6 +1122,8 @@ expression_list : expression_list TK_COMMA expression{
                     $$ = NEWNODE(TK_EXP_LIST);
                     $$->child = MALLOC($$,1);
                     $$->child[0] = $1;
+
+                    $$->lineno = $1->lineno;
                 }
                 ;
 
@@ -1029,6 +1136,8 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
            }
            | expression TK_GT expr{
                 if(DEBUG){
@@ -1038,6 +1147,8 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
            }
            | expression TK_LE expr{
                 if(DEBUG){
@@ -1047,6 +1158,8 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $1;
                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
            }
            | expression TK_LT expr{
                 if(DEBUG){
@@ -1056,6 +1169,8 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                                 $$->child[0] = $1;
                                 $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
            }
            | expression TK_EQUAL expr{
                 if(DEBUG){
@@ -1065,6 +1180,7 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                                 $$->child[0] = $1;
                                 $$->child[1] = $3;
+                 $$->lineno = MIN($1, $3);
            }
            | expression TK_UNEQUAL expr{
                 if(DEBUG){
@@ -1074,6 +1190,7 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                                 $$->child[0] = $1;
                                 $$->child[1] = $3;
+                                $$->lineno = MIN($1, $3);
            }
            | expr{
                 if(DEBUG){
@@ -1083,6 +1200,7 @@ expression : expression TK_GE expr{
                 $$->child = MALLOC($$,2);
                 $$->child[0] = NULL;
                 $$->child[1] = $1;
+                $$->lineno = $1->lineno;
            }
            ;
 
@@ -1095,6 +1213,7 @@ expr : expr TK_PLUS term{
          $$->child = MALLOC($$,2);
                          $$->child[0] = $1;
                          $$->child[1] = $3;
+                         $$->lineno = MIN($1, $3);
      }
      | expr TK_MINUS term{
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
@@ -1105,6 +1224,7 @@ expr : expr TK_PLUS term{
          $$->child = MALLOC($$,2);
                          $$->child[0] = $1;
                          $$->child[1] = $3;
+                         $$->lineno = MIN($1, $3);
      }
      | expr TK_OR term{
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
@@ -1115,6 +1235,7 @@ expr : expr TK_PLUS term{
          $$->child = MALLOC($$,2);
                          $$->child[0] = $1;
                          $$->child[1] = $3;
+                         $$->lineno = MIN($1, $3);
      }
      | term{
      //NOTE: expr IS EXPR, expression IS EXP
@@ -1125,6 +1246,8 @@ expr : expr TK_PLUS term{
          $$->child = MALLOC($$,2);
          $$->child[0] = NULL;
          $$->child[1] = $1;
+
+         $$->lineno = $1->lineno;
      }
      ;
 
@@ -1136,6 +1259,7 @@ term : term TK_MUL factor{
          $$->child = MALLOC($$,2);
                                   $$->child[0] = $1;
                                   $$->child[1] = $3;
+                                  $$->lineno = MIN($1, $3);
      }
      | term TK_DIV factor{
          if(DEBUG){
@@ -1145,6 +1269,7 @@ term : term TK_MUL factor{
         $$->child = MALLOC($$,2);
                                  $$->child[0] = $1;
                                  $$->child[1] = $3;
+                                 $$->lineno = MIN($1, $3);
      }
      | term TK_MOD factor{
          if(DEBUG){
@@ -1154,6 +1279,7 @@ term : term TK_MUL factor{
         $$->child = MALLOC($$,2);
                                  $$->child[0] = $1;
                                  $$->child[1] = $3;
+                                 $$->lineno = MIN($1, $3);
      }
      | term TK_AND factor{
          if(DEBUG){
@@ -1163,6 +1289,7 @@ term : term TK_MUL factor{
          $$->child = MALLOC($$,2);
                                   $$->child[0] = $1;
                                   $$->child[1] = $3;
+                                  $$->lineno = MIN($1, $3);
      }
      | factor{
          if(DEBUG){
@@ -1172,6 +1299,8 @@ term : term TK_MUL factor{
          $$->child = MALLOC($$,2);
          $$->child[0] = NULL;
          $$->child[1] = $1;
+
+         $$->lineno = $1->lineno;
      }
      ;
 
@@ -1183,6 +1312,8 @@ factor : TK_ID{
         $$ = NEWNODE(TK_FACTOR_ID);
         $$->child = MALLOC($$,1);
         $$->child[0] = $1;
+
+        $$->lineno = $1->lineno;
     }
     | TK_ID TK_LP args_list TK_RP{
     //NOTE: IGNORE TK_LP TK_RP
@@ -1193,6 +1324,7 @@ factor : TK_ID{
         $$->child = MALLOC($$,2);
         $$->child[0] = $1;
         $$->child[1] = $3;
+        $$->lineno = MIN($1, $3);
     }
     | TK_SYS_FUNCT TK_LP args_list TK_RP{
     //NOTE: IGNORE TK_LP TK_RP
@@ -1203,6 +1335,7 @@ factor : TK_ID{
         $$->child = MALLOC($$,2);
         $$->child[0] = $1;
         $$->child[1] = $3;
+        $$->lineno = MIN($1, $3);
     }
     | const_value{
         if(DEBUG){
@@ -1211,6 +1344,7 @@ factor : TK_ID{
         $$ = NEWNODE(TK_FACTOR_CONST);
         $$->child = MALLOC($$,1);
         $$->child[0] = $1;
+        $$->lineno = $1->lineno;
     }
     | TK_LP expression TK_RP{
     //NOTE: IGNORE TK_LP TK_RP
@@ -1220,6 +1354,7 @@ factor : TK_ID{
         $$ = NEWNODE(TK_FACTOR_EXP);
         $$->child = MALLOC($$,1);
         $$->child[0] = $2;
+        $$->lineno = $2->lineno;
     }
     | TK_NOT factor{
         if(DEBUG){
@@ -1228,6 +1363,7 @@ factor : TK_ID{
         $$ = NEWNODE(TK_FACTOR_NOT);
         $$->child = MALLOC($$,1);
         $$->child[0] = $2;
+        $$->lineno = $2->lineno;
     }
     | TK_MINUS factor{
         if(DEBUG){
@@ -1236,6 +1372,7 @@ factor : TK_ID{
         $$ = NEWNODE(TK_FACTOR_MINUS);
         $$->child = MALLOC($$,1);
         $$->child[0] = $2;
+        $$->lineno = $2->lineno;
     }
     | TK_ID TK_LB expression TK_RB{
     //NOTE: IGNORE TK_LB TK_RB
@@ -1246,6 +1383,7 @@ factor : TK_ID{
         $$->child = MALLOC($$,2);
         $$->child[0] = $1;
         $$->child[1] = $3;
+        $$->lineno = MIN($1,$3);
     }
     | TK_ID TK_DOT TK_ID{
     //NOTE: ID->ID IS IN ONE NODE
@@ -1255,6 +1393,7 @@ factor : TK_ID{
         $$ = NEWNODE(TK_FACTOR_DD);
         $$->child = MALLOC($$,1);
         $$->child[0] = $1;
+        $$->lineno = $1->lineno;
         $1->record = $2;
     }
     ;
@@ -1283,6 +1422,7 @@ args_list : args_list TK_COMMA expression{
             $$ = NEWNODE(TK_ARGS_LIST);
             $$->child = MALLOC($$,1);
             $$->child[0] = $1;
+            $$->lineno = $1->lineno;
         }
         ;
 

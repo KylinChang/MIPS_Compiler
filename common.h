@@ -96,6 +96,8 @@ typedef struct NODE{
 #define MALLOC(pointer,num) (NODE**)malloc(NODE_POINTER_SIZE*(pointer->child_number=num))
 #define TO_LOWER_CASE(ch) (ch<='A' && ch>='a')?(ch-'A'+'a') : ch;
 
+#define MIN(a,b) a->lineno<b->lineno?a->lineno:b->lineno;
+
 NODE* NEWNODE(int type);
 void cpString(string& str1, char** str2);
 void setName(NODE* node, int type);
