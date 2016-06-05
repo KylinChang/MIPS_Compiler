@@ -166,6 +166,28 @@ public:
     unordered_map<string, Value> constSymbolTable;
     unordered_map<string, Type> varSymbolTable;
     unordered_map<string, Type> typeSymbolTable;
+
+    bool insertType(string identifier, Type x) {
+        if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
+            return false;
+        }
+        typeSymbolTable[identifier] = x;
+        return true;
+    }
+    bool insertVar(string identifier, Type x) {
+        if (varSymbolTable.find(identifier) != varSymbolTable.end()) {
+            return false;
+        }
+        varSymbolTable[identifier] = x;
+        return true;
+    }
+    bool insertConst(string identifier, Value x) {
+        if (constSymbolTable.find(identifier) != constSymbolTable.end()) {
+            return false;
+        }
+        constSymbolTable[identifier] = x;
+        return true;
+    }
     Type findVar(const string &x) {
         auto y = varSymbolTable.find(x);
         if (y != varSymbolTable.end()) {

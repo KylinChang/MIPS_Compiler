@@ -8,23 +8,23 @@ void preorder(NODE* root){
         preorder(root->child[i]);
     }
 }
-int main(int argc, char** argv){
-//    char FILENAME[100];
-//    printf("Please input the test file: ");
-//    scanf("%s", FILENAME);
-
-    FILE* file = fopen("/home/stephen/Github/MIPS_Compiler/TestCases/test8.pas", "r");
+//int main(int argc, char** argv){
+////    char FILENAME[100];
+////    printf("Please input the test file: ");
+////    scanf("%s", FILENAME);
+//
 //    FILE* file = fopen("./TestCases/test8.pas", "r");
-    yyin = file;
-
-    node_init();
-    yyparse();
-
-    if(DEBUG){
-        NODE* tmp = ROOT;
-        preorder(ROOT);
-    }
-
-    return 0;
-}
-
+////    FILE* file = fopen("./TestCases/test8.pas", "r");
+//    yyin = file;
+//
+//    node_init();
+//    yyparse();
+//
+//    if(DEBUG){
+//        NODE* tmp = ROOT;
+//        preorder(ROOT);
+//    }
+//
+//    return 0;
+//}
+//
