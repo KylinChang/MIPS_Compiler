@@ -18,7 +18,7 @@ int main(int argc, char** argv){
 //    printf("Please input the test file: ");
 //    scanf("%s", FILENAME);
 
-    FILE* file = fopen("/home/stephen/Github/MIPS_Compiler/TestCases/test8.pas", "r");
+    FILE* file = fopen("./TestCases/test8.pas", "r");
     yyin = file;
 
     init();
