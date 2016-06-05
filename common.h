@@ -19,6 +19,8 @@ typedef struct NODE{
     int child_number;
     struct NODE** child;
     struct NODE* record;
+
+	int lineno; //output the error line number
 }NODE;
 
 #define NODE_SIZE sizeof(NODE)

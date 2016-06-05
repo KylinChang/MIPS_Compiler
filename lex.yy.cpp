@@ -1070,15 +1070,17 @@ YY_RULE_SETUP
 #line 109 "scan.l"
 {
 	yylval = NEWNODE(TK_REAL);
+	yylval->lineno = yylineno;
 	sscanf(yytext, "%lf", &yylval->dval);
 	return TK_REAL;
 }  /*  实数类型应写在整数类型之上  */
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 114 "scan.l"
+#line 115 "scan.l"
 {
 	yylval = NEWNODE(TK_INTEGER);
+	yylval->lineno = yylineno;
 	char *ts = yytext;
 	int sign = 1;
 	if (*ts == '+' || *ts == '-') {
@@ -1093,18 +1095,20 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 127 "scan.l"
+#line 129 "scan.l"
 {
 	yylval = NEWNODE(TK_CHAR);
+	yylval->lineno = yylineno;
 	sscanf(yytext+1, "%c", &yylval->ch);  /*  单引号的情况也可处理  */
 	return TK_CHAR;
 }  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 132 "scan.l"
+#line 135 "scan.l"
 {
 	yylval = NEWNODE(TK_STRING);
+	yylval->lineno = yylineno;
 	yytext[min(256, yyleng-1)]=0;
 	yylval->str = genString(yytext+1, min(255, yyleng-2));
 	return TK_STRING;
@@ -1112,289 +1116,298 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 139 "scan.l"
+#line 143 "scan.l"
 { return TK_TYPE; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 140 "scan.l"
+#line 144 "scan.l"
 { return TK_ARRAY; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 141 "scan.l"
+#line 145 "scan.l"
 { return TK_LB; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 142 "scan.l"
+#line 146 "scan.l"
 { return TK_RB; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 143 "scan.l"
+#line 147 "scan.l"
 { return TK_OF; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 144 "scan.l"
+#line 148 "scan.l"
 { return TK_RECORD; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 145 "scan.l"
+#line 149 "scan.l"
 {
 	return TK_END; 
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 148 "scan.l"
+#line 152 "scan.l"
 { return TK_COLON; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 149 "scan.l"
+#line 153 "scan.l"
 { return TK_COMMA; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 150 "scan.l"
+#line 154 "scan.l"
 { return TK_LP; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 151 "scan.l"
+#line 155 "scan.l"
 { return TK_RP; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 152 "scan.l"
+#line 156 "scan.l"
 { return TK_DOTDOT; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 153 "scan.l"
+#line 157 "scan.l"
 { return TK_MINUS; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 154 "scan.l"
+#line 158 "scan.l"
 {
 	return TK_VAR;
 }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 157 "scan.l"
+#line 161 "scan.l"
 { return TK_FUNCTION; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 158 "scan.l"
+#line 162 "scan.l"
 { return TK_PROCEDURE; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 159 "scan.l"
+#line 163 "scan.l"
 { return TK_ASSIGN; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 160 "scan.l"
+#line 164 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_PROC);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_PROC;
 }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 165 "scan.l"
+#line 170 "scan.l"
 {
 	yylval = NEWNODE(TK_READ);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_READ;
 }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 170 "scan.l"
+#line 176 "scan.l"
 {
 	return TK_BEGIN;
 }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 173 "scan.l"
+#line 179 "scan.l"
 { return TK_IF; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 174 "scan.l"
+#line 180 "scan.l"
 { return TK_THEN; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 175 "scan.l"
+#line 181 "scan.l"
 { return TK_ELSE; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 176 "scan.l"
+#line 182 "scan.l"
 { return TK_REPEAT; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 177 "scan.l"
+#line 183 "scan.l"
 { return TK_UNTIL; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 178 "scan.l"
+#line 184 "scan.l"
 { return TK_WHILE; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 179 "scan.l"
+#line 185 "scan.l"
 { return TK_DO; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 180 "scan.l"
+#line 186 "scan.l"
 { return TK_FOR; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 181 "scan.l"
+#line 187 "scan.l"
 {
 	yylval = NEWNODE(TK_TO);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_TO;
 }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 186 "scan.l"
+#line 193 "scan.l"
 {
 	yylval = NEWNODE(TK_DOWNTO);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_DOWNTO;
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 191 "scan.l"
+#line 199 "scan.l"
 { return TK_CASE; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 192 "scan.l"
+#line 200 "scan.l"
 { return TK_GOTO; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 193 "scan.l"
+#line 201 "scan.l"
 { return TK_GE; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 194 "scan.l"
+#line 202 "scan.l"
 { return TK_GT; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 195 "scan.l"
+#line 203 "scan.l"
 { return TK_LE; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 196 "scan.l"
+#line 204 "scan.l"
 { return TK_LT; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 197 "scan.l"
+#line 205 "scan.l"
 { return TK_UNEQUAL; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 198 "scan.l"
+#line 206 "scan.l"
 { return TK_PLUS; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 199 "scan.l"
+#line 207 "scan.l"
 { return TK_OR; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 200 "scan.l"
+#line 208 "scan.l"
 { return TK_MUL; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 201 "scan.l"
+#line 209 "scan.l"
 {
 	yylval = NEWNODE(TK_DIV);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_DIV;
 }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 206 "scan.l"
+#line 215 "scan.l"
 { return TK_MOD; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 207 "scan.l"
+#line 216 "scan.l"
 { return TK_AND; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 208 "scan.l"
+#line 217 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_FUNCT);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_FUNCT;
 }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 213 "scan.l"
+#line 223 "scan.l"
 { return TK_NOT; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 215 "scan.l"
+#line 225 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_CON);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_CON;
 }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 220 "scan.l"
+#line 231 "scan.l"
 {
 	yylval = NEWNODE(TK_SYS_TYPE);
+	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_TYPE;
 }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 226 "scan.l"
+#line 238 "scan.l"
 {
 	yylval = NEWNODE(TK_ID);
+	yylval->lineno = yylineno;
 	cpString(&yylval->name, &yytext);
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 232 "scan.l"
+#line 245 "scan.l"
 {
 	char c;
 	while ((c=yyinput())!='}') {
@@ -1405,7 +1418,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 239 "scan.l"
+#line 252 "scan.l"
 {
 	char c;
 	do {
@@ -1423,38 +1436,38 @@ YY_RULE_SETUP
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 253 "scan.l"
+#line 266 "scan.l"
 {
 	++yylineno;
 }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 256 "scan.l"
+#line 269 "scan.l"
 {
 }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 258 "scan.l"
+#line 271 "scan.l"
 { /*  缩进  */ }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 259 "scan.l"
+#line 272 "scan.l"
 { /*  skip whitespace  */ }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 260 "scan.l"
+#line 273 "scan.l"
 { return ERROR; }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 262 "scan.l"
+#line 275 "scan.l"
 ECHO;
 	YY_BREAK
-#line 1458 "lex.yy.cpp"
+#line 1471 "lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2455,7 +2468,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 262 "scan.l"
+#line 275 "scan.l"
 
 
 void endlessComment() {

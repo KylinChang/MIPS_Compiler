@@ -4,6 +4,7 @@
 #include <stdlib.h>
 int DEBUG = 1;
 NODE* ROOT;
+extern int yylineno;
 
 %}
 
@@ -1049,7 +1050,11 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_GE);
-                $1->child[1] = $$;
+
+                NODE* node = $1;
+                while(node->child[1]!=NULL) node = node->child[1];
+                node->child[1] = $$;
+
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1060,7 +1065,9 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_GT);
-                $1->child[1] = $$;
+                NODE* node = $1;
+                while(node->child[1]!=NULL) node = node->child[1];
+                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1071,7 +1078,9 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_LE);
-                $1->child[1] = $$;
+                NODE* node = $1;
+                                while(node->child[1]!=NULL) node = node->child[1];
+                                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1082,7 +1091,9 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_LT);
-                $1->child[1] = $$;
+                NODE* node = $1;
+                                while(node->child[1]!=NULL) node = node->child[1];
+                                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1093,7 +1104,9 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_EQUAL);
-                $1->child[1] = $$;
+                NODE* node = $1;
+                while(node->child[1]!=NULL) node = node->child[1];
+                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1104,7 +1117,9 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_UNEQUAL);
-                $1->child[1] = $$;
+                NODE* node = $1;
+                while(node->child[1]!=NULL) node = node->child[1];
+                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1127,7 +1142,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_PLUS);
-         $1->child[1] = $$;
+         NODE* node = $1;
+         while(node->child[1]!=NULL) node = node->child[1];
+         node->child[1] = $$;
          $$->child = MALLOC($$,2);
          $$->child[0] = $3;
          $$->child[1] = NULL;
@@ -1139,7 +1156,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_MINUS);
-         $1->child[1] = $$;
+         NODE* node = $1;
+                  while(node->child[1]!=NULL) node = node->child[1];
+                  node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1151,7 +1170,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_OR);
-         $1->child[1] = $$;
+         NODE* node = $1;
+                  while(node->child[1]!=NULL) node = node->child[1];
+                  node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1174,7 +1195,9 @@ term : term TK_MUL factor{
              printf("PARSING TK_MUL\n");
          }
          $$ = NEWNODE(TK_MUL);
-         $1->child[1] = $$;
+         NODE* node = $1;
+                  while(node->child[1]!=NULL) node = node->child[1];
+                  node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1185,7 +1208,9 @@ term : term TK_MUL factor{
              printf("PARSING TK_DIV\n");
          }
          $$ = NEWNODE(TK_DIV);
-        	$1->child[1] = $$;
+        NODE* node = $1;
+                 while(node->child[1]!=NULL) node = node->child[1];
+                 node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1196,7 +1221,9 @@ term : term TK_MUL factor{
              printf("PARSING TK_MOD\n");
          }
          $$ = NEWNODE(TK_MOD);
-        $1->child[1] = $$;
+        NODE* node = $1;
+                 while(node->child[1]!=NULL) node = node->child[1];
+                 node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
@@ -1207,7 +1234,9 @@ term : term TK_MUL factor{
              printf("PARSING TK_AND\n");
          }
          $$ = NEWNODE(TK_AND);
-         $1->child[1] = $$;
+         NODE* node = $1;
+                  while(node->child[1]!=NULL) node = node->child[1];
+                  node->child[1] = $$;
                 $$->child = MALLOC($$,2);
                 $$->child[0] = $3;
                 $$->child[1] = NULL;
