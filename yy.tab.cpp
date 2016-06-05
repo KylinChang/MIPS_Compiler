@@ -1811,7 +1811,7 @@ yyreduce:
     {
         //NOTE: PROGRAM HEAD ACTUALLY IS TK_ID
             if(DEBUG){
-                printf("PROGRAM HEAD:%s\n", (yyvsp[-1])->name);
+                printf("PROGRAM HEAD:%s\n", (yyvsp[-1])->name.c_str());
             }
             (yyval) = (yyvsp[-1]);
             (yyval)->type = TK_PROGRAM_HEAD;

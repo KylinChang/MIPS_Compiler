@@ -25,17 +25,7 @@
 #include "common.h"
 #include "yy.tab.hpp"
 #define min(a,b) ( ((a)>(b)) ? (b):(a) )
-#define TO_LOWER_CASE(ch) (ch<='A' && ch>='a')?(ch-'A'+'a') : ch;
 extern int DEBUG;
-char *genString(char *s, int len) {
-	char *ss = (char*)malloc(sizeof(char) * (len + 1));
-	strcpy(ss, s);
-	int i;
-	for(i=0;i<len;i++){
-	    ss[i] = TO_LOWER_CASE(ss[i]);
-	}
-	return ss;
-}
 extern FILE* yyout;
 void endlessComment();  /*  用于处理注释只有前面一半的情况  */
 %}
@@ -114,7 +104,9 @@ ID [A-Z]([_A-Z0-9])*
 {REAL} {
 	yylval = NEWNODE(TK_REAL);
 	yylval->lineno = yylineno;
-	sscanf(yytext, "%lf", &yylval->dval);
+	double tmp;
+	sscanf(yytext, "%lf", &tmp);
+	yylval->value = new Value(tmp);
 	return TK_REAL;
 }  /*  实数类型应写在整数类型之上  */
 {INTEGER} {
@@ -126,22 +118,27 @@ ID [A-Z]([_A-Z0-9])*
 		sign = (*ts=='+') ? 1 : -1;
 		ts++;
 	}
-	if (*ts == '$') sscanf(++ts, "%x", &yylval->ival);
-	else            sscanf(ts, "%d", &yylval->ival);
-	yylval->ival *= sign;
+
+	int tmp;
+	if (*ts == '$') sscanf(++ts, "%x", &tmp);
+	else            sscanf(ts, "%d", &tmp);
+	yylval->value = new Value(tmp*sign);
 	return TK_INTEGER;
 }
 {CHAR} {
 	yylval = NEWNODE(TK_CHAR);
 	yylval->lineno = yylineno;
-	sscanf(yytext+1, "%c", &yylval->ch);  /*  单引号的情况也可处理  */
+
+	char tmp;
+	sscanf(yytext+1, "%c", &tmp);  /*  单引号的情况也可处理  */
+	yylval->value = new Value(tmp);
 	return TK_CHAR;
 }  /*  注意单引号的表示方法：''''，以及多个单引号的表示方法。  */
 {STRING} {
 	yylval = NEWNODE(TK_STRING);
 	yylval->lineno = yylineno;
 	yytext[min(256, yyleng-1)]=0;
-	yylval->str = genString(yytext+1, min(255, yyleng-2));
+	yylval->value = new Value(genString(yytext+1, min(255, yyleng-2)));
 	return TK_STRING;
 }  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
 
@@ -230,7 +227,15 @@ ID [A-Z]([_A-Z0-9])*
 {SYS_CON} {
 	yylval = NEWNODE(TK_SYS_CON);
 	yylval->lineno = yylineno;
-	yylval->name = genString(yytext, yyleng);
+	string tmp = genString(yytext, yyleng);
+	yylval->name = tmp;
+	if(tmp=="maxint" || tmp=="maxlongint"){
+	    yylval->value = new Value(INT32_MAX);
+	}else if(tmp=="true"){
+	    yylval->value = new Value(true);
+	}else if(tmp=="false"){
+	    yylval->value = new Value(false);
+	}
 	return TK_SYS_CON;
 }
 {SYS_TYPE} {
@@ -243,7 +248,8 @@ ID [A-Z]([_A-Z0-9])*
 {ID} {
 	yylval = NEWNODE(TK_ID);
 	yylval->lineno = yylineno;
-	cpString(&yylval->name, &yytext);
+	//cpString(yylval->name, &yytext);
+	//yylval->name = yytext;
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 

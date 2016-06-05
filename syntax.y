@@ -54,7 +54,7 @@ program : program_head routine TK_DOT{
 program_head : TK_PROGRAM TK_ID TK_SEMI{
         //NOTE: PROGRAM HEAD ACTUALLY IS TK_ID
             if(DEBUG){
-                printf("PROGRAM HEAD:%s\n", $2->name);
+                printf("PROGRAM HEAD:%s\n", $2->name.c_str());
             }
             $$ = $2;
             $$->type = TK_PROGRAM_HEAD;

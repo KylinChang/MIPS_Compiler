@@ -7,22 +7,35 @@ NODE* NEWNODE(int type){
 	node->type = type;
 	node->child_number = 0;
 	node->child = NULL;
+    node->value = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		node->name = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
-		strcpy(node->name, NODE_NAMES[type].c_str());
+		char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+		strcpy(tmp, NODE_NAMES[type].c_str());
+        node->name = string(tmp);
 	}
 	return node;
 } 
 
-void cpString(char** str1, char** str2){
-	*str1 = (char*)malloc(sizeof(char) * (strlen(*str2) + 1));
-	strcpy(*str1, *str2);
+//char* cpString(char** str2){
+//    char* tmp = (char*)malloc(sizeof(char) * (strlen(*str2) + 1));
+//	strcpy(tmp, *str2);
+//
+//}
+string genString(char *s, int len) {
+    char *ss = (char*)malloc(sizeof(char) * (len + 1));
+    strcpy(ss, s);
+    int i;
+    for(i=0;i<len;i++){
+        ss[i] = TO_LOWER_CASE(ss[i]);
+    }
+    return string(ss);
 }
 
 void setName(NODE* node, int type){
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		node->name = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
-		strcpy(node->name, NODE_NAMES[type].c_str());
+        char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+        strcpy(tmp, NODE_NAMES[type].c_str());
+        node->name = string(tmp);
 	}
 }
 
