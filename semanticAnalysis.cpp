@@ -62,10 +62,10 @@ void constAnalysis(NODE** constList, int constListNum) {
         Value val;
         switch (valNode->type) {
             case TK_INTEGER:
-                val = Value(valNode->ival);
+                val = valNode->ival;
                 break;
             case TK_REAL:
-                val = Value(valNode->dval);
+                val = valNode->dval;
                 break;
             case TK_CHAR:
                 val = Value(valNode->ch);

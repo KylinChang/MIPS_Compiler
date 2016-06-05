@@ -38,6 +38,7 @@ enum SimpleTypeEnum {
     type_real,
     type_boolean,
     type_char,
+    type_string
 };
 
 enum ComplexTypeEnum {
@@ -72,12 +73,18 @@ public:
         cval = x;
         type = type_char;
     }
+    Value (string x) {
+        invalid = false;
+        sval = x;
+        type = type_string;
+    }
     bool invalid;
     SimpleTypeEnum type;
     int ival;
     double dval;
     bool bval;
     char cval;
+    string sval;
 };
 
 class Type {
@@ -149,6 +156,10 @@ public:
         }
         if (x == "char") {
             simpleType = type_char;
+        }
+
+        if (x == "string") {
+            simpleType = type_string;
         }
     }
     SimpleTypeEnum simpleType;
