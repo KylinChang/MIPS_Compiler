@@ -3575,7 +3575,7 @@ yyreduce:
                 for(i=0;i<old_child_number;i++){
                 	(yyval)->child[i] = tmp[i];
                 }
-                (yyval)->child[i] = (yyvsp[-1]);
+                (yyval)->child[i] = (yyvsp[0]);
 
                 free(tmp);
         }

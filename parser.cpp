@@ -14,11 +14,11 @@ void preorder(NODE* root){
 }
 
 int main(int argc, char** argv){
-    char FILENAME[100];
-    printf("Please input the test file: ");
-    scanf("%s", FILENAME);
+//    char FILENAME[100];
+//    printf("Please input the test file: ");
+//    scanf("%s", FILENAME);
 
-    FILE* file = fopen(FILENAME, "r");
+    FILE* file = fopen("/home/stephen/Github/MIPS_Compiler/TestCases/test8.pas", "r");
     yyin = file;
 
     init();
