@@ -6,6 +6,7 @@
 #define MIPS_COMPILER_SEMENTICANALYSIS_H
 
 #include "common.h"
+#include "yy.tab.hpp"
 #include <set>
 #include <unordered_map>
 #include <vector>
@@ -13,5 +14,8 @@
 
 using namespace std;
 
+unordered_map<int, string> typeName;
+
+void sa_init();
 
 #endif //MIPS_COMPILER_SEMENTICANALYSIS_H

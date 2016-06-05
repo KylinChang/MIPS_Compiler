@@ -21,7 +21,7 @@ int main(int argc, char** argv){
     FILE* file = fopen("./TestCases/test8.pas", "r");
     yyin = file;
 
-    init();
+    node_init();
     yyparse();
 
     if(DEBUG){

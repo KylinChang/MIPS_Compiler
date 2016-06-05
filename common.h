@@ -30,7 +30,7 @@ typedef struct NODE{
 NODE* NEWNODE(int type);
 void cpString(char** str1, char** str2);
 void setName(NODE* node, int type);
-void init();
+void node_init();
 
 extern "C" {
 	extern int yylex();

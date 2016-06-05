@@ -27,7 +27,7 @@ void setName(NODE* node, int type){
 	}
 }
 
-void init(){
+void node_init(){
 
 	NODE_NAMES[TK_PROGRAM] = "TK_PROGRAM";
 	NODE_NAMES[TK_PROGRAM_HEAD] = "TK_PROGRAM_HEAD";
