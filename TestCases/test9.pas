@@ -1,19 +1,76 @@
-program test9;
-var
-    x:real;
-    y:byte;
-    z:integer;
-    v: array[1..2,2..3] of integer;
-    tt : array['a'..'z'] of integer;
-    kk : array[1..2] of array[2..3] of integer;
-begin
-    y := 2;
-    z:=1;
-    x := y+z;
+program test8;
 
-    writeln(x);
-    v[1,2] := 1;
-    kk[1][2] := 1;
-    writeln(v[1,2]);
-    writeln(kk[1][2]);
+const
+    haha = true;
+    PI=3.14 ;
+
+type
+    a = integer;
+    color = a;
+    xxx = record
+        title : integer;
+        author : integer;
+    end;
+    arr = array[1..10] of integer;
+
+var
+    n,i:byte;
+    a,b,c:longint;
+    hhh : real;
+    book: record
+        title : integer;
+        author : integer;
+    end;
+    arr_var : arr;
+    clr_var : color;
+
+
+procedure findMin(x, y:integer; var m:integer);
+begin
+
+    if x<y then
+        m:=x
+    else
+        m:=y;
+end;
+
+function max(num1, num2: integer): integer;
+var
+    result: integer;
+begin
+    if (num1 > num2) then
+        result := num1
+    else
+        result := num2;
+    max := result;
+end;
+
+function add(num1, num2: integer): integer;
+var
+    result: integer;
+begin
+    result := num1 + num2;
+    add := result;
+end;
+
+begin
+    readln(n);
+    case n of
+    1: writeln(0);
+    2: writeln(1);
+    end;
+
+    1:
+    a:=1;
+    b:=2;
+    goto 1;
+
+    while(true) do begin
+        a := 4;
+        b := 5;
+    end
+
+    h := (a+b) * a;
+
+
 end.
