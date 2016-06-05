@@ -1,7 +1,8 @@
 #include <string>
 #include <queue>
 #include <sstream>
-#include "y.tab.h"
+#include "common.h"
+#include "yy.tab.hpp"
 using namespace std;
 
 /*
@@ -80,6 +81,11 @@ using namespace std;
 		
 		L1: S1
 		goto L..2(CaseEnd)
+		->
+			Label L1
+			<code for S1>
+			goto L..2(CaseEnd)
+		
 		L2: S2
 		goto L..2(CaseEnd)
 		...
@@ -129,24 +135,6 @@ struct Error {
 // 		if (d) delete a;
 // 	}
 // };
-// inline string operator+(const int &a, const string &b) {
-// 	stringstream ss;
-// 	string c;
-// 	ss<<a; ss>>c;
-// 	return c+b;
-// }
-// inline string operator+(const string &a, const int &b) {
-// 	return b+a;
-// }
-// inline string operator+(const double &a, const string &b) {
-// 	stringstream ss;
-// 	string c;
-// 	ss<<a; ss>>c;
-// 	return c+b;
-// }
-// inline string operator+(const string &a, const double &b) {
-// 	return b+a;
-// }
 // inline Value operator+(const Value &a, const Value &b) {
 // 	if (a.type == Value::INTEGER) {
 // 		if (b.type == Value::INTEGER)
@@ -189,6 +177,30 @@ struct Error {
 // 			return Value(a.val.s + b.val.s);
 // 	}
 // }
+inline string operator+(const int &a, const string &b) {
+	stringstream ss;
+	string c;
+	ss<<a; ss>>c;
+	return c+b;
+}
+inline string operator+(const string &a, const int &b) {
+	return b+a;
+}
+inline string operator+(const double &a, const string &b) {
+	stringstream ss;
+	string c;
+	ss<<a; ss>>c;
+	return c+b;
+}
+inline string operator+(const string &a, const double &b) {
+	return b+a;
+}
+string toString(int a) {
+	stringstream ss;
+	string s;
+	ss<<a; ss>>s;
+	return s;
+}
 
 struct Value {
 	enum Type {
@@ -230,9 +242,9 @@ struct Value {
 		string s; ss>>s;
 		return s;
 	}
-	operator int() {
+	int toInt() {
 		//if (type == INTEGER) return val.i;
-		if (type == MYINT) return a;
+		if (type == MYINT) return i;
 		throw Error("Value cast value: Current value is not an integer");
 	}
 };
@@ -255,8 +267,8 @@ struct TempVars {
 	static void release(int TempVar) {
 		idleTemp.push(TempVar);
 	}
-	static void release(pair<int,Value> a) {
-		if (a.first == 0) release(a.second);
+	static void release(pair<int, Value> a) {
+		if (a.first == 0) release(a.second.toInt());
 	}
 };
 int TempVars::ind = 0;
@@ -266,32 +278,6 @@ struct Label {
 	static int newLabel() { return ind++; }
 };
 int Label::ind = 0;
-
-struct CaseExpr {
-	piv a;
-	int label;
-	CaseExpr() {}
-	CaseExpr(piv a, int label):a(a), label(label) {}
-};
-struct CaseParse {
-	static vector<vector<CaseExpr> > scases;
-	static void addNew() { scases.push_back(vector<CaseExpr>()); }
-	static vector<string> pop(const piv &E) {
-		if (scases.size() == 0) throw Error("Unexpected end of 'switch..case'");
-		vector<string> ret;
-		vector<CaseExpr> &cases = *scases.rbegin();
-		for (int i=0; i<cases.size(); i++) {
-			ret.push_back("if " + string(cases[i].a.second) + cases[i].label); 
-		}
-		scases.pop_back();
-	}
-	
-	static void addCase(piv a, int label) {
-		if (scases.size() == 0) throw Error("Unexpected case of 'switch..case'");
-		scases[scases.size() - 1].push_back(CaseExpr(a, label));
-	}
-};
-
 
 string getName(piv a) {
 	if (a.first == 0) {  // t开头的临时变量(type==INTEGER，val.i保存值)
@@ -324,6 +310,60 @@ void output(string c, string a, string op, string b) {
 void output(piv c, piv a, string op, piv b) {
 	output(getName(c), getName(a), op, getName(b));
 }
+void output(vector<string> ss) {
+	for (int i=0; i<ss.size(); i++)
+		printf("%s\n", ss[i].c_str());
+}
+string _output(string s) {  //没有自带回车
+	return s;
+}
+string _output(string c, string op, string a) {
+	return c + " " + op + " " + a;
+}
+string _output(piv c, string op, piv a) {
+	return _output(getName(c), op, getName(a));
+}
+string _output(string c, string a, string op, string b) {
+	return c + " = " + a + " " + op + " " + b;
+}
+string _output(piv c, piv a, string op, piv b) {
+	return _output(getName(c), getName(a), op, getName(b));
+}
+
+
+struct CaseExpr {
+	piv a;
+	int label;
+	CaseExpr() {}
+	CaseExpr(piv a, int label):a(a), label(label) {}
+};
+struct CaseParse {
+	// static piv E;
+	static vector<vector<CaseExpr> > scases;
+	static int endLabel;
+	
+	// static void setE(piv e) { E = e; }
+	// static piv getE() { return E; }
+	static void setEndLabel(int a) { endLabel = a; }
+	static int getEndLabel() { return endLabel; }
+	
+	static void addNew() { scases.push_back(vector<CaseExpr>()); }
+	static vector<string> pop(piv E) {
+		if (scases.size() == 0) throw Error("Unexpected end of 'switch..case'");
+		vector<string> ret;
+		vector<CaseExpr> &cases = *scases.rbegin();
+		for (int i=0; i<cases.size(); i++)
+			ret.push_back("if " + string(E.second) + "==" + string(cases[i].a.second) + " then goto L" + toString(cases[i].label));
+		scases.pop_back();
+		return ret;
+	}
+	
+	static void addCase(piv a, int label) {
+		if (scases.size() == 0) throw Error("Unexpected case of 'switch..case'");
+		scases[scases.size() - 1].push_back(CaseExpr(a, label));
+	}
+};
+
 
 
 void chkOpnd(piv a, string side, string op) {
@@ -344,7 +384,7 @@ static piv getTempVar(piv a) {
 	output(c, "=", a);
 	return c;
 }
-piv genCode(NODE *t, int faToken=-1) {
+piv genCode(NODE *t, int extraMsg=-1) {
 	if (t) {
 		piv a, b, c;
 		piv x, d, tmp;
@@ -456,7 +496,7 @@ piv genCode(NODE *t, int faToken=-1) {
 			//TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_PART:  //routine_body和routine_part都是这个??
-			if (faToken == TK_ROUTINE) {  //to generate code of compound_stmt
+			if (extraMsg == TK_ROUTINE) {  //to generate code of compound_stmt
 				if (!t->child[0] || t->child[0]->type!=TK_CP_STMT)
 					throw Error("Wrong syntax tree as it somehow generates illegal 't->child[0]->type' under 'TK_ROUTINE->TK_ROUTINE_PART'");
 				else
@@ -472,18 +512,13 @@ piv genCode(NODE *t, int faToken=-1) {
 				return genCode(t->child[1]);
 			}
 			break;
-		case TK_STMT:  /*  stmt其实不需要一个返回值  */
-			if (t->child[0]->type == TK_INTEGER) {
-				a = genCode(t->child[0]);
-				a.first!=1||a.second.type!=Value::INTEGER ? throw Error("Wrong syntax tree under TK_STMT, above TK_INTEGER"): 0;
-				output("Label LUER" + string(a.second));
-				return genCode(t->child[1]);
-			}
-			else {
-				return genCode(t->child[0]);
-			}
+		case TK_STMT_LABEL:  /*  stmt其实不需要一个返回值  */
+			a = genCode(t->child[0]);
+			a.first!=1||a.second.type!=Value::INTEGER ? throw Error("Wrong syntax tree under TK_STMT, above TK_INTEGER"): 0;
+			output("Label LUER" + string(a.second));
+			return genCode(t->child[1]);
 			break;
-		case TK_NON_LABEL_STMT:
+		case TK_STMT:
 			return genCode(t->child[0]);
 			break;
 		case TK_ASSIGN_ID:
@@ -544,12 +579,12 @@ piv genCode(NODE *t, int faToken=-1) {
 		//if_stmt
 		case TK_IF:
 			a = genCode(SON(0));
-			output("if_false " + string(a.second) + " goto L" + w1=Label::newLabel());
+			output("if_false " + string(a.second) + " goto L" + toString(w1=Label::newLabel()));
 			TempVars::release(a); TempVars::release(genCode(SON(1)));
-			output("goto L" + w2=Label::newLabel());
-			output("label L" + w1);
+			output("goto L" + toString(w2=Label::newLabel()));
+			output("label L" + toString(w1));
 			TempVars::release(genCode(SON(2)));  //可以优化(不一定有else)
-			output("label L" + w2);
+			output("label L" + toString(w2));
 			break;
 		case TK_ELSE:
 			if (SON(0)) TempVars::release(genCode(SON(0)));
@@ -557,30 +592,30 @@ piv genCode(NODE *t, int faToken=-1) {
 		
 		//repeat_stmt
 		case TK_REPEAT:
-			output("label L" + w1=Label::newLabel());
-			genCdoe(SON(0));
+			output("label L" + toString(w1=Label::newLabel()));
+			genCode(SON(0));
 			a = genCode(SON(1));
-			output("if_false " + string(a.second) + " goto L" + w1);
+			output("if_false " + string(a.second) + " goto L" + toString(w1));
 			TempVars::release(a);
 			break;
 		//while_stmt
 		case TK_WHILE:
-			output("label L" + w1=Label::newLabel());
+			output("label L" + toString(w1=Label::newLabel()));
 			a = genCode(SON(0));
-			output("if_false " + string(a.second) + " goto L" + w2=Label::newLabel());
+			output("if_false " + string(a.second) + " goto L" + toString(w2=Label::newLabel()));
 			genCode(SON(1));
-			output("goto L" + w1);
-			output("label L" + w2);
+			output("goto L" + toString(w1));
+			output("label L" + toString(w2));
 			TempVars::release(a);
 			break;
 		//for_stmt
 		case TK_FOR:  //TO-DO 结构体的单增、单减
-			x = genCode(SON(0));  a = genCode(SON(1));  b = genCdoe(SON(3));
+			x = genCode(SON(0));  a = genCode(SON(1));  b = genCode(SON(3));
 			output(x, "=", a);
 			
 			// / to -> d=1
 			// \ downto -> d=-1
-				tmp = genCdoe(SON(2));
+				tmp = genCode(SON(2));
 				if (string(tmp.second) == "TO")
 					output(d=mp(0, TempVars::getAnother()), "=", mp(1, 1));
 				else
@@ -588,71 +623,166 @@ piv genCode(NODE *t, int faToken=-1) {
 				TempVars::release(tmp);
 				
 			//while (x!=b) { stmt; x=x+d; }
-				output("label L" + w1=Label::newLabel());
+				output("label L" + toString(w1=Label::newLabel()));
 				output(tmp=mp(0, TempVars::getAnother()), x, "!=", b);
-				output("if_false " + string(tmp.second) + " goto L" + w2=Label::newLabel());
+				output("if_false " + string(tmp.second) + " goto L" + toString(w2=Label::newLabel()));
 				genCode(SON(4)); output(x, x, "+", d);
-				output("goto L" + w1);
-				output("label L" + w2);
+				output("goto L" + toString(w1));
+				output("label L" + toString(w2));
 				TempVars::release(tmp);
 				
 			//while (x==b) { stmt; x=x+d; }
-				output("label L" + w1=Label::newLabel());
+				output("label L" + toString(w1=Label::newLabel()));
 				output(tmp=mp(0, TempVars::getAnother()), x, "==", b);
-				output("if_false " + string(tmp.second) + " goto L" + w2=Label::newLabel());
+				output("if_false " + string(tmp.second) + " goto L" + toString(w2=Label::newLabel()));
 				genCode(SON(4)); output(x, x, "+", d);
-				output("goto L" + w1);
-				output("label L" + w2);
+				output("goto L" + toString(w1));
+				output("label L" + toString(w2));
 				TempVars::release(tmp);
 		
-			TempVars::release(a); TempVars::release(b); TempVars::release();
+			TempVars::release(a); TempVars::release(b);
 			break;
 		//case_stmt
 		case TK_CASE:
-			a = genCode(SON(0));
+			CaseParse::addNew();
+			a = genCode(SON(0));  //CaseParse::setE(a);
+			output("goto L" + toString(w1=Label::newLabel()));
+			CaseParse::setEndLabel(w2=Label::newLabel());
 			
+			genCode(SON(1));
+			
+			output("label L" + toString(w1));
+			output(CaseParse::pop(a));
+			output("label L" + toString(w2));
 			break;
 		//case_expr_list
 		case TK_CASE_EL:
-			break;
-		case TK_CASE_EL_END:
+			for (int i=0; i<t->child_number; i++)
+				genCode(SON(i));
 			break;
 		//case_expr
-		case TK_CASE_EXPR:
-			break;
-		case TK_CASE_EXPR_END:
+		case TK_CASE_EXPR: case TK_CASE_EXPR_END:
+			a = genCode(SON(0));
+			output("Label L" + toString(ww=Label::newLabel()));
+			genCode(SON(1));
+			output("goto L" + CaseParse::getEndLabel());
+			CaseParse::addCase(a, ww);
 			break;
 		//goto_stmt
 		case TK_GOTO:
-			output(string("") + "goto LUER" + t->ival);
+			output("goto LUER" + toString(t->ival));
 			break;
 			
 		//args_list
-		case TK_ARGS_LIST_COMMA:
-			genCode(SON(0));
-			a = genCode(SON(1));
-			output("arg " + string(a.second));
-			if (a.first == 0) TempVars::release(a);
-			break;
+		// case TK_ARGS_LIST_COMMA:
+		// 	genCode(SON(0));
+		// 	a = genCode(SON(1));
+		// 	output("arg " + string(a.second));
+		// 	if (a.first == 0) TempVars::release(a);
+		// 	break;
 		case TK_ARGS_LIST:
-			a = genCode(SON(0));
-			output("arg " + string(a.second));
-			if (a.first == 0) TempVars::release(a);
+			for (int i=0; i<t->child_number; i++) {
+				a = genCode(SON(i));
+				output("arg " + string(a.second));
+				if (a.first == 0) TempVars::release(a);
+			}
 			break;
 			
 		//expression_list
-		case TK_EXP_LIST_COMMA:
-			genCode(SON(0));
-			a = genCode(SON(1));
-			output("arg " + string(a.second));
-			if (a.first == 0) TempVars::release(a);
-			break;
+		// case TK_EXP_LIST_COMMA:
+		// 	genCode(SON(0));
+		// 	a = genCode(SON(1));
+		// 	output("arg " + string(a.second));
+		// 	if (a.first == 0) TempVars::release(a);
+		// 	break;
 		case TK_EXP_LIST:
-			a = genCode(SON(0));
-			output("arg " + string(a.second));
-			if (a.first == 0) TempVars::release(a);
+			for (int i=0; i<t->child_number; i++) {
+				a = genCode(SON(i));
+				output("arg " + string(a.second));
+				if (a.first == 0) TempVars::release(a);
+			}
 			break;
-			
+		
+		//expression  //TO-DO
+		case TK_GE:
+			a = genCode(SON(0));
+			if (SON(1)) b = genCode(SON(1));
+			break;
+		case TK_GT:
+			break;
+		case TK_LE:
+			break;
+		case TK_LT:
+			break;
+		case TK_EQUAL:
+			break;
+		case TK_UNEQUAL:
+			break;
+		case TK_EXP:
+			break;
+		
+		//expr  //TO-DO
+		case TK_PLUS:
+			break;
+		case TK_MINUS:
+			break;
+		case TK_OR:
+			break;
+		case TK_EXPR:
+			break;
+		
+		//term  //TO-DO
+		case TK_MUL:
+			break;
+		case TK_DIV:
+			break;
+		case TK_MOD:
+			break;
+		case TK_AND:
+			break;
+		case TK_TERM:
+			break;
+		
+		//factor
+		case TK_FACTOR_ID:
+			return genCode(SON(0));
+			break;
+		case TK_FACTOR_ID_ARGS:
+			a = genCode(SON(0));
+			output("begin_args");
+			TempVars::release(genCode(SON(1)));
+			output("call " + string(a.second));
+			//返回值?? TO-DO
+			break;
+		case TK_FACTOR_SYS_FUNCT:
+			a = genCode(SON(0));
+			output("begin_args");
+			TempVars::release(genCode(SON(1)));
+			output("call " + string(a.second));
+			//返回值?? TO-DO
+			break;
+		case TK_FACTOR_CONST:
+			return genCode(SON(0));
+			break;
+		case TK_FACTOR_EXP:
+			return genCode(SON(0));
+			break;
+		case TK_FACTOR_NOT:
+			a = genCode(SON(0));
+			output(tmp=mp(0, TempVars::getAnother()), "= NOT", a);
+			TempVars::release(a);
+			break;
+		case TK_FACTOR_MINUS:
+			a = genCode(SON(0));
+			output(tmp=mp(0, TempVars::getAnother()), "= -", a);
+			TempVars::release(a);
+			break;
+		case TK_FACTOR_ID_EXP:
+			//需要得到数组的每个元素的字节长度 TO-DO
+			break;
+		case TK_FACTOR_DD:
+			//?? TO-DO
+			break;
 			
 		//procedure??
 		
@@ -675,8 +805,6 @@ piv genCode(NODE *t, int faToken=-1) {
 			break;
 		case TK_CONST_EL:
 			//??
-			break;
-		case TK_GOTO:
 			break;
 		default:
 			break;
