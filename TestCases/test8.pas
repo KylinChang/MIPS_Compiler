@@ -1,5 +1,6 @@
 program test8;
 const
+    haha = true;
 PI=3.14 ;
 
 type
