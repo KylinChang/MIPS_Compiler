@@ -115,7 +115,7 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
 
                     NODE** tmp = $$->child;
                     int old_child_number = $$->child_number;
-                    $$->child = MALLOC($$, (2+old_child_number));
+                    $$->child = MALLOC($$, (1+old_child_number));
                     int i;
                     for(i=0;i<old_child_number;i++){
                     	$$->child[i] = tmp[i];

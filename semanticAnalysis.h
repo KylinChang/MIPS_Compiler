@@ -16,7 +16,7 @@
 
 using namespace std;
 
-void LOGERR(string x, ...);
+void LOGERR(int cnt, ...);
 
 
 unordered_map<string, string> typeName;

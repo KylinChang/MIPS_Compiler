@@ -2,6 +2,7 @@
 // Created by Orpine on 6/5/16.
 //
 
+#include <assert.h>
 #include "semanticAnalysis.h"
 #include "symbolTable.h"
 
@@ -53,38 +54,37 @@ void sa_init() {
 
 }
 
+Type parseType(NODE* root) {
+    assert(root->type == TK_TYPE_DECL);
+    root = root->child[0];
+    if (root->child[0]->type == TK_STD_SYS_TYPE) {
+        return Type(root->child[0]->child[0]->name);
+    } else if (root->child[0]->type == TK_STD_ID) {
+        auto x = symbolTableList.front()->findType(root->child[0]->child[0]->name);
+        if (x.null) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined type");
+        }
+    }
+}
 
 
 void constAnalysis(NODE** constList, int constListNum) {
     for (int i = 0; i < constListNum; i++) {
         string identifier = constList[i]->child[0]->name;
-        NODE* valNode = constList[i]->child[1];
-        Value val;
-        switch (valNode->type) {
-            case TK_INTEGER:
-                val = valNode->ival;
-                break;
-            case TK_REAL:
-                val = valNode->dval;
-                break;
-            case TK_CHAR:
-                val = Value(valNode->ch);
-            // TODO: support string
-            case TK_STRING:
-                break;
-            case TK_SYS_CON:
-                if (valNode->name)
-            default:
-                LOGERR(3, "error in", to_string(valNode->lineno), ":", "unsupport data type");
-
+        Value val = *(constList[i]->child[1]->value);
+        if (!(symbolTableList.front()->insertConst(identifier, val))) {
+            LOGERR(4, "error in line", to_string(constList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
-//        Value val = Value(constList[i]->child[1].)
     }
 }
 
-void typeAnalysis(NODE* root) {
-    if (root == NULL) {
-        return;
+void typeAnalysis(NODE** typeList, int typeListNum) {
+    for (int i = 0; i < typeListNum; i++) {
+        string identifier = typeList[i]->child[0]->name;
+        Type val = parseType(typeList[i]->child[1]);
+        if (!(symbolTableList.front()->insertType(identifier, val))) {
+            LOGERR(4, "error in line", to_string(typeList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
+        }
     }
 }
 
@@ -96,20 +96,36 @@ void varAnalysis(NODE* root) {
 
 void routineAnalysis(NODE* root) {
     symbolTableList.push_front(new SymbolTable());
+    // routineHead
+    NODE* routineHead = root->child[0];
     // CONST
-    if (root->child[0] != NULL) {
-        constAnalysis(root->child[0]->child, root->child[0]->child_number);
+    if (routineHead->child[0]) {
+        constAnalysis(routineHead->child[0]->child, routineHead->child[0]->child_number);
     }
     // TYPE
-    typeAnalysis(root->child[1]);
+    if (routineHead->child[1]) {
+        typeAnalysis(routineHead->child[1]->child, routineHead->child[1]->child_number);
+    }
     // VAR
-    varAnalysis(root->child[2]);
+    varAnalysis(routineHead->child[2]);
     // ROUTINE
-    if (root->child[3]) {
-        for (int i = 0; i < root->child_number; i++) {
+    if (routineHead->child[3]) {
 
+        for (int i = 0; i < routineHead->child[3]->child_number; i++) {
+            NODE* routineNode = routineHead->child[3]->child[i];
+            if (routineNode->type == TK_PROC_DECL) {
+                NODE* funcHead = routineNode->child[0];
+
+            } else if (routineNode->type == TK_FUNC_DECL) {
+
+            } else {
+                LOGERR(4, "error in", to_string(routineNode->lineno).c_str(), ":", "unsupported token");
+            }
         }
     }
+    // routineBody
+    NODE* routineBody = root->child[1];
+
 
     symbolTableList.pop_front();
 }

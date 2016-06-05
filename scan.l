@@ -249,7 +249,7 @@ ID [A-Z]([_A-Z0-9])*
 	yylval = NEWNODE(TK_ID);
 	yylval->lineno = yylineno;
 	//cpString(yylval->name, &yytext);
-	//yylval->name = yytext;
+	yylval->name = yytext;
 	return TK_ID; 
 }  /*  因为保留字不能做操作符，所以将其移到最后一个以降低分析优先级  */
 
