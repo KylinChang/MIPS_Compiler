@@ -6,6 +6,10 @@
 /note
 *.bak
 /Makefile
+*.swp
+/yy.tab.hpp
+/yy.tab.cpp
+/lex.yy.cpp
 
 
 
