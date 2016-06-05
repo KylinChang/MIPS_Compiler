@@ -1320,8 +1320,8 @@ args_list : args_list TK_COMMA expression{
                 int i;
                 for(i=0;i<old_child_number;i++){
                 	$$->child[i] = tmp[i];
-                }
-                $$->child[i] = $2;
+                }git stat
+                $$->child[i] = $3;
 
                 free(tmp);
         }
