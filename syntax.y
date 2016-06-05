@@ -375,27 +375,6 @@ simple_type_decl : TK_SYS_TYPE{
                     $$->child[0] = $1;
                     $$->child[1] = $3;
                 }
-                 | TK_MINUS const_value TK_DOTDOT const_value{
-                     if(DEBUG){
-                        printf("PARSING SIMPLE TYPE DECL ID\n");
-                    }
-                    $$ = NEWNODE(TK_STD_DD_M);
-                    $$->child = MALLOC($$,3);
-                    $$->child[0] = $1;
-                    $$->child[1] = $2;
-                    $$->child[2] = $4;
-                }
-                 | TK_MINUS const_value TK_DOTDOT TK_MINUS const_value{
-                     if(DEBUG){
-                        printf("PARSING SIMPLE TYPE DECL ID\n");
-                    }
-                    $$ = NEWNODE(TK_STD_DD_MM);
-                    $$->child = MALLOC($$,4);
-                    $$->child[0] = $1;
-                    $$->child[1] = $2;
-                    $$->child[2] = $4;
-                    $$->child[3] = $5;
-                }
                  | TK_ID TK_DOTDOT TK_ID{
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
