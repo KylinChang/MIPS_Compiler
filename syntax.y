@@ -92,17 +92,13 @@ const_part : TK_CONST const_expr_list{
             if(DEBUG){
                 printf("PARSING CONST PART\n");
             }
-            $$ = NEWNODE(TK_CONST_PART);
-            $$->child = MALLOC($$,1);
-            $$->child[0] = $1;
+            $$ = $2;
         }
         |{
             if(DEBUG){
                 printf("PARSING CONST PART NULL\n");
             }
-            $$ = NEWNODE(TK_CONST_PART_END);
-            $$->child_number = 0;
-            $$->child = NULL;
+            $$ = NULL;
         }
         ;
 
@@ -135,12 +131,15 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
                     }
                     $$ = NEWNODE(TK_CONST_EL);
                     NODE* node = NEWNODE(TK_CONST_EL_END);
+
+                    node->child = MALLOC(node,2);
+                    node->child[0] = $1;
+                    node->child[1] = $3;
+
                     $$->child = MALLOC($$,1);
                     $$->child[0] = node;
 
-                    node->child = MALLOC($$,2);
-                    node->child[0] = $1;
-                    node->child[1] = $3;
+
                 }
                 ;
 
