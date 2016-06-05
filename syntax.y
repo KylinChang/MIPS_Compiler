@@ -1049,80 +1049,54 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_GE);
-
-                NODE* node = $1;
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = $$;
-
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+                $$->child[0] = $1;
+                $$->child[1] = $3;
            }
            | expression TK_GT expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_GT);
-                NODE* node = $1;
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+                $$->child[0] = $1;
+                $$->child[1] = $3;
            }
            | expression TK_LE expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_LE);
-                NODE* node = $1;
-                                while(node->child[1]!=NULL) node = node->child[1];
-                                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+                $$->child[0] = $1;
+                $$->child[1] = $3;
            }
            | expression TK_LT expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_LT);
-                NODE* node = $1;
-                                while(node->child[1]!=NULL) node = node->child[1];
-                                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+                                $$->child[0] = $1;
+                                $$->child[1] = $3;
            }
            | expression TK_EQUAL expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_EQUAL);
-                NODE* node = $1;
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+                                $$->child[0] = $1;
+                                $$->child[1] = $3;
            }
            | expression TK_UNEQUAL expr{
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 $$ = NEWNODE(TK_UNEQUAL);
-                NODE* node = $1;
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = $$;
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+                                $$->child[0] = $1;
+                                $$->child[1] = $3;
            }
            | expr{
                 if(DEBUG){
@@ -1130,8 +1104,8 @@ expression : expression TK_GE expr{
                 }
                 $$ = NEWNODE(TK_EXP);
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $1;
-                $$->child[1] = NULL;
+                $$->child[0] = NULL;
+                $$->child[1] = $1;
            }
            ;
 
@@ -1141,13 +1115,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_PLUS);
-         NODE* node = $1;
-         while(node->child[1]!=NULL) node = node->child[1];
-         node->child[1] = $$;
          $$->child = MALLOC($$,2);
-         $$->child[0] = $3;
-         $$->child[1] = NULL;
-         $$ = $1;
+                         $$->child[0] = $1;
+                         $$->child[1] = $3;
      }
      | expr TK_MINUS term{
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
@@ -1155,13 +1125,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_MINUS);
-         NODE* node = $1;
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = $$;
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+         $$->child = MALLOC($$,2);
+                         $$->child[0] = $1;
+                         $$->child[1] = $3;
      }
      | expr TK_OR term{
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
@@ -1169,13 +1135,9 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_OR);
-         NODE* node = $1;
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = $$;
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+         $$->child = MALLOC($$,2);
+                         $$->child[0] = $1;
+                         $$->child[1] = $3;
      }
      | term{
      //NOTE: expr IS EXPR, expression IS EXP
@@ -1184,8 +1146,8 @@ expr : expr TK_PLUS term{
          }
          $$ = NEWNODE(TK_EXPR);
          $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = NULL;
+         $$->child[0] = NULL;
+         $$->child[1] = $1;
      }
      ;
 
@@ -1194,52 +1156,36 @@ term : term TK_MUL factor{
              printf("PARSING TK_MUL\n");
          }
          $$ = NEWNODE(TK_MUL);
-         NODE* node = $1;
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = $$;
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+         $$->child = MALLOC($$,2);
+                                  $$->child[0] = $1;
+                                  $$->child[1] = $3;
      }
      | term TK_DIV factor{
          if(DEBUG){
              printf("PARSING TK_DIV\n");
          }
          $$ = NEWNODE(TK_DIV);
-        NODE* node = $1;
-                 while(node->child[1]!=NULL) node = node->child[1];
-                 node->child[1] = $$;
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+        $$->child = MALLOC($$,2);
+                                 $$->child[0] = $1;
+                                 $$->child[1] = $3;
      }
      | term TK_MOD factor{
          if(DEBUG){
              printf("PARSING TK_MOD\n");
          }
          $$ = NEWNODE(TK_MOD);
-        NODE* node = $1;
-                 while(node->child[1]!=NULL) node = node->child[1];
-                 node->child[1] = $$;
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+        $$->child = MALLOC($$,2);
+                                 $$->child[0] = $1;
+                                 $$->child[1] = $3;
      }
      | term TK_AND factor{
          if(DEBUG){
              printf("PARSING TK_AND\n");
          }
          $$ = NEWNODE(TK_AND);
-         NODE* node = $1;
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = $$;
-                $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
-                $$->child[1] = NULL;
-                $$ = $1;
+         $$->child = MALLOC($$,2);
+                                  $$->child[0] = $1;
+                                  $$->child[1] = $3;
      }
      | factor{
          if(DEBUG){
@@ -1247,8 +1193,8 @@ term : term TK_MUL factor{
          }
          $$ = NEWNODE(TK_TERM);
          $$->child = MALLOC($$,2);
-         $$->child[0] = $1;
-         $$->child[1] = NULL;
+         $$->child[0] = NULL;
+         $$->child[1] = $1;
      }
      ;
 

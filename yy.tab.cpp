@@ -784,10 +784,10 @@ static const yytype_uint16 yyrline[] =
      659,   682,   690,   700,   711,   719,   727,   735,   741,   747,
      753,   759,   765,   773,   783,   794,   808,   816,   826,   834,
      844,   856,   864,   877,   883,   891,   903,   915,   930,   937,
-     946,   958,   975,   986,   996,  1008,  1019,  1036,  1046,  1062,
-    1075,  1088,  1101,  1114,  1127,  1138,  1152,  1166,  1180,  1192,
-    1205,  1218,  1231,  1244,  1255,  1264,  1274,  1284,  1292,  1301,
-    1309,  1317,  1327,  1339,  1356
+     946,   958,   975,   986,   996,  1008,  1019,  1036,  1046,  1056,
+    1065,  1074,  1083,  1092,  1101,  1112,  1122,  1132,  1142,  1154,
+    1163,  1172,  1181,  1190,  1201,  1210,  1220,  1230,  1238,  1247,
+    1255,  1263,  1273,  1285,  1302
 };
 #endif
 
@@ -3189,182 +3189,144 @@ yyreduce:
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_GE);
-
-                NODE* node = (yyvsp[-2]);
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = (yyval);
-
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+                (yyval)->child[0] = (yyvsp[-2]);
+                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3203 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3197 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 1062 "syntax.y" /* yacc.c:1646  */
+#line 1056 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_GT);
-                NODE* node = (yyvsp[-2]);
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+                (yyval)->child[0] = (yyvsp[-2]);
+                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3221 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3211 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 1075 "syntax.y" /* yacc.c:1646  */
+#line 1065 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_LE);
-                NODE* node = (yyvsp[-2]);
-                                while(node->child[1]!=NULL) node = node->child[1];
-                                node->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+                (yyval)->child[0] = (yyvsp[-2]);
+                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3239 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3225 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 1088 "syntax.y" /* yacc.c:1646  */
+#line 1074 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_LT);
-                NODE* node = (yyvsp[-2]);
-                                while(node->child[1]!=NULL) node = node->child[1];
-                                node->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+                                (yyval)->child[0] = (yyvsp[-2]);
+                                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3257 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3239 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 1101 "syntax.y" /* yacc.c:1646  */
+#line 1083 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_EQUAL);
-                NODE* node = (yyvsp[-2]);
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+                                (yyval)->child[0] = (yyvsp[-2]);
+                                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3275 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3253 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 1114 "syntax.y" /* yacc.c:1646  */
+#line 1092 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
                 }
                 (yyval) = NEWNODE(TK_UNEQUAL);
-                NODE* node = (yyvsp[-2]);
-                while(node->child[1]!=NULL) node = node->child[1];
-                node->child[1] = (yyval);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+                                (yyval)->child[0] = (yyvsp[-2]);
+                                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3293 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3267 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 1127 "syntax.y" /* yacc.c:1646  */
+#line 1101 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION : FIRST ONE\n");
                 }
                 (yyval) = NEWNODE(TK_EXP);
                 (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
+                (yyval)->child[0] = NULL;
+                (yyval)->child[1] = (yyvsp[0]);
            }
-#line 3307 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3281 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 1138 "syntax.y" /* yacc.c:1646  */
+#line 1112 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_PLUS
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_PLUS);
-         NODE* node = (yyvsp[-2]);
-         while(node->child[1]!=NULL) node = node->child[1];
-         node->child[1] = (yyval);
          (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[0]);
-         (yyval)->child[1] = NULL;
-         (yyval) = (yyvsp[-2]);
+                         (yyval)->child[0] = (yyvsp[-2]);
+                         (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3326 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3296 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 1152 "syntax.y" /* yacc.c:1646  */
+#line 1122 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_MINUS);
-         NODE* node = (yyvsp[-2]);
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = (yyval);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+         (yyval)->child = MALLOC((yyval),2);
+                         (yyval)->child[0] = (yyvsp[-2]);
+                         (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3345 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3311 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 1166 "syntax.y" /* yacc.c:1646  */
+#line 1132 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
          if(DEBUG){
              printf("PARSING EXPR : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_OR);
-         NODE* node = (yyvsp[-2]);
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = (yyval);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+         (yyval)->child = MALLOC((yyval),2);
+                         (yyval)->child[0] = (yyvsp[-2]);
+                         (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3364 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3326 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 1180 "syntax.y" /* yacc.c:1646  */
+#line 1142 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP
          if(DEBUG){
@@ -3372,100 +3334,84 @@ yyreduce:
          }
          (yyval) = NEWNODE(TK_EXPR);
          (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[0]);
-         (yyval)->child[1] = NULL;
+         (yyval)->child[0] = NULL;
+         (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3379 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3341 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 1192 "syntax.y" /* yacc.c:1646  */
+#line 1154 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MUL\n");
          }
          (yyval) = NEWNODE(TK_MUL);
-         NODE* node = (yyvsp[-2]);
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = (yyval);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+         (yyval)->child = MALLOC((yyval),2);
+                                  (yyval)->child[0] = (yyvsp[-2]);
+                                  (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3397 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3355 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 1205 "syntax.y" /* yacc.c:1646  */
+#line 1163 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_DIV\n");
          }
          (yyval) = NEWNODE(TK_DIV);
-        NODE* node = (yyvsp[-2]);
-                 while(node->child[1]!=NULL) node = node->child[1];
-                 node->child[1] = (yyval);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+        (yyval)->child = MALLOC((yyval),2);
+                                 (yyval)->child[0] = (yyvsp[-2]);
+                                 (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3415 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3369 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 1218 "syntax.y" /* yacc.c:1646  */
+#line 1172 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MOD\n");
          }
          (yyval) = NEWNODE(TK_MOD);
-        NODE* node = (yyvsp[-2]);
-                 while(node->child[1]!=NULL) node = node->child[1];
-                 node->child[1] = (yyval);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+        (yyval)->child = MALLOC((yyval),2);
+                                 (yyval)->child[0] = (yyvsp[-2]);
+                                 (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3433 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3383 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 1231 "syntax.y" /* yacc.c:1646  */
+#line 1181 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_AND\n");
          }
          (yyval) = NEWNODE(TK_AND);
-         NODE* node = (yyvsp[-2]);
-                  while(node->child[1]!=NULL) node = node->child[1];
-                  node->child[1] = (yyval);
-                (yyval)->child = MALLOC((yyval),2);
-                (yyval)->child[0] = (yyvsp[0]);
-                (yyval)->child[1] = NULL;
-                (yyval) = (yyvsp[-2]);
+         (yyval)->child = MALLOC((yyval),2);
+                                  (yyval)->child[0] = (yyvsp[-2]);
+                                  (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3451 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3397 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 1244 "syntax.y" /* yacc.c:1646  */
+#line 1190 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TERM : FIRST ONE\n");
          }
          (yyval) = NEWNODE(TK_TERM);
          (yyval)->child = MALLOC((yyval),2);
-         (yyval)->child[0] = (yyvsp[0]);
-         (yyval)->child[1] = NULL;
+         (yyval)->child[0] = NULL;
+         (yyval)->child[1] = (yyvsp[0]);
      }
-#line 3465 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3411 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 1255 "syntax.y" /* yacc.c:1646  */
+#line 1201 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: THERE IS NO TK_FACTOR BUT 'TK_FACTOR' FOLLOWED BY A TYPE
         if(DEBUG){
@@ -3475,11 +3421,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3479 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3425 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 1264 "syntax.y" /* yacc.c:1646  */
+#line 1210 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3490,11 +3436,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-3]);
         (yyval)->child[1] = (yyvsp[-1]);
     }
-#line 3494 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3440 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 1274 "syntax.y" /* yacc.c:1646  */
+#line 1220 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3505,11 +3451,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-3]);
         (yyval)->child[1] = (yyvsp[-1]);
     }
-#line 3509 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3455 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 1284 "syntax.y" /* yacc.c:1646  */
+#line 1230 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3518,11 +3464,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3522 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3468 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 1292 "syntax.y" /* yacc.c:1646  */
+#line 1238 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3532,11 +3478,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[-1]);
     }
-#line 3536 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3482 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 1301 "syntax.y" /* yacc.c:1646  */
+#line 1247 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3545,11 +3491,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3549 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3495 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 1309 "syntax.y" /* yacc.c:1646  */
+#line 1255 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3558,11 +3504,11 @@ yyreduce:
         (yyval)->child = MALLOC((yyval),1);
         (yyval)->child[0] = (yyvsp[0]);
     }
-#line 3562 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3508 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 1317 "syntax.y" /* yacc.c:1646  */
+#line 1263 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LB TK_RB
         if(DEBUG){
@@ -3573,11 +3519,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-3]);
         (yyval)->child[1] = (yyvsp[-1]);
     }
-#line 3577 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3523 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 1327 "syntax.y" /* yacc.c:1646  */
+#line 1273 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: ID->ID IS IN ONE NODE
         if(DEBUG){
@@ -3588,11 +3534,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-2]);
         (yyvsp[-2])->record = (yyvsp[-1]);
     }
-#line 3592 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3538 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 1339 "syntax.y" /* yacc.c:1646  */
+#line 1285 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COMMA
             if(DEBUG){
@@ -3610,11 +3556,11 @@ yyreduce:
 
                 free(tmp);
         }
-#line 3614 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3560 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 1356 "syntax.y" /* yacc.c:1646  */
+#line 1302 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING ARGS LIST : FIRST ONE\n");
@@ -3623,11 +3569,11 @@ yyreduce:
             (yyval)->child = MALLOC((yyval),1);
             (yyval)->child[0] = (yyvsp[0]);
         }
-#line 3627 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3573 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 3631 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3577 "yy.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3855,7 +3801,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1366 "syntax.y" /* yacc.c:1906  */
+#line 1312 "syntax.y" /* yacc.c:1906  */
 
 
 int yyerror(string s){
