@@ -8,7 +8,10 @@
 #include <map>
 #include <climits>
 #include <cstdarg>
-#include <assert.h>
+#include <cassert>
+#include <vector>
+#include <set>
+#include <unordered_map>
 
 using namespace std;
 
@@ -98,6 +101,162 @@ public:
 	string sval;
 };
 
+class SimpleType;
+class ComplexType;
+
+class Type {
+public:
+	Type(){
+		null = true;
+		simpleType = nullptr;
+		complexType = nullptr;
+	}
+	Type(const Type &o);
+	Type(const string &x);
+	Type(const vector<string> &x);
+	Type(int start, int end, const Type &elementType);
+	Type(const unordered_map<string, Type> &x);
+	Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
+	Type(const vector<Type> &argTypeList, const Type &retType, int isFunc = 0);
+
+	bool operator <(const Type &o) const {
+		// TODO
+		return false;
+	}
+
+	bool null;
+	bool isSimpleType;
+	SimpleType *simpleType;
+	ComplexType *complexType;
+};
+
+class SimpleType {
+
+public:
+	SimpleType(){}
+	SimpleType(const string &x) {
+		if (x == "shortint") {
+			simpleType = type_integer;
+			intType = t_shortint;
+		} else if (x == "smallint") {
+			simpleType = type_integer;
+			intType = t_smallint;
+		} else if (x == "longint") {
+			simpleType = type_integer;
+			intType = t_longint;
+		} else if (x == "int64") {
+			simpleType = type_integer;
+			intType = t_int64;
+		} else if (x == "byte") {
+			simpleType = type_integer;
+			intType = t_byte;
+		} else if (x == "word") {
+			simpleType = type_integer;
+			intType = t_word;
+		} else if (x == "dword") {
+			simpleType = type_integer;
+			intType = t_dword;
+		} else if (x == "qword") {
+			simpleType = type_integer;
+			intType = t_qword;
+		}
+
+		if (x == "single") {
+			simpleType = type_real;
+			realType = t_single;
+		} else if (x == "double") {
+			simpleType = type_real;
+			realType = t_double;
+		} else if (x == "extended") {
+			simpleType = type_real;
+			realType = t_extended;
+		} else if (x == "currency") {
+			simpleType = type_real;
+			realType = t_currency;
+		}
+
+		if (x == "boolean") {
+			simpleType = type_boolean;
+		}
+		if (x == "char") {
+			simpleType = type_char;
+		}
+
+		if (x == "string") {
+			simpleType = type_string;
+		}
+	}
+	SimpleTypeEnum simpleType;
+	IntType intType;
+	RealType realType;
+};
+
+class EnumType {
+	// NOTE: one enum item cannot be in different enumType
+public:
+	EnumType(){}
+	EnumType(const vector<string> &x): enumList(x.begin(), x.end()){}
+	set<string> enumList;
+};
+
+class RecordType {
+public:
+	RecordType(){}
+	RecordType(const unordered_map<string, Type> &x): attrType(x){}
+	unordered_map<string, Type> attrType;
+};
+
+class ArrayType {
+public:
+	ArrayType(){}
+	ArrayType(int _start, int _end, const Type &_elementType): start(_start), end(_end), elementType(_elementType){}
+	int start, end;
+	Type elementType;
+};
+
+class RangeType {
+	// NOTE: we assume we can determine the value in semantic analysis phase
+public:
+	RangeType(){}
+	RangeType(const SimpleTypeEnum &_rangeType, const Value &_start, const Value &_end): rangeType(_rangeType), start(_start), end(_end) {}
+	SimpleTypeEnum rangeType;
+	Value start, end;
+};
+
+class FPType {
+public:
+	FPType(){}
+	FPType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
+	vector<Type> argTypeList;
+	Type retType;
+};
+
+class ComplexType {
+public:
+	ComplexType(const vector<string> &x): enumType(x) {
+		complexType = type_enum;
+	}
+	ComplexType(int start, int end, Type elementType): arrayType(start, end, elementType) {
+		complexType = type_array;
+	}
+	ComplexType(const unordered_map<string, Type> &x): recordType(x) {
+		complexType = type_record;
+	}
+	ComplexType(const SimpleTypeEnum &x, const Value &a, const Value &b): rangeType(x, a, b) {
+		complexType = type_range;
+	}
+	ComplexType(const vector<Type> &argTypeList, Type retType, int isFunc = 0): fpType(argTypeList, retType) {
+		complexType = isFunc ? type_func : type_proc;
+	}
+	ComplexTypeEnum complexType;
+	EnumType enumType;
+	RecordType recordType;
+	ArrayType arrayType;
+	RangeType rangeType;
+	// NOTE: here we use fptype to represent func and proc
+	FPType fpType;
+};
+
 typedef struct NODE{
     string name;
 	Value value;
@@ -105,7 +264,7 @@ typedef struct NODE{
     int child_number;
     struct NODE** child;
     struct NODE* record;
-
+	Type dataType;
 	int lineno; //output the error line number
 } NODE;
 

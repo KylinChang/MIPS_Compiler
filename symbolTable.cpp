@@ -5,6 +5,13 @@
 #include "symbolTable.h"
 
 
+Type::Type(const Type &o) {
+    null = o.null;
+    isSimpleType = o.isSimpleType;
+    simpleType = o.simpleType;
+    complexType = o.complexType;
+}
+
 Type::Type(const string &x) {
     null = false;
     isSimpleType = true;
@@ -37,7 +44,7 @@ Type::Type(const vector<Type> &argListType, const Type &retType, int isFunc) {
 }
 
 Type findVar(SymbolTable* symbolTable, const string &varName) {
-    for (auto x = symbolTable; x->nextSymbolTable != nullptr; x = x->nextSymbolTable) {
+    for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findVar(varName);
         if (!y.null) {
             return y;
@@ -47,7 +54,7 @@ Type findVar(SymbolTable* symbolTable, const string &varName) {
 }
 
 Type findType(SymbolTable* symbolTable, const string &varName) {
-    for (auto x = symbolTable; x->nextSymbolTable != nullptr; x = x->nextSymbolTable) {
+    for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findType(varName);
         if (!y.null) {
             return y;
@@ -57,7 +64,7 @@ Type findType(SymbolTable* symbolTable, const string &varName) {
 }
 
 Value findConst(SymbolTable* symbolTable, const string &constName) {
-    for (auto x = symbolTable; x->nextSymbolTable != nullptr; x = x->nextSymbolTable) {
+    for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
         if (!y.invalid) {
             return y;
