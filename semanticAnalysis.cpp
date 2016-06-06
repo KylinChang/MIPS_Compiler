@@ -410,11 +410,7 @@ void statementAnalysis(NODE* root) {
         root->child[3]->dataType = Type("longint");
         statementAnalysis(root->child[4]);
     } else if (root->type == TK_CASE) {
-        Type lhst = findVar(symbolTableList.front(), root->child[0]->name);
-        if (lhst.null) {
-            LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable", root->child[0]->name.c_str());
-            return;
-        }
+        Type lhst = expressionAnalysis(root->child[0]);
         if (!lhst.isSimpleType || (lhst.simpleType->simpleType != type_integer && lhst.simpleType->simpleType != type_char)) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be integer or char");
         }
