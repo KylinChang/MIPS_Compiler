@@ -24,7 +24,7 @@ NODE* NEWNODE(int type){
 //}
 string genString(char *s, int len) {
 	s[len] = 0; string ss(s);
-	transform(ss, ss+len, ss, ::tolower);
+	transform(ss.begin(), ss.end(), ss.begin(), ::tolower);
     return string(ss);
 }
 
