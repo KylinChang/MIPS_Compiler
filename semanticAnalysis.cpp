@@ -230,6 +230,10 @@ void varAnalysis(NODE** varList, int varListNum) {
     }
 }
 
+void statementAnalysis(NODE* statement) {
+
+}
+
 void routineAnalysis(NODE* root) {
     // routineHead
     NODE* routineHead = root->child[0];
@@ -263,7 +267,9 @@ void routineAnalysis(NODE* root) {
     }
     // routineBody
     NODE* routineBody = root->child[1];
-
+    for (int i = 0; i < routineBody->child_number; i++) {
+        statementAnalysis(routineBody->child[i]);
+    }
 
 }
 
