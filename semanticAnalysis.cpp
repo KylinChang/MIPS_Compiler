@@ -102,7 +102,7 @@ void constAnalysis(NODE** constList, int constListNum) {
 void typeAnalysis(NODE** typeList, int typeListNum) {
     for (int i = 0; i < typeListNum; i++) {
         string identifier = typeList[i]->child[0]->name;
-        Type val = parseType(typeList[i]->child[1]);
+        Type val = parseSimpleType(typeList[i]->child[1]);
         if ((symbolTableList.front()->insertType(identifier, val))) {
             LOGERR(4, "error in line", to_string(typeList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
@@ -156,7 +156,7 @@ int main(int argc, char** argv){
 //    printf("Please input the test file: ");
 //    scanf("%s", FILENAME);
 
-    FILE* file = fopen("./TestCases/test8.pas", "r");
+    FILE* file = fopen("./TestCases/test9.pas", "r");
     yyin = file;
 
     node_init();
