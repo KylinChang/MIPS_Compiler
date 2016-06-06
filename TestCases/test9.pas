@@ -1,12 +1,12 @@
-program test8;
+program test9;
 
 const
     haha = true;
     PI=3.14 ;
 
 type
-    a = integer;
-    color = a;
+    innn = integer;
+    color = innn;
     xxx = record
         title : integer;
         author : integer;
@@ -65,12 +65,15 @@ begin
     b:=2;
     goto 1;
 
-    while(true) do begin
-        a := 4;
-        b := 5;
-    end
+    while true do
+        begin
+            a:=1;
+            b:=1;
+            c:=2;
+        end;
 
-    h := (a+b) * a;
+
+    hhh := (a+b) * a;
 
 
 end.

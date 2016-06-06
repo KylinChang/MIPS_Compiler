@@ -12,15 +12,10 @@
 #include <vector>
 #include <list>
 #include <iostream>
-#include <cstdarg>
 
 using namespace std;
 
-void LOGERR(int cnt, ...);
-
-
 unordered_map<string, string> typeName;
-
 
 
 void sa_init();

@@ -8,7 +8,6 @@ NODE* NEWNODE(int type){
 	node->type = type;
 	node->child_number = 0;
 	node->child = NULL;
-    node->value = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
 //		char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
 //		strcpy(tmp, NODE_NAMES[type].c_str());
@@ -17,11 +16,7 @@ NODE* NEWNODE(int type){
 	return node;
 } 
 
-//char* cpString(char** str2){
-//    char* tmp = (char*)malloc(sizeof(char) * (strlen(*str2) + 1));
-//	strcpy(tmp, *str2);
-//
-//}
+
 string genString(char *s, int len) {
 	s[len] = 0; string ss(s);
 	transform(ss.begin(), ss.end(), ss.begin(), ::tolower);
@@ -83,6 +78,8 @@ void node_init(){
 	NODE_NAMES[TK_FUNC_HEAD] = "TK_FUNC_HEAD";
 	NODE_NAMES[TK_PROC_DECL] = "TK_PROC_DECL";
 	NODE_NAMES[TK_PROC_HEAD] = "TK_PROC_HEAD";
+	NODE_NAMES[TK_PARA_TL_VAL] = "TK_PARA_TL_VAL";
+	NODE_NAMES[TK_PARA_TL_VAR] = "TK_PARA_TL_VAR";
 	NODE_NAMES[TK_PARA] = "TK_PARA";
 	NODE_NAMES[TK_PARA_NULL] = "TK_PARA_NULL";
 	NODE_NAMES[TK_PARA_DL] = "TK_PARA_DL";

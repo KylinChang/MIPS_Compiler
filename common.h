@@ -7,6 +7,7 @@
 #include <string>
 #include <map>
 #include <climits>
+#include <cstdarg>
 
 using namespace std;
 
@@ -84,7 +85,7 @@ public:
 
 typedef struct NODE{
     string name;
-	Value* value;
+	Value value;
 	int type;
     int child_number;
     struct NODE** child;
@@ -103,8 +104,10 @@ typedef struct NODE{
 #define MIN(a, b) min(a == NULL ? INT_MAX : a->lineno, b == NULL ? INT_MAX : b->lineno)
 //#define MIN(a,b) ((a)->lineno) < ((b)->lineno) ? ((a)->lineno) : ((b)->lineno);
 
+//LOGERR FOR error output
+void LOGERR(int cnt, ...);
+
 NODE* NEWNODE(int type);
-void cpString(string& str1, char** str2);
 void setName(NODE* node, int type);
 void node_init();
 string genString(char *s, int len);
