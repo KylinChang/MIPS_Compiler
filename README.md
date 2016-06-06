@@ -19,3 +19,8 @@ The syntax tree has following features:
 * The const part is in form of "const_var := const_val", where 'const_val' is integer, real, char ,string or system constant 'maxint' 'maxlongint' 'true' 'false'
 
 * The record part doesn't support nested form
+* we do not support array[integer/char] declaration form, 
+
+## Symbol Table
+
+* we support enum type just like C(by adding those token into constant table), so you could use symbolTable.findConst to get the corresponding int value.
