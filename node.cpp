@@ -1,5 +1,6 @@
 #include "common.h"
 #include "yy.tab.hpp"
+#include <algorithm>
 map<int, string> NODE_NAMES;
 
 NODE* NEWNODE(int type){
@@ -22,12 +23,8 @@ NODE* NEWNODE(int type){
 //
 //}
 string genString(char *s, int len) {
-    char *ss = (char*)malloc(sizeof(char) * (len + 1));
-    strcpy(ss, s);
-    int i;
-    for(i=0;i<len;i++){
-        ss[i] = TO_LOWER_CASE(ss[i]);
-    }
+	s[len] = 0; string ss(s);
+	transform(ss, ss+len, ss, ::tolower);
     return string(ss);
 }
 
