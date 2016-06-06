@@ -3,15 +3,15 @@
 map<int, string> NODE_NAMES;
 
 NODE* NEWNODE(int type){
-	NODE* node = (NODE*)malloc(NODE_SIZE);
+	NODE* node = new NODE();
 	node->type = type;
 	node->child_number = 0;
 	node->child = NULL;
     node->value = NULL;
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-		char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
-		strcpy(tmp, NODE_NAMES[type].c_str());
-        node->name = string(tmp);
+//		char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+//		strcpy(tmp, NODE_NAMES[type].c_str());
+        node->name = NODE_NAMES[type];
 	}
 	return node;
 } 
@@ -28,14 +28,17 @@ string genString(char *s, int len) {
     for(i=0;i<len;i++){
         ss[i] = TO_LOWER_CASE(ss[i]);
     }
+	auto ret = string(ss);
+	free(ss);
     return string(ss);
 }
 
 void setName(NODE* node, int type){
 	if(NODE_NAMES.find(type)!=NODE_NAMES.end()){
-        char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
-        strcpy(tmp, NODE_NAMES[type].c_str());
-        node->name = string(tmp);
+//        char* tmp = (char*)malloc(sizeof(char)*(NODE_NAMES[type].length()+1));
+//        strcpy(tmp, NODE_NAMES[type].c_str());
+//        node->name = string(tmp);
+        node->name = NODE_NAMES[type];
 	}
 }
 

@@ -54,16 +54,37 @@ void sa_init() {
 
 }
 
-Type parseType(NODE* root) {
+Type parseSimpleType(NODE* root) {
     assert(root->type == TK_TYPE_DECL);
     root = root->child[0];
-    if (root->child[0]->type == TK_STD_SYS_TYPE) {
-        return Type(root->child[0]->child[0]->name);
-    } else if (root->child[0]->type == TK_STD_ID) {
-        auto x = symbolTableList.front()->findType(root->child[0]->child[0]->name);
+    if (root->type == TK_STD_SYS_TYPE) {
+        return Type(root->child[0]->name);
+    } else if (root->type == TK_STD_ID) {
+        auto x = symbolTableList.front()->findType(root->child[0]->name);
         if (x.null) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined type");
         }
+        return x;
+    } else if (root->type == TK_STD_NL) {
+        vector<string> x;
+        for (int i = 0; i < root->child[0]->child_number; i++) {
+            x.push_back(root->child[0]->child[i]->name);
+        }
+        auto uniqueCheck = unique(x.begin(), x.end());
+        if (uniqueCheck != x.end()) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "duplicate enum item");
+        }
+        return Type(x);
+    } else if (root->type == TK_STD_DD) {
+        Value a = *(root->child[0]->value), b = *(root->child[1]->value);
+        if (a.type != b.type) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range data type mismatch");
+        }
+        return Type(a.type, a, b);
+    } else if (root->type == TK_STD_DD_ID) {
+        // TODO
+    } else {
+        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown type");
     }
 }
 
@@ -72,7 +93,7 @@ void constAnalysis(NODE** constList, int constListNum) {
     for (int i = 0; i < constListNum; i++) {
         string identifier = constList[i]->child[0]->name;
         Value val = *(constList[i]->child[1]->value);
-        if (!(symbolTableList.front()->insertConst(identifier, val))) {
+        if ((symbolTableList.front()->insertConst(identifier, val))) {
             LOGERR(4, "error in line", to_string(constList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
     }
@@ -82,7 +103,7 @@ void typeAnalysis(NODE** typeList, int typeListNum) {
     for (int i = 0; i < typeListNum; i++) {
         string identifier = typeList[i]->child[0]->name;
         Type val = parseType(typeList[i]->child[1]);
-        if (!(symbolTableList.front()->insertType(identifier, val))) {
+        if ((symbolTableList.front()->insertType(identifier, val))) {
             LOGERR(4, "error in line", to_string(typeList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
     }
@@ -107,22 +128,22 @@ void routineAnalysis(NODE* root) {
         typeAnalysis(routineHead->child[1]->child, routineHead->child[1]->child_number);
     }
     // VAR
-    varAnalysis(routineHead->child[2]);
+//    varAnalysis(routineHead->child[2]);
     // ROUTINE
-    if (routineHead->child[3]) {
-
-        for (int i = 0; i < routineHead->child[3]->child_number; i++) {
-            NODE* routineNode = routineHead->child[3]->child[i];
-            if (routineNode->type == TK_PROC_DECL) {
-                NODE* funcHead = routineNode->child[0];
-
-            } else if (routineNode->type == TK_FUNC_DECL) {
-
-            } else {
-                LOGERR(4, "error in", to_string(routineNode->lineno).c_str(), ":", "unsupported token");
-            }
-        }
-    }
+//    if (routineHead->child[3]) {
+//
+//        for (int i = 0; i < routineHead->child[3]->child_number; i++) {
+//            NODE* routineNode = routineHead->child[3]->child[i];
+//            if (routineNode->type == TK_PROC_DECL) {
+//                NODE* funcHead = routineNode->child[0];
+//
+//            } else if (routineNode->type == TK_FUNC_DECL) {
+//
+//            } else {
+//                LOGERR(4, "error in", to_string(routineNode->lineno).c_str(), ":", "unsupported token");
+//            }
+//        }
+//    }
     // routineBody
     NODE* routineBody = root->child[1];
 

@@ -25,7 +25,7 @@ Type::Type(const map<string, Type> &x) {
     isSimpleType = false;
     complexType = new ComplexType(x);
 }
-Type::Type(const SimpleType &x, const Value &a, const Value &b) {
+Type::Type(const SimpleTypeEnum &x, const Value &a, const Value &b) {
     null = false;
     isSimpleType = false;
     complexType = new ComplexType(x, a, b);

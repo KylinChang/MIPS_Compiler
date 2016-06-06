@@ -26,7 +26,7 @@ public:
     Type(const vector<string> &x);
     Type(int start, int end, const Type &elementType);
     Type(const map<string, Type> &x);
-    Type(const SimpleType &x, const Value &a, const Value &b);
+    Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
     Type(const vector<Type> &argListType, Type retType, int isFunc = 0);
     bool null;
     bool isSimpleType;
@@ -122,8 +122,8 @@ class RangeType {
     // NOTE: here we just check type, do not evaluate value
 public:
     RangeType(){}
-    RangeType(const SimpleType &_rangeType, const Value &_start, const Value &_end): rangeType(_rangeType), start(_start), end(_end) {}
-    SimpleType rangeType;
+    RangeType(const SimpleTypeEnum &_rangeType, const Value &_start, const Value &_end): rangeType(_rangeType), start(_start), end(_end) {}
+    SimpleTypeEnum rangeType;
     Value start, end;
 };
 
@@ -146,7 +146,7 @@ public:
     ComplexType(const map<string, Type> &x): recordType(x) {
         complexType = type_record;
     }
-    ComplexType(const SimpleType &x, const Value &a, const Value &b): rangeType(x, a, b) {
+    ComplexType(const SimpleTypeEnum &x, const Value &a, const Value &b): rangeType(x, a, b) {
         complexType = type_range;
     }
     ComplexType(const vector<Type> &argListType, Type retType, int isFunc = 0): funcType(argListType, retType) {
@@ -166,27 +166,34 @@ public:
     unordered_map<string, Value> constSymbolTable;
     unordered_map<string, Type> varSymbolTable;
     unordered_map<string, Type> typeSymbolTable;
-
-    bool insertType(string identifier, Type x) {
+    set<string> enumSet;
+    int insertType(string identifier, Type x) {
         if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
-            return false;
+            return 1;
         }
         typeSymbolTable[identifier] = x;
-        return true;
+        if (!x.null && !x.isSimpleType && x.complexType->complexType == type_enum) {
+            int pre = enumSet.size();
+            enumSet.insert(x.complexType->enumType.enumList.begin(), x.complexType->enumType.enumList.end());
+            if (enumSet.size() != pre + x.complexType->enumType.enumList.size()) {
+                return 2;
+            }
+        }
+        return 0;
     }
     bool insertVar(string identifier, Type x) {
         if (varSymbolTable.find(identifier) != varSymbolTable.end()) {
-            return false;
+            return true;
         }
         varSymbolTable[identifier] = x;
-        return true;
+        return false;
     }
     bool insertConst(string identifier, Value x) {
         if (constSymbolTable.find(identifier) != constSymbolTable.end()) {
-            return false;
+            return true;
         }
         constSymbolTable[identifier] = x;
-        return true;
+        return false;
     }
     Type findVar(const string &x) {
         auto y = varSymbolTable.find(x);

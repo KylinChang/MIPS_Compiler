@@ -6,6 +6,8 @@
 #include <cstring>
 #include <string>
 #include <map>
+#include <climits>
+
 using namespace std;
 
 enum IntType {
@@ -89,14 +91,18 @@ typedef struct NODE{
     struct NODE* record;
 
 	int lineno; //output the error line number
-}NODE;
+} NODE;
 
 #define NODE_SIZE sizeof(NODE)
 #define NODE_POINTER_SIZE sizeof(NODE*)
-#define MALLOC(pointer,num) (NODE**)malloc(NODE_POINTER_SIZE*(pointer->child_number=num))
+//#define MALLOC(pointer,num) (NODE**)malloc(NODE_POINTER_SIZE*(pointer->child_number=num))
+#define MALLOC(pointer,num) new NODE*[pointer->child_number=num]
+
+
 #define TO_LOWER_CASE(ch) (ch<='A' && ch>='a')?(ch-'A'+'a') : ch;
 
-#define MIN(a,b) a->lineno<b->lineno?a->lineno:b->lineno;
+#define MIN(a, b) min(a == NULL ? INT_MAX : a->lineno, b == NULL ? INT_MAX : b->lineno)
+//#define MIN(a,b) ((a)->lineno) < ((b)->lineno) ? ((a)->lineno) : ((b)->lineno);
 
 NODE* NEWNODE(int type);
 void cpString(string& str1, char** str2);
