@@ -275,7 +275,10 @@ array_type_decl : TK_ARRAY TK_LB simple_type_decl TK_RB TK_OF type_decl{
                 }
                 $$ = NEWNODE(TK_ARRAY);
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
+                $$->child[0] = NEWNODE(TK_TYPE_DECL);
+                $$->child[0]->lineno = $3->lineno;
+                $$->child[0]->child = MALLOC($$, 1);
+                $$->child[0]->child[0] = $3;
                 $$->child[1] = $6;
 
                 $$->lineno = MIN($3, $6);
@@ -557,7 +560,10 @@ function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl{
                 $$->child = MALLOC($$,3);
                 $$->child[0] = $2;
                 $$->child[1] = $3;
-                $$->child[2] = $5;
+                $$->child[2] = NEWNODE(TK_TYPE_DECL);
+                $$->child[2]->lineno = $5->lineno;
+                $$->child[2]->child = MALLOC($$, 1);
+                $$->child[2]->child[0] = $5;
 
                 $$->lineno = MIN($2,$3);
                 $$->lineno = MIN($$,$5);
@@ -647,7 +653,10 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     $$ = NEWNODE(TK_PARA_TL_VAR);
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
-                    $$->child[1] = $3;
+                    $$->child[1] = NEWNODE(TK_TYPE_DECL);
+                    $$->child[1]->lineno = $3->lineno;
+                    $$->child[1]->child = MALLOC($$, 1);
+                    $$->child[1]->child[0] = $3;
 
                     $$->lineno = MIN($1, $3);
                 }
@@ -659,7 +668,10 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     $$ = NEWNODE(TK_PARA_TL_VAL);
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
-                    $$->child[1] = $3;
+                    $$->child[1] = NEWNODE(TK_TYPE_DECL);
+                    $$->child[1]->lineno = $3->lineno;
+                    $$->child[1]->child = MALLOC($$, 1);
+                    $$->child[1]->child[0] = $3;
 
                     $$->lineno = MIN($1, $3);
                 }

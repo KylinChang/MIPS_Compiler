@@ -8,6 +8,7 @@
 #include <map>
 #include <climits>
 #include <cstdarg>
+#include <assert.h>
 
 using namespace std;
 
@@ -73,6 +74,20 @@ public:
 		invalid = false;
 		sval = x;
 		type = type_string;
+	}
+	bool operator < (const Value &b) const {
+		// NOTE: here we assume a and b are the same type
+		if (type == type_integer) {
+			return ival < b.ival;
+		} else if (type == type_real) {
+			return dval < b.dval;
+		} else if (type == type_boolean) {
+			return !bval && b.bval;
+		} else if (type == type_char) {
+			return cval < b.cval;
+		} else {
+			assert(0);
+		}
 	}
 	bool invalid;
 	SimpleTypeEnum type;

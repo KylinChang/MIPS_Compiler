@@ -25,9 +25,9 @@ public:
     Type(const string &x);
     Type(const vector<string> &x);
     Type(int start, int end, const Type &elementType);
-    Type(const map<string, Type> &x);
+    Type(const unordered_map<string, Type> &x);
     Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
-    Type(const vector<Type> &argListType, Type retType, int isFunc = 0);
+    Type(const vector<Type> &argTypeList, const Type &retType, int isFunc = 0);
     bool null;
     bool isSimpleType;
     SimpleType *simpleType;
@@ -106,8 +106,8 @@ public:
 class RecordType {
 public:
     RecordType(){}
-    RecordType(const map<string, Type> &x): attrType(x){}
-    map<string, Type> attrType;
+    RecordType(const unordered_map<string, Type> &x): attrType(x){}
+    unordered_map<string, Type> attrType;
 };
 
 class ArrayType {
@@ -119,7 +119,7 @@ public:
 };
 
 class RangeType {
-    // NOTE: here we just check type, do not evaluate value
+    // NOTE: we assume we can determine the value in semantic analysis phase
 public:
     RangeType(){}
     RangeType(const SimpleTypeEnum &_rangeType, const Value &_start, const Value &_end): rangeType(_rangeType), start(_start), end(_end) {}
@@ -130,8 +130,8 @@ public:
 class FuncType {
 public:
     FuncType(){}
-    FuncType(vector<Type> _argListType, Type _retType): argListType(_argListType), retType(_retType){}
-    vector<Type> argListType;
+    FuncType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
+    vector<Type> argTypeList;
     Type retType;
 };
 
@@ -143,13 +143,13 @@ public:
     ComplexType(int start, int end, Type elementType): arrayType(start, end, elementType) {
         complexType = type_array;
     }
-    ComplexType(const map<string, Type> &x): recordType(x) {
+    ComplexType(const unordered_map<string, Type> &x): recordType(x) {
         complexType = type_record;
     }
     ComplexType(const SimpleTypeEnum &x, const Value &a, const Value &b): rangeType(x, a, b) {
         complexType = type_range;
     }
-    ComplexType(const vector<Type> &argListType, Type retType, int isFunc = 0): funcType(argListType, retType) {
+    ComplexType(const vector<Type> &argTypeList, Type retType, int isFunc = 0): funcType(argTypeList, retType) {
         complexType = isFunc ? type_func : type_proc;
     }
     ComplexTypeEnum complexType;
@@ -163,32 +163,39 @@ public:
 
 class SymbolTable {
 public:
+    SymbolTable* nextSymbolTable;
     unordered_map<string, Value> constSymbolTable;
     unordered_map<string, Type> varSymbolTable;
     unordered_map<string, Type> typeSymbolTable;
-    set<string> enumSet;
+    int enumCount;
+//    set<string> enumSet;
+    SymbolTable(SymbolTable* _next = nullptr) {nextSymbolTable = _next; enumCount = 0;}
     int insertType(string identifier, Type x) {
-        if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
-            return 1;
-        }
+        // NOTE: here we treat type override is legal
+//        if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
+//            return 1;
+//        }
         typeSymbolTable[identifier] = x;
-        if (!x.null && !x.isSimpleType && x.complexType->complexType == type_enum) {
-            int pre = enumSet.size();
-            enumSet.insert(x.complexType->enumType.enumList.begin(), x.complexType->enumType.enumList.end());
-            if (enumSet.size() != pre + x.complexType->enumType.enumList.size()) {
-                return 2;
-            }
-        }
+//        if (!x.null && !x.isSimpleType && x.complexType->complexType == type_enum) {
+//            int pre = enumSet.size();
+//            enumSet.insert(x.complexType->enumType.enumList.begin(), x.complexType->enumType.enumList.end());
+//            if (enumSet.size() != pre + x.complexType->enumType.enumList.size()) {
+//                return 2;
+//            }
+//        }
         return 0;
     }
-    bool insertVar(string identifier, Type x) {
+    bool insertEnum(const string &identifier) {
+        return insertConst(identifier, ++enumCount);
+    }
+    bool insertVar(const string &identifier, Type x) {
         if (varSymbolTable.find(identifier) != varSymbolTable.end()) {
             return true;
         }
         varSymbolTable[identifier] = x;
         return false;
     }
-    bool insertConst(string identifier, Value x) {
+    bool insertConst(const string &identifier, Value x) {
         if (constSymbolTable.find(identifier) != constSymbolTable.end()) {
             return true;
         }

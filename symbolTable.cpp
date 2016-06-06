@@ -20,7 +20,7 @@ Type::Type(int start, int end, const Type &elementType) {
     isSimpleType = false;
     complexType = new ComplexType(start, end, elementType);
 }
-Type::Type(const map<string, Type> &x) {
+Type::Type(const unordered_map<string, Type> &x) {
     null = false;
     isSimpleType = false;
     complexType = new ComplexType(x);
@@ -30,14 +30,14 @@ Type::Type(const SimpleTypeEnum &x, const Value &a, const Value &b) {
     isSimpleType = false;
     complexType = new ComplexType(x, a, b);
 }
-Type::Type(const vector<Type> &argListType, Type retType, int isFunc) {
+Type::Type(const vector<Type> &argListType, const Type &retType, int isFunc) {
     null = false;
     isSimpleType = false;
     complexType = new ComplexType(argListType, retType, isFunc);
 }
 
-Type findVar(list<SymbolTable*> symbolTable, string varName) {
-    for (auto &x: symbolTable) {
+Type findVar(SymbolTable* symbolTable, const string &varName) {
+    for (auto x = symbolTable; x->nextSymbolTable != nullptr; x = x->nextSymbolTable) {
         auto y = x->findVar(varName);
         if (!y.null) {
             return y;
@@ -46,8 +46,8 @@ Type findVar(list<SymbolTable*> symbolTable, string varName) {
     return Type();
 }
 
-Type findType(list<SymbolTable*> symbolTable, string varName) {
-    for (auto &x: symbolTable) {
+Type findType(SymbolTable* symbolTable, const string &varName) {
+    for (auto x = symbolTable; x->nextSymbolTable != nullptr; x = x->nextSymbolTable) {
         auto y = x->findType(varName);
         if (!y.null) {
             return y;
@@ -56,8 +56,8 @@ Type findType(list<SymbolTable*> symbolTable, string varName) {
     return Type();
 }
 
-Value findConst(list<SymbolTable*> symbolTable, string constName) {
-    for (auto &x: symbolTable) {
+Value findConst(SymbolTable* symbolTable, const string &constName) {
+    for (auto x = symbolTable; x->nextSymbolTable != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
         if (!y.invalid) {
             return y;

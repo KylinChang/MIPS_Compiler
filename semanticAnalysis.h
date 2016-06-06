@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "yy.tab.hpp"
+#include "symbolTable.h"
 #include <set>
 #include <unordered_map>
 #include <vector>
@@ -19,5 +20,8 @@ unordered_map<string, string> typeName;
 
 
 void sa_init();
+void parseRecordType(unordered_map<string, Type> &nameMap, NODE* root);
+Type parseType(NODE* root);
+
 
 #endif //MIPS_COMPILER_SEMENTICANALYSIS_H
