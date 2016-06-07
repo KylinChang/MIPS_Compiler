@@ -20,6 +20,7 @@ public:
     unordered_map<string, Value> constSymbolTable;
     unordered_map<string, Type> varSymbolTable;
     unordered_map<string, Type> typeSymbolTable;
+    unordered_map<string, vector<Type>> funcSymbolTable;
     // the following data structures are used to check goto labels' validity
     unordered_map<int, int> labelRef;
     unordered_map<int, NODE*> labelMap;
@@ -66,6 +67,20 @@ public:
         labelMap[label] = node;
         return true;
     }
+    bool insertFunc(const string &identifier, const Type &x) {
+        auto it = funcSymbolTable.find(identifier);
+        if (it == funcSymbolTable.end()) {
+            funcSymbolTable[identifier] = vector<Type>();
+            funcSymbolTable[identifier].push_back(x);
+        } else {
+            for (const auto &y: it->second) {
+                if (x == y) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     void insertLabelRef(int label, int lineno) {
         // NOTE: it is unnecessary to record all goto reference
         labelRef[label] = lineno;
@@ -86,6 +101,30 @@ public:
             return Type();
         }
     }
+    Type findFunc(const string &x) {
+        auto y = funcSymbolTable.find(x);
+        if (y != funcSymbolTable.end()) {
+            auto type = Type(vector<Type>(), Type());
+            for (const auto &t: y->second) {
+                if (t == type) {
+                    return t;
+                }
+            }
+        }
+        return Type();
+    }
+    Type findFunc(const string &x, const vector<Type> &typeList) {
+        auto y = funcSymbolTable.find(x);
+        if (y != funcSymbolTable.end()) {
+            auto type = Type(typeList, Type());
+            for (const auto &t: y->second) {
+                if (t == type) {
+                    return t;
+                }
+            }
+        }
+        return Type();
+    }
     Value findConst(const string &x) {
         auto y = constSymbolTable.find(x);
         if (y != constSymbolTable.end()) {
@@ -94,23 +133,25 @@ public:
             return Value();
         }
     }
-    bool checkLabelRef() {
+    void checkLabelRef() {
         for (auto &x: labelRef) {
             if (labelMap.find(x.first) == labelMap.end()) {
                 LOGERR(4, "error in line", to_string(x.second).c_str(), ":", "use a unavailable label");
-                return false;
             }
         }
-        return true;
     }
 };
 
-Type findVar(SymbolTable* symbolTable, const string &varName);
+Type findVar(SymbolTable* symbolTable, const string &varName, NODE* root);
 
-Type findType(SymbolTable* symbolTable, const string &varName);
+Type findType(SymbolTable* symbolTable, const string &varName, NODE* root);
 
-Type findConstType(SymbolTable* symbolTable, const string &varName);
+Type findConstType(SymbolTable* symbolTable, const string &varName, NODE* root);
 
-Value findConst(SymbolTable* symbolTable, const string &constName);
+Type findFunc(SymbolTable* symbolTable, const string &varName, NODE* root);
+
+Type findFunc(SymbolTable* symbolTable, const string &varName, const vector<Type> &typeList, NODE* root);
+
+Value findConst(SymbolTable* symbolTable, const string &constName, NODE* root);
 
 #endif //MIPS_COMPILER_SYMBOLTABLE_H

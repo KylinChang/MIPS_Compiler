@@ -35,6 +35,6 @@ Type expressionAnalysis(NODE* root);
 void statementAnalysis(NODE* root);
 void statementListAnalysis(NODE* statementList);
 void routineAnalysis(NODE* root);
-
+vector<Type> expressionListAnalysis(NODE* root);
 
 #endif //MIPS_COMPILER_SEMENTICANALYSIS_H

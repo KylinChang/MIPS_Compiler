@@ -59,6 +59,7 @@ begin
     1: writeln(0);
     2: writeln(1);
     end;
+    arr_var[3] := 2;
 
     1:
     a:=1;

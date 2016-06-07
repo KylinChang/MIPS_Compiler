@@ -16,21 +16,21 @@
 using namespace std;
 
 enum IntType {
+    t_byte,
 	t_shortint,
+    t_word,
 	t_smallint,
+    t_dword, //t_longword, t_cardinal
 	t_longint, // t_integer
+    t_qword,
 	t_int64, // t_comp
-	t_byte,
-	t_word,
-	t_dword, //t_longword, t_cardinal
-	t_qword
 };
 
 enum RealType {
 	t_single,
 	t_double, // t_real
 	t_extended,
-	t_currency
+//	t_currency
 };
 
 enum SimpleTypeEnum {
@@ -103,6 +103,7 @@ public:
 
 class SimpleType;
 class ComplexType;
+class SymbolTable;
 
 class Type {
 public:
@@ -119,10 +120,8 @@ public:
 	Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
 	Type(const vector<Type> &argTypeList, const Type &retType, int isFunc = 0);
 
-	bool operator <(const Type &o) const {
-		// TODO
-		return false;
-	}
+    bool operator <(const Type &o) const;
+    bool operator ==(const Type &o) const;
 
 	bool null;
 	bool isSimpleType;
@@ -184,9 +183,9 @@ public:
 		} else if (x == "extended") {
 			simpleType = type_real;
 			realType = t_extended;
-		} else if (x == "currency") {
-			simpleType = type_real;
-			realType = t_currency;
+//		} else if (x == "currency") {
+//			simpleType = type_real;
+//			realType = t_currency;
 		}
 
 		if (x == "boolean") {
@@ -218,6 +217,18 @@ public:
 	RecordType(){}
 	RecordType(const unordered_map<string, Type> &x): attrType(x){}
 	unordered_map<string, Type> attrType;
+    bool operator ==(const RecordType &o) const {
+        if (this->attrType.size() != o.attrType.size()) {
+            return false;
+        }
+        for (const auto &x: this->attrType) {
+            auto y = o.attrType.find(x.first);
+            if (y == o.attrType.end() || !(y->second == x.second)) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 class ArrayType {
@@ -243,6 +254,17 @@ public:
 	FPType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
 	vector<Type> argTypeList;
 	Type retType;
+    bool operator ==(const FPType &o) const {
+        if (argTypeList.size() != o.argTypeList.size()) {
+            return false;
+        }
+        for (int i = 0; i < argTypeList.size(); i++) {
+            if (!(argTypeList[i] == o.argTypeList[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 class ComplexType {
@@ -279,6 +301,7 @@ typedef struct NODE{
     struct NODE** child;
     struct NODE* record;
 	Type dataType;
+    SymbolTable* symbolTable;
 	int lineno; //output the error line number
 } NODE;
 

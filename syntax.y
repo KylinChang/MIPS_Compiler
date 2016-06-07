@@ -2,7 +2,7 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
-int DEBUG = 1;
+int DEBUG = 0;
 NODE* ROOT;
 extern int yylineno;
 
@@ -1396,7 +1396,7 @@ factor : TK_ID{
         $$->child[0] = $2;
         $$->lineno = $2->lineno;
     }
-    | TK_ID TK_LB expression TK_RB{
+    | TK_ID TK_LB expr TK_RB{
     //NOTE: IGNORE TK_LB TK_RB
         if(DEBUG){
             printf("PARSING FACTOR \n");
