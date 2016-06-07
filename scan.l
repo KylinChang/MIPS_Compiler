@@ -106,7 +106,7 @@ ID [A-Z]([_A-Z0-9])*
 	yylval->lineno = yylineno;
 	double tmp;
 	sscanf(yytext, "%lf", &tmp);
-	yylval->value =  Value(tmp);
+	yylval->value = Value(tmp);
 	return TK_REAL;
 }  /*  实数类型应写在整数类型之上  */
 {INTEGER} {
@@ -137,10 +137,10 @@ ID [A-Z]([_A-Z0-9])*
 {STRING} {
 	yylval = NEWNODE(TK_STRING);
 	yylval->lineno = yylineno;
-	yytext[min(256, yyleng-1)]=0;
-	yylval->value = Value(genString(yytext+1, min(255, yyleng-2)));
+	yytext[yyleng-1]=0;
+	yylval->value = Value(genString(yytext+1, yyleng-2));
 	return TK_STRING;
-}  /*  注意STRING可能是空串，且按照pascal标准，只会保存前255个字符。  */
+}  /*  注意STRING可能是空串，<del>且按照pascal标准，只会保存前255个字符。</del>(忽略此pascal标准)  */
 
 {TYPE} { return TK_TYPE; }
 {ARRAY} { return TK_ARRAY; }
