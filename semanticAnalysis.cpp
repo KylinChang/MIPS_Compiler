@@ -313,7 +313,7 @@ Type factorAnalysis(NODE* root) {
         case TK_FACTOR_NOT:
             lhst = factorAnalysis(root->child[0]);
             if (!lhst.isSimpleType || lhst.simpleType->simpleType != type_boolean) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for not");
                 break;
             }
             root->dataType = lhst;
@@ -321,7 +321,7 @@ Type factorAnalysis(NODE* root) {
         case TK_FACTOR_MINUS:
             lhst = factorAnalysis(root->child[0]);
             if (!lhst.isSimpleType || (lhst.simpleType->simpleType != type_integer && lhst.simpleType->simpleType != type_real)) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for minus");
                 break;
             }
             root->dataType = lhst;
@@ -368,24 +368,37 @@ Type termAnalysis(NODE* root) {
             if (!lhst.isSimpleType || !rhst.isSimpleType ||
                 (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
                 (lhst.simpleType->simpleType == type_char || rhst.simpleType->simpleType == type_char)) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for *");
                 break;
             }
             root->dataType = upcast(lhst, rhst);
+            break;
+        case TK_REM:
+            lhst = termAnalysis(root->child[0]);
+            rhst = factorAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType ||
+                (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
+                (lhst.simpleType->simpleType == type_char || rhst.simpleType->simpleType == type_char)) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for *");
+                break;
+            }
+            root->dataType = Type("double");
+            break;
         case TK_DIV:
         case TK_MOD:
             lhst = termAnalysis(root->child[0]);
             rhst = factorAnalysis(root->child[1]);
             if (!lhst.isSimpleType || !rhst.isSimpleType || lhst.simpleType->simpleType != type_integer || rhst.simpleType->simpleType != type_integer) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for div and mod");
                 break;
             }
             root->dataType = upcast(lhst, rhst);
+            break;
         case TK_AND:
             lhst = termAnalysis(root->child[0]);
             rhst = factorAnalysis(root->child[1]);
             if (!lhst.isSimpleType || !rhst.isSimpleType || lhst.simpleType->simpleType != type_boolean || rhst.simpleType->simpleType != type_boolean) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for and");
                 break;
             }
             root->dataType = lhst;
@@ -393,6 +406,7 @@ Type termAnalysis(NODE* root) {
         case TK_TERM:
             lhst = factorAnalysis(root->child[0]);
             root->dataType = lhst;
+            break;
         default:
             assert(0);
     }
@@ -410,15 +424,16 @@ Type exprAnalysis(NODE* root) {
             if (!lhst.isSimpleType || !rhst.isSimpleType ||
                 (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
                 (lhst.simpleType->simpleType == type_char || rhst.simpleType->simpleType == type_char)) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for + and -");
                 break;
             }
             root->dataType = upcast(lhst, rhst);
+            break;
         case TK_OR:
             lhst = exprAnalysis(root->child[0]);
             rhst = termAnalysis(root->child[1]);
             if (!lhst.isSimpleType || !rhst.isSimpleType || lhst.simpleType->simpleType != type_boolean || rhst.simpleType->simpleType != type_boolean) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for or");
                 break;
             }
             root->dataType = lhst;
@@ -426,6 +441,7 @@ Type exprAnalysis(NODE* root) {
         case TK_EXPR:
             lhst = termAnalysis(root->child[0]);
             root->dataType = lhst;
+            break;
         default:
             assert(0);
     }
@@ -447,7 +463,7 @@ Type expressionAnalysis(NODE* root) {
                 (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
                 (lhst.simpleType->simpleType == type_char && rhst.simpleType->simpleType != type_char) ||
                 (lhst.simpleType->simpleType != type_char && rhst.simpleType->simpleType == type_char)) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for cmp operator");
                 break;
             }
             root->dataType = Type("boolean");
