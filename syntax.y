@@ -946,6 +946,9 @@ if_stmt : TK_IF expression TK_THEN stmt else_clause{
             $$->child[0] = $2;
             $$->child[1] = $4;
             $$->child[2] = $5;
+
+            $$->lineno = MIN($2, $4);
+            $$->lineno = MIN($$, $5);
         }
         ;
 

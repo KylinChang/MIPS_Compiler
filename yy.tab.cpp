@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.0.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.4"
+#define YYBISON_VERSION "3.0.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:339  */
+#line 1 "syntax.y" /* yacc.c:339  */
 
 #include "common.h"
 #include <stdio.h>
@@ -72,7 +72,7 @@ NODE* ROOT;
 extern int yylineno;
 
 
-#line 76 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:339  */
+#line 76 "yy.tab.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -92,8 +92,8 @@ extern int yylineno;
 
 /* In a future release of Bison, this section will be replaced
    by #include "yy.tab.hpp".  */
-#ifndef YY_YY_USERS_ORPINE_DROPBOX_COURSES_COMPILER_PROJECT_MIPS_COMPILER_YY_TAB_HPP_INCLUDED
-# define YY_YY_USERS_ORPINE_DROPBOX_COURSES_COMPILER_PROJECT_MIPS_COMPILER_YY_TAB_HPP_INCLUDED
+#ifndef YY_YY_YY_TAB_HPP_INCLUDED
+# define YY_YY_YY_TAB_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -276,6 +276,174 @@ extern int yydebug;
     TK_STMT_CP = 424
   };
 #endif
+/* Tokens.  */
+#define TK_AND 258
+#define TK_ARRAY 259
+#define TK_ASSIGN 260
+#define TK_CASE 261
+#define TK_TYPE 262
+#define TK_SYS_TYPE 263
+#define TK_COLON 264
+#define TK_COMMA 265
+#define TK_CONST 266
+#define TK_DIGITS 267
+#define TK_DIV 268
+#define TK_DO 269
+#define TK_DOT 270
+#define TK_DOTDOT 271
+#define TK_DOWNTO 272
+#define TK_ELSE 273
+#define TK_ELSE_NULL 274
+#define TK_END 275
+#define TK_EQUAL 276
+#define TK_FOR 277
+#define TK_FUNCTION 278
+#define TK_GE 279
+#define TK_GOTO 280
+#define TK_GT 281
+#define TK_ID 282
+#define TK_REF 283
+#define TK_IF 284
+#define TK_IN 285
+#define TK_LB 286
+#define TK_LE 287
+#define TK_LP 288
+#define TK_LT 289
+#define TK_MINUS 290
+#define TK_MOD 291
+#define TK_UNEQUAL 292
+#define TK_OF 293
+#define TK_OR 294
+#define TK_OTHERWISE 295
+#define TK_BEGIN 296
+#define TK_PLUS 297
+#define TK_PROCEDURE 298
+#define TK_PROGRAM 299
+#define TK_RB 300
+#define TK_REAL 301
+#define TK_RECORD 302
+#define TK_REPEAT 303
+#define TK_RP 304
+#define TK_SYS_PROC 305
+#define TK_READ 306
+#define TK_SEMI 307
+#define TK_MUL 308
+#define TK_THEN 309
+#define TK_NOT 310
+#define TK_TO 311
+#define TK_UNTIL 312
+#define TK_UPARROW 313
+#define TK_VAR 314
+#define TK_WHILE 315
+#define TK_SET 316
+#define TK_STARSTAR 317
+#define TK_CHAR 318
+#define TK_STRING 319
+#define TK_INTEGER 320
+#define TK_SYS_CON 321
+#define TK_SYS_FUNCT 322
+#define TK_WITH 323
+#define TK_NIL 324
+#define ERROR 325
+#define TK_PROGRAM_HEAD 326
+#define TK_ROUTINE 327
+#define TK_ROUTINE_PART 328
+#define TK_ROUTINE_HEAD 329
+#define TK_ROUTINE_BODY 330
+#define TK_CONST_PART 331
+#define TK_CONST_PART_END 332
+#define TK_TYPE_PART 333
+#define TK_TYPE_PART_END 334
+#define TK_VAR_PART 335
+#define TK_VAR_PART_END 336
+#define TK_ROUTINE_PART_RF 337
+#define TK_ROUTINE_PART_RP 338
+#define TK_ROUTINE_PART_FUNC 339
+#define TK_ROUTINE_PART_PROC 340
+#define TK_ROUTINE_PART_NULL 341
+#define TK_STMT_LIST 342
+#define TK_STMT_LIST_NULL 343
+#define TK_STMT_LABEL 344
+#define TK_STMT 345
+#define TK_CP_STMT 346
+#define TK_VAL_PARA_LIST 347
+#define TK_NON_LABEL_STMT_ASSIGN 348
+#define TK_NON_LABEL_STMT_PROC 349
+#define TK_NON_LABEL_STMT_CP 350
+#define TK_NON_LABEL_STMT_IF 351
+#define TK_NON_LABEL_STMT_REP 352
+#define TK_NON_LABEL_STMT_WHILE 353
+#define TK_NON_LABEL_STMT_FOR 354
+#define TK_NON_LABEL_STMT_CASE 355
+#define TK_NON_LABEL_STMT_GOTO 356
+#define TK_EXP_LIST 357
+#define TK_EXP_LIST_END 358
+#define TK_EXP 359
+#define TK_TERM 360
+#define TK_FACTOR_ID 361
+#define TK_FACTOR_ID_ARGS 362
+#define TK_FACTOR_SYS_FUNCT 363
+#define TK_FACTOR_CONST 364
+#define TK_FACTOR_EXP 365
+#define TK_FACTOR_NOT 366
+#define TK_FACTOR_MINUS 367
+#define TK_FACTOR_ID_EXP 368
+#define TK_FACTOR_DD 369
+#define TK_ARGS_LIST 370
+#define TK_ARGS_LIST_END 371
+#define TK_CONST_DL 372
+#define TK_CONST_DL_END 373
+#define TK_TYPE_DL 374
+#define TK_TYPE_DL_END 375
+#define TK_TYPE_DEF 376
+#define TK_TYPE_DECL 377
+#define TK_TYPE_DECL_SIM 378
+#define TK_TYPE_DECL_ARR 379
+#define TK_TYPE_DECL_REC 380
+#define TK_FIELD_DL 381
+#define TK_FIELD_DL_END 382
+#define TK_FIELD_DECL 383
+#define TK_NL 384
+#define TK_NL_END 385
+#define TK_STD_SYS_TYPE 386
+#define TK_STD_ID 387
+#define TK_STD_NL 388
+#define TK_STD_DD 389
+#define TK_STD_DD_M 390
+#define TK_STD_DD_MM 391
+#define TK_STD_DD_ID 392
+#define TK_DL 393
+#define TK_DL_END 394
+#define TK_VAR_DECL 395
+#define TK_FUNC_DECL 396
+#define TK_FUNC_HEAD 397
+#define TK_PROC_DECL 398
+#define TK_PROC_HEAD 399
+#define TK_PARA 400
+#define TK_PARA_TL 401
+#define TK_PARA_NULL 402
+#define TK_PARA_DL 403
+#define TK_PARA_DL_END 404
+#define TK_PARA_TL_VAR 405
+#define TK_PARA_TL_VAL 406
+#define TK_PARA_TL_END 407
+#define TK_PROC 408
+#define TK_CASE_EL 409
+#define TK_CASE_EL_END 410
+#define TK_CASE_EXPR 411
+#define TK_CASE_EXPR_END 412
+#define TK_EXPR 413
+#define TK_ASSIGN_ID 414
+#define TK_ASSIGN_ID_EXPR 415
+#define TK_ASSIGN_DD 416
+#define TK_PROC_ID 417
+#define TK_PROC_ID_ARGS 418
+#define TK_PROC_SYS 419
+#define TK_PROC_SYS_ARGS 420
+#define TK_PROC_READ 421
+#define TK_STMT_ASSIGN 422
+#define TK_STMT_PROC 423
+#define TK_STMT_CP 424
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -289,11 +457,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_USERS_ORPINE_DROPBOX_COURSES_COMPILER_PROJECT_MIPS_COMPILER_YY_TAB_HPP_INCLUDED  */
+#endif /* !YY_YY_YY_TAB_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 297 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:358  */
+#line 465 "yy.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -615,11 +783,11 @@ static const yytype_uint16 yyrline[] =
      609,   618,   635,   648,   663,   680,   689,   697,   705,   730,
      738,   750,   763,   773,   783,   793,   799,   805,   811,   817,
      823,   831,   843,   857,   873,   883,   895,   905,   917,   931,
-     939,   952,   958,   966,   980,   994,  1014,  1021,  1030,  1045,
-    1062,  1075,  1088,  1102,  1113,  1130,  1142,  1154,  1165,  1176,
-    1187,  1197,  1207,  1219,  1230,  1241,  1252,  1266,  1276,  1286,
-    1296,  1306,  1319,  1330,  1341,  1352,  1361,  1371,  1380,  1389,
-    1400,  1413,  1430
+     939,   955,   961,   969,   983,   997,  1017,  1024,  1033,  1048,
+    1065,  1078,  1091,  1105,  1116,  1133,  1145,  1157,  1168,  1179,
+    1190,  1200,  1210,  1222,  1233,  1244,  1255,  1269,  1279,  1289,
+    1299,  1309,  1322,  1333,  1344,  1355,  1364,  1374,  1383,  1392,
+    1403,  1416,  1433
 };
 #endif
 
@@ -1623,7 +1791,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 41 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 41 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING PROGRAM\n");
@@ -1637,11 +1805,11 @@ yyreduce:
 
             ROOT = (yyval);
         }
-#line 1641 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1809 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 56 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 56 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: PROGRAM HEAD ACTUALLY IS TK_ID
             if(DEBUG){
@@ -1652,11 +1820,11 @@ yyreduce:
             (yyval)->child_number = 0;
             (yyval)->child = NULL;
         }
-#line 1656 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1824 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 68 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 68 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING ROUTINE\n");
@@ -1668,11 +1836,11 @@ yyreduce:
 
             (yyval)->lineno = MIN((yyvsp[-1]),(yyvsp[0]));
         }
-#line 1672 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1840 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 81 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 81 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING ROUTINE HEAD\n");
@@ -1688,11 +1856,11 @@ yyreduce:
             (yyval)->lineno = MIN((yyval),(yyvsp[-1]));
             (yyval)->lineno = MIN((yyval),(yyvsp[0]));
         }
-#line 1692 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1860 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 98 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 98 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: IGNORE TK_CONST
             if(DEBUG){
@@ -1700,22 +1868,22 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 1704 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1872 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 105 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 105 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING CONST PART NULL\n");
             }
             (yyval) = NULL;
         }
-#line 1715 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1883 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 113 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 113 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_EQUAL TK_SEMI
                     if(DEBUG){
@@ -1738,11 +1906,11 @@ yyreduce:
 
                     free(tmp);
                 }
-#line 1742 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1910 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 135 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 135 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_EQUAL TK_SEMI
                     if(DEBUG){
@@ -1761,66 +1929,66 @@ yyreduce:
 
 
                 }
-#line 1765 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1933 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 155 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 155 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE INTEGER\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1776 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1944 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 161 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 161 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE REAL\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1787 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1955 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 167 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 167 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE CHAR\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1798 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1966 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 173 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 173 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE STRING\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1809 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1977 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 179 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 179 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING COSNT VALUE SYS CON\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1820 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 1988 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 187 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 187 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TYPE
             if(DEBUG){
@@ -1828,11 +1996,11 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 1832 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2000 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 194 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 194 "syntax.y" /* yacc.c:1646  */
     {
               //NOTE: IGNORE TYPE
                   if(DEBUG){
@@ -1840,11 +2008,11 @@ yyreduce:
                   }
                 (yyval)=NULL;
                 }
-#line 1844 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2012 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 203 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 203 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING TYPE DECL LIST DEF\n");
@@ -1860,11 +2028,11 @@ yyreduce:
                     }
                     (yyval)->child[i] = (yyvsp[0]);
                 }
-#line 1864 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2032 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 218 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 218 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING TYPE DECL LIST\n");
@@ -1874,11 +2042,11 @@ yyreduce:
                     (yyval)->child[0] = (yyvsp[0]);
                     (yyval)->lineno = (yyvsp[0])->lineno;
                }
-#line 1878 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2046 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 229 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 229 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING TYPE DEF\n");
@@ -1890,11 +2058,11 @@ yyreduce:
 
                     (yyval)->lineno = MIN((yyvsp[-3]),(yyvsp[-1]));
                 }
-#line 1894 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2062 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 242 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 242 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
@@ -1904,11 +2072,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
           }
-#line 1908 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2076 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 251 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 251 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
@@ -1918,11 +2086,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
           }
-#line 1922 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2090 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 260 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 260 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING TYPE DECL\n");
@@ -1932,11 +2100,11 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
           }
-#line 1936 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2104 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 271 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 271 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_LB TK_RB TK_OF
                 if(DEBUG){
@@ -1952,11 +2120,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[0]));
             }
-#line 1956 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2124 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 288 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 288 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_END
                 if(DEBUG){
@@ -1964,11 +2132,11 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[-1]);
             }
-#line 1968 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2136 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 297 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 297 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING FIELD DECL LIST\n");
@@ -1985,11 +2153,11 @@ yyreduce:
 
                 free(tmp);
             }
-#line 1989 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2157 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 313 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 313 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING FIELD DECL LIST : FIRST ONE\n");
@@ -2000,11 +2168,11 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2004 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2172 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 325 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 325 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COLON TK_SEMI
                 if(DEBUG){
@@ -2017,11 +2185,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]),(yyvsp[-1]));
             }
-#line 2021 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2189 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 339 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 339 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: HERE TAG IS SIMPLIFIED AS 'TK_NL', IGNORE TK_COMMA
                 if(DEBUG){
@@ -2039,11 +2207,11 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2043 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2211 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 356 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 356 "syntax.y" /* yacc.c:1646  */
     {
                   if(DEBUG){
                       printf("PARSING NAME LIST : FIRST ONE\n");
@@ -2054,11 +2222,11 @@ yyreduce:
 
                   (yyval)->lineno = (yyvsp[0])->lineno;
               }
-#line 2058 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2226 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 368 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 368 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: HERE TAG IS SIMPLIFIED AS 'TK_STD' AND FOLLOWED BY A TYPE
                     if(DEBUG){
@@ -2070,11 +2238,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2074 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2242 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 379 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 379 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2085,11 +2253,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2089 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2257 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 389 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 389 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2100,11 +2268,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[-2])->lineno;
                 }
-#line 2104 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2272 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 399 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 399 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2116,11 +2284,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[-2])->lineno;
                 }
-#line 2120 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2288 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 410 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 410 "syntax.y" /* yacc.c:1646  */
     {
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");
@@ -2132,11 +2300,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[-2])->lineno;
                 }
-#line 2136 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2304 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 423 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 423 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: IGNORE TK_VAR
             if(DEBUG){
@@ -2144,22 +2312,22 @@ yyreduce:
               }
               (yyval) = (yyvsp[0]);
         }
-#line 2148 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2316 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 430 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 430 "syntax.y" /* yacc.c:1646  */
     {
               if(DEBUG){
                   printf("PARSING VAR PART NULL\n");
               }
              (yyval) = NULL;
         }
-#line 2159 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2327 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 438 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 438 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING VAR DECL LIST\n");
@@ -2176,11 +2344,11 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2180 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2348 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 454 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 454 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING VAR DECL LIST : FIRST ONE\n");
@@ -2191,11 +2359,11 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2195 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2363 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 466 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 466 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -2208,11 +2376,11 @@ yyreduce:
 
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
         }
-#line 2212 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2380 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 480 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 480 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
@@ -2229,11 +2397,11 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2233 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2401 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 496 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 496 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
@@ -2250,11 +2418,11 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2254 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2422 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 512 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 512 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
@@ -2265,11 +2433,11 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2269 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2437 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 522 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 522 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE_PART\n");
@@ -2280,22 +2448,22 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2284 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2452 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 532 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 532 "syntax.y" /* yacc.c:1646  */
     {
                  if(DEBUG){
                      printf("PARSING ROUTINE_PART NULL\n");
                  }
                  (yyval) = NULL;
              }
-#line 2295 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2463 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 540 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 540 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI
                 if(DEBUG){
@@ -2308,11 +2476,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
             }
-#line 2312 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2480 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 554 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 554 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_FUNCTION TK_COLON
                 if(DEBUG){
@@ -2331,11 +2499,11 @@ yyreduce:
                 (yyval)->lineno = MIN((yyval),(yyvsp[0]));
 
             }
-#line 2335 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2503 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 574 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 574 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI PROCEDURE_DECL IS 'TK_PROC_DECL'
                 if(DEBUG){
@@ -2348,11 +2516,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
             }
-#line 2352 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2520 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 588 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 588 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_PROCEDURE  PROCEDURE_HEAD IS 'TK_PROC_HEAD'
                 if(DEBUG){
@@ -2365,11 +2533,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-1]), (yyvsp[0]));
             }
-#line 2369 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2537 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 602 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 602 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: PARAMETERS IS 'TK_PARA', IGNORE TK_LP TK_RP
                 if(DEBUG){
@@ -2377,11 +2545,11 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[-1]);
             }
-#line 2381 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2549 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 609 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 609 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: PARAMETERS IS 'TK_PARA'
                 if(DEBUG){
@@ -2389,11 +2557,11 @@ yyreduce:
                 }
                 (yyval) = NULL;
             }
-#line 2393 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2561 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 618 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 618 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
                 if(DEBUG){
@@ -2411,11 +2579,11 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2415 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2583 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 635 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 635 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
                 if(DEBUG){
@@ -2427,11 +2595,11 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2431 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2599 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 648 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 648 "syntax.y" /* yacc.c:1646  */
     {
                     //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
                     if(DEBUG){
@@ -2447,11 +2615,11 @@ yyreduce:
 
                     (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
                 }
-#line 2451 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2619 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 663 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 663 "syntax.y" /* yacc.c:1646  */
     {
                     //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
                     if(DEBUG){
@@ -2467,11 +2635,11 @@ yyreduce:
 
                     (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
                 }
-#line 2471 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2639 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 680 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 680 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_VAR VAR_PARA_LIST IS "TK_VAR"
                 if(DEBUG){
@@ -2479,33 +2647,33 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2483 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2651 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 689 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 689 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING VAL PARA LIST\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2494 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2662 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 697 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 697 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ROUTINE BODY\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2505 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2673 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 705 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 705 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING STMT LIST\n");
@@ -2531,22 +2699,22 @@ yyreduce:
                 free(tmp);
           	}
         }
-#line 2535 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2703 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 730 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 730 "syntax.y" /* yacc.c:1646  */
     {
               if(DEBUG){
                   printf("PARSING STMT LIST NULL\n");
               }
               (yyval)=NULL;
         }
-#line 2546 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2714 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 738 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 738 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: IGNORE TK_COLON
         if(DEBUG){
@@ -2559,11 +2727,11 @@ yyreduce:
 
          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
     }
-#line 2563 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2731 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 750 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 750 "syntax.y" /* yacc.c:1646  */
     {
          //NOTE: IGNORE TK_COLON
          if(DEBUG){
@@ -2575,11 +2743,11 @@ yyreduce:
 
          (yyval)->lineno = (yyvsp[0])->lineno;
      }
-#line 2579 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2747 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 763 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 763 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING ASSIGN STMT\n");
@@ -2590,11 +2758,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2594 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2762 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 773 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 773 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING PROC STMT\n");
@@ -2605,11 +2773,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2609 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2777 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 783 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 783 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING CP STMT\n");
@@ -2620,77 +2788,77 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2624 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2792 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 793 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 793 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING IF STMT\n");
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2635 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2803 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 799 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 799 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING REPEAT STMT\n");
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2646 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2814 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 805 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 805 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING WHILE STMT\n");
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2657 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2825 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 811 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 811 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING FOR STMT\n");
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2668 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2836 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 817 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 817 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING CASE STMT\n");
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2679 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2847 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 823 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 823 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING GOTO STMT\n");
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2690 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2858 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 831 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 831 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_ASSIGN
                 if(DEBUG){
@@ -2703,11 +2871,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
             }
-#line 2707 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2875 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 843 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 843 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
                 if(DEBUG){
@@ -2722,11 +2890,11 @@ yyreduce:
                 (yyval)->lineno = MIN((yyvsp[-5]), (yyvsp[-3]));
                 (yyval)->lineno = MIN((yyval), (yyvsp[0]));
             }
-#line 2726 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2894 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 857 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 857 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
                 if(DEBUG){
@@ -2741,11 +2909,11 @@ yyreduce:
 
                 (yyvsp[-4])->record = (yyvsp[-2]);
             }
-#line 2745 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2913 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 873 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 873 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                printf("PARSING PROC STMT\n");
@@ -2756,11 +2924,11 @@ yyreduce:
 
            (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 2760 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2928 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 883 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 883 "syntax.y" /* yacc.c:1646  */
     {
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -2773,11 +2941,11 @@ yyreduce:
 
            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
           }
-#line 2777 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2945 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 895 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 895 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                printf("PARSING PROC STMT\n");
@@ -2788,11 +2956,11 @@ yyreduce:
 
            (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 2792 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2960 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 905 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 905 "syntax.y" /* yacc.c:1646  */
     {
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -2805,11 +2973,11 @@ yyreduce:
 
            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
           }
-#line 2809 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2977 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 78:
-#line 917 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 917 "syntax.y" /* yacc.c:1646  */
     {
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -2822,22 +2990,22 @@ yyreduce:
 
            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
           }
-#line 2826 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 2994 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 931 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 931 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING CP STMT\n");
             }
             (yyval) = (yyvsp[-1]);
         }
-#line 2837 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3005 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 939 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 939 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_IF TK_THEN
             if(DEBUG){
@@ -2848,34 +3016,37 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[-3]);
             (yyval)->child[1] = (yyvsp[-1]);
             (yyval)->child[2] = (yyvsp[0]);
+
+            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
+            (yyval)->lineno = MIN((yyval), (yyvsp[0]));
         }
-#line 2853 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3024 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 952 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 955 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ELSE CLAUSE\n");
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2864 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3035 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 958 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 961 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING ELSE CLAUSE NULL\n");
                 }
                 (yyval) = NULL;
             }
-#line 2875 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3046 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 966 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 969 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_REPEAR TK_UNTIL
                 if(DEBUG){
@@ -2888,11 +3059,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
             }
-#line 2892 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3063 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 980 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 983 "syntax.y" /* yacc.c:1646  */
     {
                 //NOTE: IGNORE TK_WHILE TK_DO
                 if(DEBUG){
@@ -2905,11 +3076,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
             }
-#line 2909 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3080 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 994 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 997 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
             if(DEBUG){
@@ -2928,11 +3099,11 @@ yyreduce:
             (yyval)->lineno = MIN((yyval), (yyvsp[-2]));
             (yyval)->lineno = MIN((yyval), (yyvsp[0]));
         }
-#line 2932 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3103 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 1014 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1017 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: THERE IS NO DIR
             if(DEBUG){
@@ -2940,11 +3111,11 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 2944 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3115 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 1021 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1024 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: THERE IS NO DIR
             if(DEBUG){
@@ -2952,11 +3123,11 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 2956 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3127 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 88:
-#line 1030 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1033 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_CASE TK_OF TK_END
             if(DEBUG){
@@ -2970,11 +3141,11 @@ yyreduce:
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
 
         }
-#line 2974 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3145 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 1045 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1048 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
             if(DEBUG){
@@ -2992,11 +3163,11 @@ yyreduce:
 
                 free(tmp);
         }
-#line 2996 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3167 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 1062 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1065 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: CASE_EXPR_LIST IS 'TK_CASE_EL'
             if(DEBUG){
@@ -3008,11 +3179,11 @@ yyreduce:
 
             (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 3012 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3183 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 1075 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1078 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -3026,11 +3197,11 @@ yyreduce:
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
 
         }
-#line 3030 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3201 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 92:
-#line 1088 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1091 "syntax.y" /* yacc.c:1646  */
     {
          //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -3043,11 +3214,11 @@ yyreduce:
 
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
         }
-#line 3047 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3218 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 1102 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1105 "syntax.y" /* yacc.c:1646  */
     {
         //NOTE: GOTO STMT IS ACTUALLY TK_INTEGER
             if(DEBUG){
@@ -3057,11 +3228,11 @@ yyreduce:
             (yyval)->type = TK_GOTO;
            	setName((yyval), TK_GOTO);
         }
-#line 3061 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3232 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 1113 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1116 "syntax.y" /* yacc.c:1646  */
     {
                     //NOTE: IGNORE TK_COMMA
                     if(DEBUG){
@@ -3079,11 +3250,11 @@ yyreduce:
 
                 	free(tmp);
                 }
-#line 3083 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3254 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 95:
-#line 1130 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1133 "syntax.y" /* yacc.c:1646  */
     {
                     if(DEBUG){
                         printf("PARSING EXP LIST : FIRST ONE\n");
@@ -3094,11 +3265,11 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 3098 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3269 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 1142 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1145 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_GE TK_GT TK_LE TK_LT TK_EQUAL TK_UNEQUAL
                 if(DEBUG){
@@ -3111,11 +3282,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3115 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3286 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 1154 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1157 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
@@ -3127,11 +3298,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3131 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3302 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 1165 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1168 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
@@ -3143,11 +3314,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3147 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3318 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 1176 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1179 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
@@ -3159,11 +3330,11 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3163 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3334 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 1187 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1190 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
@@ -3174,11 +3345,11 @@ yyreduce:
                                 (yyval)->child[1] = (yyvsp[0]);
                  (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3178 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3349 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 101:
-#line 1197 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1200 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION\n");
@@ -3189,11 +3360,11 @@ yyreduce:
                                 (yyval)->child[1] = (yyvsp[0]);
                                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3193 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3364 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 1207 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1210 "syntax.y" /* yacc.c:1646  */
     {
                 if(DEBUG){
                     printf("PARSING EXPRESSION : FIRST ONE\n");
@@ -3204,11 +3375,11 @@ yyreduce:
                 (yyval)->child[1] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
            }
-#line 3208 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3379 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 1219 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1222 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_PLUS
          if(DEBUG){
@@ -3220,11 +3391,11 @@ yyreduce:
                          (yyval)->child[1] = (yyvsp[0]);
                          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3224 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3395 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 1230 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1233 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_MINUS
          if(DEBUG){
@@ -3236,11 +3407,11 @@ yyreduce:
                          (yyval)->child[1] = (yyvsp[0]);
                          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3240 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3411 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 1241 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1244 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP, IGNORE TK_OR
          if(DEBUG){
@@ -3252,11 +3423,11 @@ yyreduce:
                          (yyval)->child[1] = (yyvsp[0]);
                          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3256 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3427 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 1252 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1255 "syntax.y" /* yacc.c:1646  */
     {
      //NOTE: expr IS EXPR, expression IS EXP
          if(DEBUG){
@@ -3269,11 +3440,11 @@ yyreduce:
 
          (yyval)->lineno = (yyvsp[0])->lineno;
      }
-#line 3273 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3444 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 1266 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1269 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MUL\n");
@@ -3284,11 +3455,11 @@ yyreduce:
                                   (yyval)->child[1] = (yyvsp[0]);
                                   (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3288 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3459 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 1276 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1279 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_DIV\n");
@@ -3299,11 +3470,11 @@ yyreduce:
                                  (yyval)->child[1] = (yyvsp[0]);
                                  (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3303 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3474 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 1286 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1289 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MOD\n");
@@ -3314,11 +3485,11 @@ yyreduce:
                                  (yyval)->child[1] = (yyvsp[0]);
                                  (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3318 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3489 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 1296 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1299 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_AND\n");
@@ -3329,11 +3500,11 @@ yyreduce:
                                   (yyval)->child[1] = (yyvsp[0]);
                                   (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3333 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3504 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 1306 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1309 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TERM : FIRST ONE\n");
@@ -3345,11 +3516,11 @@ yyreduce:
 
          (yyval)->lineno = (yyvsp[0])->lineno;
      }
-#line 3349 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3520 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 1319 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1322 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: THERE IS NO TK_FACTOR BUT 'TK_FACTOR' FOLLOWED BY A TYPE
         if(DEBUG){
@@ -3361,11 +3532,11 @@ yyreduce:
 
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3365 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3536 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 113:
-#line 1330 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1333 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3377,11 +3548,11 @@ yyreduce:
         (yyval)->child[1] = (yyvsp[-1]);
         (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
     }
-#line 3381 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3552 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 1341 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1344 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3393,11 +3564,11 @@ yyreduce:
         (yyval)->child[1] = (yyvsp[-1]);
         (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
     }
-#line 3397 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3568 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 1352 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1355 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3407,11 +3578,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[0]);
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3411 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3582 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 116:
-#line 1361 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1364 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3422,11 +3593,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-1]);
         (yyval)->lineno = (yyvsp[-1])->lineno;
     }
-#line 3426 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3597 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 1371 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1374 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3436,11 +3607,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[0]);
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3440 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3611 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 118:
-#line 1380 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1383 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3450,11 +3621,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[0]);
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3454 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3625 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 1389 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1392 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LB TK_RB
         if(DEBUG){
@@ -3466,11 +3637,11 @@ yyreduce:
         (yyval)->child[1] = (yyvsp[-1]);
         (yyval)->lineno = MIN((yyvsp[-3]),(yyvsp[-1]));
     }
-#line 3470 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3641 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 1400 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1403 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: ID->ID IS IN ONE NODE
         if(DEBUG){
@@ -3482,11 +3653,11 @@ yyreduce:
         (yyval)->lineno = (yyvsp[-2])->lineno;
         (yyvsp[-2])->record = (yyvsp[-1]);
     }
-#line 3486 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3657 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 121:
-#line 1413 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1416 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COMMA
             if(DEBUG){
@@ -3504,11 +3675,11 @@ yyreduce:
 
                 free(tmp);
         }
-#line 3508 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3679 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 122:
-#line 1430 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1661  */
+#line 1433 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING ARGS LIST : FIRST ONE\n");
@@ -3518,11 +3689,11 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[0]);
             (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 3522 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3693 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 3526 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/yy.tab.cpp" /* yacc.c:1661  */
+#line 3697 "yy.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3750,7 +3921,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1441 "/Users/orpine/Dropbox/Courses/Compiler/Project/MIPS_Compiler/syntax.y" /* yacc.c:1906  */
+#line 1444 "syntax.y" /* yacc.c:1906  */
 
 
 int yyerror(string s){
