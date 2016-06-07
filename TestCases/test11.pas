@@ -1,45 +1,31 @@
 program test4;
 
 var 
-x:integer;
-y: longint;
-z: integer;
-h: char;	
+x,y:longint;
+a, c: longint;
+b, d: dword;
+arr : array[0..10] of integer;
+e, f: integer;
 
-procedure findMin(x, y:integer; var m:integer);
-begin
-	if x<y then
-		m:=x
-	else
-		m:=y;
-end;
-
-function max(num1, num2: integer): integer;
-var
-   result: integer;
-begin
-   if (num1 > num2) then
-      result := num1
-   else
-      result := num2;
-   max := result;
-end;
-
-function add(num1, num2: integer): integer;
-var
-   result: integer;
-begin
-   result := num1 + num2;
-   add := result;
-end;
 
 begin
-	x:=1;
-y:= 32000;
-h:='a';
-for x:=y to 60000 do begin
-	h := 'a';
-end;
+a:= 2147483645;
+b:=5;
+c:=-10;
+d:=5;
 
+x := a+b;
+writeln(a+b);
+
+y:=c+d;
+writeln(y);
+
+arr[0] := 10;
+
+
+    e := 10;
+    f := 5;
+    e := e DIV f;
+    writeln(e);
 
 end.

@@ -118,162 +118,163 @@ extern int yydebug;
     TK_CONST = 266,
     TK_DIGITS = 267,
     TK_DIV = 268,
-    TK_DO = 269,
-    TK_DOT = 270,
-    TK_DOTDOT = 271,
-    TK_DOWNTO = 272,
-    TK_ELSE = 273,
-    TK_ELSE_NULL = 274,
-    TK_END = 275,
-    TK_EQUAL = 276,
-    TK_FOR = 277,
-    TK_FUNCTION = 278,
-    TK_GE = 279,
-    TK_GOTO = 280,
-    TK_GT = 281,
-    TK_ID = 282,
-    TK_REF = 283,
-    TK_IF = 284,
-    TK_IN = 285,
-    TK_LB = 286,
-    TK_LE = 287,
-    TK_LP = 288,
-    TK_LT = 289,
-    TK_MINUS = 290,
-    TK_MOD = 291,
-    TK_UNEQUAL = 292,
-    TK_OF = 293,
-    TK_OR = 294,
-    TK_OTHERWISE = 295,
-    TK_BEGIN = 296,
-    TK_PLUS = 297,
-    TK_PROCEDURE = 298,
-    TK_PROGRAM = 299,
-    TK_RB = 300,
-    TK_REAL = 301,
-    TK_RECORD = 302,
-    TK_REPEAT = 303,
-    TK_RP = 304,
-    TK_SYS_PROC = 305,
-    TK_READ = 306,
-    TK_SEMI = 307,
-    TK_MUL = 308,
-    TK_THEN = 309,
-    TK_NOT = 310,
-    TK_TO = 311,
-    TK_UNTIL = 312,
-    TK_UPARROW = 313,
-    TK_VAR = 314,
-    TK_WHILE = 315,
-    TK_SET = 316,
-    TK_STARSTAR = 317,
-    TK_CHAR = 318,
-    TK_STRING = 319,
-    TK_INTEGER = 320,
-    TK_SYS_CON = 321,
-    TK_SYS_FUNCT = 322,
-    TK_WITH = 323,
-    TK_NIL = 324,
-    ERROR = 325,
-    TK_PROGRAM_HEAD = 326,
-    TK_ROUTINE = 327,
-    TK_ROUTINE_PART = 328,
-    TK_ROUTINE_HEAD = 329,
-    TK_ROUTINE_BODY = 330,
-    TK_CONST_PART = 331,
-    TK_CONST_PART_END = 332,
-    TK_TYPE_PART = 333,
-    TK_TYPE_PART_END = 334,
-    TK_VAR_PART = 335,
-    TK_VAR_PART_END = 336,
-    TK_ROUTINE_PART_RF = 337,
-    TK_ROUTINE_PART_RP = 338,
-    TK_ROUTINE_PART_FUNC = 339,
-    TK_ROUTINE_PART_PROC = 340,
-    TK_ROUTINE_PART_NULL = 341,
-    TK_STMT_LIST = 342,
-    TK_STMT_LIST_NULL = 343,
-    TK_STMT_LABEL = 344,
-    TK_STMT = 345,
-    TK_CP_STMT = 346,
-    TK_VAL_PARA_LIST = 347,
-    TK_NON_LABEL_STMT_ASSIGN = 348,
-    TK_NON_LABEL_STMT_PROC = 349,
-    TK_NON_LABEL_STMT_CP = 350,
-    TK_NON_LABEL_STMT_IF = 351,
-    TK_NON_LABEL_STMT_REP = 352,
-    TK_NON_LABEL_STMT_WHILE = 353,
-    TK_NON_LABEL_STMT_FOR = 354,
-    TK_NON_LABEL_STMT_CASE = 355,
-    TK_NON_LABEL_STMT_GOTO = 356,
-    TK_EXP_LIST = 357,
-    TK_EXP_LIST_END = 358,
-    TK_EXP = 359,
-    TK_TERM = 360,
-    TK_FACTOR_ID = 361,
-    TK_FACTOR_ID_ARGS = 362,
-    TK_FACTOR_SYS_FUNCT = 363,
-    TK_FACTOR_CONST = 364,
-    TK_FACTOR_EXP = 365,
-    TK_FACTOR_NOT = 366,
-    TK_FACTOR_MINUS = 367,
-    TK_FACTOR_ID_EXP = 368,
-    TK_FACTOR_DD = 369,
-    TK_ARGS_LIST = 370,
-    TK_ARGS_LIST_END = 371,
-    TK_CONST_DL = 372,
-    TK_CONST_DL_END = 373,
-    TK_TYPE_DL = 374,
-    TK_TYPE_DL_END = 375,
-    TK_TYPE_DEF = 376,
-    TK_TYPE_DECL = 377,
-    TK_TYPE_DECL_SIM = 378,
-    TK_TYPE_DECL_ARR = 379,
-    TK_TYPE_DECL_REC = 380,
-    TK_FIELD_DL = 381,
-    TK_FIELD_DL_END = 382,
-    TK_FIELD_DECL = 383,
-    TK_NL = 384,
-    TK_NL_END = 385,
-    TK_STD_SYS_TYPE = 386,
-    TK_STD_ID = 387,
-    TK_STD_NL = 388,
-    TK_STD_DD = 389,
-    TK_STD_DD_M = 390,
-    TK_STD_DD_MM = 391,
-    TK_STD_DD_ID = 392,
-    TK_DL = 393,
-    TK_DL_END = 394,
-    TK_VAR_DECL = 395,
-    TK_FUNC_DECL = 396,
-    TK_FUNC_HEAD = 397,
-    TK_PROC_DECL = 398,
-    TK_PROC_HEAD = 399,
-    TK_PARA = 400,
-    TK_PARA_TL = 401,
-    TK_PARA_NULL = 402,
-    TK_PARA_DL = 403,
-    TK_PARA_DL_END = 404,
-    TK_PARA_TL_VAR = 405,
-    TK_PARA_TL_VAL = 406,
-    TK_PARA_TL_END = 407,
-    TK_PROC = 408,
-    TK_CASE_EL = 409,
-    TK_CASE_EL_END = 410,
-    TK_CASE_EXPR = 411,
-    TK_CASE_EXPR_END = 412,
-    TK_EXPR = 413,
-    TK_ASSIGN_ID = 414,
-    TK_ASSIGN_ID_EXPR = 415,
-    TK_ASSIGN_DD = 416,
-    TK_PROC_ID = 417,
-    TK_PROC_ID_ARGS = 418,
-    TK_PROC_SYS = 419,
-    TK_PROC_SYS_ARGS = 420,
-    TK_PROC_READ = 421,
-    TK_STMT_ASSIGN = 422,
-    TK_STMT_PROC = 423,
-    TK_STMT_CP = 424
+    TK_REM = 269,
+    TK_DO = 270,
+    TK_DOT = 271,
+    TK_DOTDOT = 272,
+    TK_DOWNTO = 273,
+    TK_ELSE = 274,
+    TK_ELSE_NULL = 275,
+    TK_END = 276,
+    TK_EQUAL = 277,
+    TK_FOR = 278,
+    TK_FUNCTION = 279,
+    TK_GE = 280,
+    TK_GOTO = 281,
+    TK_GT = 282,
+    TK_ID = 283,
+    TK_REF = 284,
+    TK_IF = 285,
+    TK_IN = 286,
+    TK_LB = 287,
+    TK_LE = 288,
+    TK_LP = 289,
+    TK_LT = 290,
+    TK_MINUS = 291,
+    TK_MOD = 292,
+    TK_UNEQUAL = 293,
+    TK_OF = 294,
+    TK_OR = 295,
+    TK_OTHERWISE = 296,
+    TK_BEGIN = 297,
+    TK_PLUS = 298,
+    TK_PROCEDURE = 299,
+    TK_PROGRAM = 300,
+    TK_RB = 301,
+    TK_REAL = 302,
+    TK_RECORD = 303,
+    TK_REPEAT = 304,
+    TK_RP = 305,
+    TK_SYS_PROC = 306,
+    TK_READ = 307,
+    TK_SEMI = 308,
+    TK_MUL = 309,
+    TK_THEN = 310,
+    TK_NOT = 311,
+    TK_TO = 312,
+    TK_UNTIL = 313,
+    TK_UPARROW = 314,
+    TK_VAR = 315,
+    TK_WHILE = 316,
+    TK_SET = 317,
+    TK_STARSTAR = 318,
+    TK_CHAR = 319,
+    TK_STRING = 320,
+    TK_INTEGER = 321,
+    TK_SYS_CON = 322,
+    TK_SYS_FUNCT = 323,
+    TK_WITH = 324,
+    TK_NIL = 325,
+    ERROR = 326,
+    TK_PROGRAM_HEAD = 327,
+    TK_ROUTINE = 328,
+    TK_ROUTINE_PART = 329,
+    TK_ROUTINE_HEAD = 330,
+    TK_ROUTINE_BODY = 331,
+    TK_CONST_PART = 332,
+    TK_CONST_PART_END = 333,
+    TK_TYPE_PART = 334,
+    TK_TYPE_PART_END = 335,
+    TK_VAR_PART = 336,
+    TK_VAR_PART_END = 337,
+    TK_ROUTINE_PART_RF = 338,
+    TK_ROUTINE_PART_RP = 339,
+    TK_ROUTINE_PART_FUNC = 340,
+    TK_ROUTINE_PART_PROC = 341,
+    TK_ROUTINE_PART_NULL = 342,
+    TK_STMT_LIST = 343,
+    TK_STMT_LIST_NULL = 344,
+    TK_STMT_LABEL = 345,
+    TK_STMT = 346,
+    TK_CP_STMT = 347,
+    TK_VAL_PARA_LIST = 348,
+    TK_NON_LABEL_STMT_ASSIGN = 349,
+    TK_NON_LABEL_STMT_PROC = 350,
+    TK_NON_LABEL_STMT_CP = 351,
+    TK_NON_LABEL_STMT_IF = 352,
+    TK_NON_LABEL_STMT_REP = 353,
+    TK_NON_LABEL_STMT_WHILE = 354,
+    TK_NON_LABEL_STMT_FOR = 355,
+    TK_NON_LABEL_STMT_CASE = 356,
+    TK_NON_LABEL_STMT_GOTO = 357,
+    TK_EXP_LIST = 358,
+    TK_EXP_LIST_END = 359,
+    TK_EXP = 360,
+    TK_TERM = 361,
+    TK_FACTOR_ID = 362,
+    TK_FACTOR_ID_ARGS = 363,
+    TK_FACTOR_SYS_FUNCT = 364,
+    TK_FACTOR_CONST = 365,
+    TK_FACTOR_EXP = 366,
+    TK_FACTOR_NOT = 367,
+    TK_FACTOR_MINUS = 368,
+    TK_FACTOR_ID_EXP = 369,
+    TK_FACTOR_DD = 370,
+    TK_ARGS_LIST = 371,
+    TK_ARGS_LIST_END = 372,
+    TK_CONST_DL = 373,
+    TK_CONST_DL_END = 374,
+    TK_TYPE_DL = 375,
+    TK_TYPE_DL_END = 376,
+    TK_TYPE_DEF = 377,
+    TK_TYPE_DECL = 378,
+    TK_TYPE_DECL_SIM = 379,
+    TK_TYPE_DECL_ARR = 380,
+    TK_TYPE_DECL_REC = 381,
+    TK_FIELD_DL = 382,
+    TK_FIELD_DL_END = 383,
+    TK_FIELD_DECL = 384,
+    TK_NL = 385,
+    TK_NL_END = 386,
+    TK_STD_SYS_TYPE = 387,
+    TK_STD_ID = 388,
+    TK_STD_NL = 389,
+    TK_STD_DD = 390,
+    TK_STD_DD_M = 391,
+    TK_STD_DD_MM = 392,
+    TK_STD_DD_ID = 393,
+    TK_DL = 394,
+    TK_DL_END = 395,
+    TK_VAR_DECL = 396,
+    TK_FUNC_DECL = 397,
+    TK_FUNC_HEAD = 398,
+    TK_PROC_DECL = 399,
+    TK_PROC_HEAD = 400,
+    TK_PARA = 401,
+    TK_PARA_TL = 402,
+    TK_PARA_NULL = 403,
+    TK_PARA_DL = 404,
+    TK_PARA_DL_END = 405,
+    TK_PARA_TL_VAR = 406,
+    TK_PARA_TL_VAL = 407,
+    TK_PARA_TL_END = 408,
+    TK_PROC = 409,
+    TK_CASE_EL = 410,
+    TK_CASE_EL_END = 411,
+    TK_CASE_EXPR = 412,
+    TK_CASE_EXPR_END = 413,
+    TK_EXPR = 414,
+    TK_ASSIGN_ID = 415,
+    TK_ASSIGN_ID_EXPR = 416,
+    TK_ASSIGN_DD = 417,
+    TK_PROC_ID = 418,
+    TK_PROC_ID_ARGS = 419,
+    TK_PROC_SYS = 420,
+    TK_PROC_SYS_ARGS = 421,
+    TK_PROC_READ = 422,
+    TK_STMT_ASSIGN = 423,
+    TK_STMT_PROC = 424,
+    TK_STMT_CP = 425
   };
 #endif
 /* Tokens.  */
@@ -288,162 +289,163 @@ extern int yydebug;
 #define TK_CONST 266
 #define TK_DIGITS 267
 #define TK_DIV 268
-#define TK_DO 269
-#define TK_DOT 270
-#define TK_DOTDOT 271
-#define TK_DOWNTO 272
-#define TK_ELSE 273
-#define TK_ELSE_NULL 274
-#define TK_END 275
-#define TK_EQUAL 276
-#define TK_FOR 277
-#define TK_FUNCTION 278
-#define TK_GE 279
-#define TK_GOTO 280
-#define TK_GT 281
-#define TK_ID 282
-#define TK_REF 283
-#define TK_IF 284
-#define TK_IN 285
-#define TK_LB 286
-#define TK_LE 287
-#define TK_LP 288
-#define TK_LT 289
-#define TK_MINUS 290
-#define TK_MOD 291
-#define TK_UNEQUAL 292
-#define TK_OF 293
-#define TK_OR 294
-#define TK_OTHERWISE 295
-#define TK_BEGIN 296
-#define TK_PLUS 297
-#define TK_PROCEDURE 298
-#define TK_PROGRAM 299
-#define TK_RB 300
-#define TK_REAL 301
-#define TK_RECORD 302
-#define TK_REPEAT 303
-#define TK_RP 304
-#define TK_SYS_PROC 305
-#define TK_READ 306
-#define TK_SEMI 307
-#define TK_MUL 308
-#define TK_THEN 309
-#define TK_NOT 310
-#define TK_TO 311
-#define TK_UNTIL 312
-#define TK_UPARROW 313
-#define TK_VAR 314
-#define TK_WHILE 315
-#define TK_SET 316
-#define TK_STARSTAR 317
-#define TK_CHAR 318
-#define TK_STRING 319
-#define TK_INTEGER 320
-#define TK_SYS_CON 321
-#define TK_SYS_FUNCT 322
-#define TK_WITH 323
-#define TK_NIL 324
-#define ERROR 325
-#define TK_PROGRAM_HEAD 326
-#define TK_ROUTINE 327
-#define TK_ROUTINE_PART 328
-#define TK_ROUTINE_HEAD 329
-#define TK_ROUTINE_BODY 330
-#define TK_CONST_PART 331
-#define TK_CONST_PART_END 332
-#define TK_TYPE_PART 333
-#define TK_TYPE_PART_END 334
-#define TK_VAR_PART 335
-#define TK_VAR_PART_END 336
-#define TK_ROUTINE_PART_RF 337
-#define TK_ROUTINE_PART_RP 338
-#define TK_ROUTINE_PART_FUNC 339
-#define TK_ROUTINE_PART_PROC 340
-#define TK_ROUTINE_PART_NULL 341
-#define TK_STMT_LIST 342
-#define TK_STMT_LIST_NULL 343
-#define TK_STMT_LABEL 344
-#define TK_STMT 345
-#define TK_CP_STMT 346
-#define TK_VAL_PARA_LIST 347
-#define TK_NON_LABEL_STMT_ASSIGN 348
-#define TK_NON_LABEL_STMT_PROC 349
-#define TK_NON_LABEL_STMT_CP 350
-#define TK_NON_LABEL_STMT_IF 351
-#define TK_NON_LABEL_STMT_REP 352
-#define TK_NON_LABEL_STMT_WHILE 353
-#define TK_NON_LABEL_STMT_FOR 354
-#define TK_NON_LABEL_STMT_CASE 355
-#define TK_NON_LABEL_STMT_GOTO 356
-#define TK_EXP_LIST 357
-#define TK_EXP_LIST_END 358
-#define TK_EXP 359
-#define TK_TERM 360
-#define TK_FACTOR_ID 361
-#define TK_FACTOR_ID_ARGS 362
-#define TK_FACTOR_SYS_FUNCT 363
-#define TK_FACTOR_CONST 364
-#define TK_FACTOR_EXP 365
-#define TK_FACTOR_NOT 366
-#define TK_FACTOR_MINUS 367
-#define TK_FACTOR_ID_EXP 368
-#define TK_FACTOR_DD 369
-#define TK_ARGS_LIST 370
-#define TK_ARGS_LIST_END 371
-#define TK_CONST_DL 372
-#define TK_CONST_DL_END 373
-#define TK_TYPE_DL 374
-#define TK_TYPE_DL_END 375
-#define TK_TYPE_DEF 376
-#define TK_TYPE_DECL 377
-#define TK_TYPE_DECL_SIM 378
-#define TK_TYPE_DECL_ARR 379
-#define TK_TYPE_DECL_REC 380
-#define TK_FIELD_DL 381
-#define TK_FIELD_DL_END 382
-#define TK_FIELD_DECL 383
-#define TK_NL 384
-#define TK_NL_END 385
-#define TK_STD_SYS_TYPE 386
-#define TK_STD_ID 387
-#define TK_STD_NL 388
-#define TK_STD_DD 389
-#define TK_STD_DD_M 390
-#define TK_STD_DD_MM 391
-#define TK_STD_DD_ID 392
-#define TK_DL 393
-#define TK_DL_END 394
-#define TK_VAR_DECL 395
-#define TK_FUNC_DECL 396
-#define TK_FUNC_HEAD 397
-#define TK_PROC_DECL 398
-#define TK_PROC_HEAD 399
-#define TK_PARA 400
-#define TK_PARA_TL 401
-#define TK_PARA_NULL 402
-#define TK_PARA_DL 403
-#define TK_PARA_DL_END 404
-#define TK_PARA_TL_VAR 405
-#define TK_PARA_TL_VAL 406
-#define TK_PARA_TL_END 407
-#define TK_PROC 408
-#define TK_CASE_EL 409
-#define TK_CASE_EL_END 410
-#define TK_CASE_EXPR 411
-#define TK_CASE_EXPR_END 412
-#define TK_EXPR 413
-#define TK_ASSIGN_ID 414
-#define TK_ASSIGN_ID_EXPR 415
-#define TK_ASSIGN_DD 416
-#define TK_PROC_ID 417
-#define TK_PROC_ID_ARGS 418
-#define TK_PROC_SYS 419
-#define TK_PROC_SYS_ARGS 420
-#define TK_PROC_READ 421
-#define TK_STMT_ASSIGN 422
-#define TK_STMT_PROC 423
-#define TK_STMT_CP 424
+#define TK_REM 269
+#define TK_DO 270
+#define TK_DOT 271
+#define TK_DOTDOT 272
+#define TK_DOWNTO 273
+#define TK_ELSE 274
+#define TK_ELSE_NULL 275
+#define TK_END 276
+#define TK_EQUAL 277
+#define TK_FOR 278
+#define TK_FUNCTION 279
+#define TK_GE 280
+#define TK_GOTO 281
+#define TK_GT 282
+#define TK_ID 283
+#define TK_REF 284
+#define TK_IF 285
+#define TK_IN 286
+#define TK_LB 287
+#define TK_LE 288
+#define TK_LP 289
+#define TK_LT 290
+#define TK_MINUS 291
+#define TK_MOD 292
+#define TK_UNEQUAL 293
+#define TK_OF 294
+#define TK_OR 295
+#define TK_OTHERWISE 296
+#define TK_BEGIN 297
+#define TK_PLUS 298
+#define TK_PROCEDURE 299
+#define TK_PROGRAM 300
+#define TK_RB 301
+#define TK_REAL 302
+#define TK_RECORD 303
+#define TK_REPEAT 304
+#define TK_RP 305
+#define TK_SYS_PROC 306
+#define TK_READ 307
+#define TK_SEMI 308
+#define TK_MUL 309
+#define TK_THEN 310
+#define TK_NOT 311
+#define TK_TO 312
+#define TK_UNTIL 313
+#define TK_UPARROW 314
+#define TK_VAR 315
+#define TK_WHILE 316
+#define TK_SET 317
+#define TK_STARSTAR 318
+#define TK_CHAR 319
+#define TK_STRING 320
+#define TK_INTEGER 321
+#define TK_SYS_CON 322
+#define TK_SYS_FUNCT 323
+#define TK_WITH 324
+#define TK_NIL 325
+#define ERROR 326
+#define TK_PROGRAM_HEAD 327
+#define TK_ROUTINE 328
+#define TK_ROUTINE_PART 329
+#define TK_ROUTINE_HEAD 330
+#define TK_ROUTINE_BODY 331
+#define TK_CONST_PART 332
+#define TK_CONST_PART_END 333
+#define TK_TYPE_PART 334
+#define TK_TYPE_PART_END 335
+#define TK_VAR_PART 336
+#define TK_VAR_PART_END 337
+#define TK_ROUTINE_PART_RF 338
+#define TK_ROUTINE_PART_RP 339
+#define TK_ROUTINE_PART_FUNC 340
+#define TK_ROUTINE_PART_PROC 341
+#define TK_ROUTINE_PART_NULL 342
+#define TK_STMT_LIST 343
+#define TK_STMT_LIST_NULL 344
+#define TK_STMT_LABEL 345
+#define TK_STMT 346
+#define TK_CP_STMT 347
+#define TK_VAL_PARA_LIST 348
+#define TK_NON_LABEL_STMT_ASSIGN 349
+#define TK_NON_LABEL_STMT_PROC 350
+#define TK_NON_LABEL_STMT_CP 351
+#define TK_NON_LABEL_STMT_IF 352
+#define TK_NON_LABEL_STMT_REP 353
+#define TK_NON_LABEL_STMT_WHILE 354
+#define TK_NON_LABEL_STMT_FOR 355
+#define TK_NON_LABEL_STMT_CASE 356
+#define TK_NON_LABEL_STMT_GOTO 357
+#define TK_EXP_LIST 358
+#define TK_EXP_LIST_END 359
+#define TK_EXP 360
+#define TK_TERM 361
+#define TK_FACTOR_ID 362
+#define TK_FACTOR_ID_ARGS 363
+#define TK_FACTOR_SYS_FUNCT 364
+#define TK_FACTOR_CONST 365
+#define TK_FACTOR_EXP 366
+#define TK_FACTOR_NOT 367
+#define TK_FACTOR_MINUS 368
+#define TK_FACTOR_ID_EXP 369
+#define TK_FACTOR_DD 370
+#define TK_ARGS_LIST 371
+#define TK_ARGS_LIST_END 372
+#define TK_CONST_DL 373
+#define TK_CONST_DL_END 374
+#define TK_TYPE_DL 375
+#define TK_TYPE_DL_END 376
+#define TK_TYPE_DEF 377
+#define TK_TYPE_DECL 378
+#define TK_TYPE_DECL_SIM 379
+#define TK_TYPE_DECL_ARR 380
+#define TK_TYPE_DECL_REC 381
+#define TK_FIELD_DL 382
+#define TK_FIELD_DL_END 383
+#define TK_FIELD_DECL 384
+#define TK_NL 385
+#define TK_NL_END 386
+#define TK_STD_SYS_TYPE 387
+#define TK_STD_ID 388
+#define TK_STD_NL 389
+#define TK_STD_DD 390
+#define TK_STD_DD_M 391
+#define TK_STD_DD_MM 392
+#define TK_STD_DD_ID 393
+#define TK_DL 394
+#define TK_DL_END 395
+#define TK_VAR_DECL 396
+#define TK_FUNC_DECL 397
+#define TK_FUNC_HEAD 398
+#define TK_PROC_DECL 399
+#define TK_PROC_HEAD 400
+#define TK_PARA 401
+#define TK_PARA_TL 402
+#define TK_PARA_NULL 403
+#define TK_PARA_DL 404
+#define TK_PARA_DL_END 405
+#define TK_PARA_TL_VAR 406
+#define TK_PARA_TL_VAL 407
+#define TK_PARA_TL_END 408
+#define TK_PROC 409
+#define TK_CASE_EL 410
+#define TK_CASE_EL_END 411
+#define TK_CASE_EXPR 412
+#define TK_CASE_EXPR_END 413
+#define TK_EXPR 414
+#define TK_ASSIGN_ID 415
+#define TK_ASSIGN_ID_EXPR 416
+#define TK_ASSIGN_DD 417
+#define TK_PROC_ID 418
+#define TK_PROC_ID_ARGS 419
+#define TK_PROC_SYS 420
+#define TK_PROC_SYS_ARGS 421
+#define TK_PROC_READ 422
+#define TK_STMT_ASSIGN 423
+#define TK_STMT_PROC 424
+#define TK_STMT_CP 425
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -461,7 +463,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 465 "yy.tab.cpp" /* yacc.c:358  */
+#line 467 "yy.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -703,21 +705,21 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   328
+#define YYLAST   339
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  170
+#define YYNTOKENS  171
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  54
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  122
+#define YYNRULES  123
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  252
+#define YYNSTATES  254
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   424
+#define YYMAXUTOK   425
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -768,7 +770,7 @@ static const yytype_uint8 yytranslate[] =
      135,   136,   137,   138,   139,   140,   141,   142,   143,   144,
      145,   146,   147,   148,   149,   150,   151,   152,   153,   154,
      155,   156,   157,   158,   159,   160,   161,   162,   163,   164,
-     165,   166,   167,   168,   169
+     165,   166,   167,   168,   169,   170
 };
 
 #if YYDEBUG
@@ -786,8 +788,8 @@ static const yytype_uint16 yyrline[] =
      939,   955,   961,   969,   983,   997,  1017,  1024,  1033,  1048,
     1065,  1078,  1091,  1105,  1116,  1133,  1145,  1157,  1168,  1179,
     1190,  1200,  1210,  1221,  1232,  1243,  1254,  1267,  1277,  1287,
-    1297,  1307,  1319,  1330,  1341,  1352,  1361,  1371,  1380,  1389,
-    1400,  1413,  1430
+    1297,  1307,  1317,  1329,  1340,  1351,  1362,  1371,  1381,  1390,
+    1399,  1410,  1423,  1440
 };
 #endif
 
@@ -798,23 +800,23 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "TK_AND", "TK_ARRAY", "TK_ASSIGN",
   "TK_CASE", "TK_TYPE", "TK_SYS_TYPE", "TK_COLON", "TK_COMMA", "TK_CONST",
-  "TK_DIGITS", "TK_DIV", "TK_DO", "TK_DOT", "TK_DOTDOT", "TK_DOWNTO",
-  "TK_ELSE", "TK_ELSE_NULL", "TK_END", "TK_EQUAL", "TK_FOR", "TK_FUNCTION",
-  "TK_GE", "TK_GOTO", "TK_GT", "TK_ID", "TK_REF", "TK_IF", "TK_IN",
-  "TK_LB", "TK_LE", "TK_LP", "TK_LT", "TK_MINUS", "TK_MOD", "TK_UNEQUAL",
-  "TK_OF", "TK_OR", "TK_OTHERWISE", "TK_BEGIN", "TK_PLUS", "TK_PROCEDURE",
-  "TK_PROGRAM", "TK_RB", "TK_REAL", "TK_RECORD", "TK_REPEAT", "TK_RP",
-  "TK_SYS_PROC", "TK_READ", "TK_SEMI", "TK_MUL", "TK_THEN", "TK_NOT",
-  "TK_TO", "TK_UNTIL", "TK_UPARROW", "TK_VAR", "TK_WHILE", "TK_SET",
-  "TK_STARSTAR", "TK_CHAR", "TK_STRING", "TK_INTEGER", "TK_SYS_CON",
-  "TK_SYS_FUNCT", "TK_WITH", "TK_NIL", "ERROR", "TK_PROGRAM_HEAD",
-  "TK_ROUTINE", "TK_ROUTINE_PART", "TK_ROUTINE_HEAD", "TK_ROUTINE_BODY",
-  "TK_CONST_PART", "TK_CONST_PART_END", "TK_TYPE_PART", "TK_TYPE_PART_END",
-  "TK_VAR_PART", "TK_VAR_PART_END", "TK_ROUTINE_PART_RF",
-  "TK_ROUTINE_PART_RP", "TK_ROUTINE_PART_FUNC", "TK_ROUTINE_PART_PROC",
-  "TK_ROUTINE_PART_NULL", "TK_STMT_LIST", "TK_STMT_LIST_NULL",
-  "TK_STMT_LABEL", "TK_STMT", "TK_CP_STMT", "TK_VAL_PARA_LIST",
-  "TK_NON_LABEL_STMT_ASSIGN", "TK_NON_LABEL_STMT_PROC",
+  "TK_DIGITS", "TK_DIV", "TK_REM", "TK_DO", "TK_DOT", "TK_DOTDOT",
+  "TK_DOWNTO", "TK_ELSE", "TK_ELSE_NULL", "TK_END", "TK_EQUAL", "TK_FOR",
+  "TK_FUNCTION", "TK_GE", "TK_GOTO", "TK_GT", "TK_ID", "TK_REF", "TK_IF",
+  "TK_IN", "TK_LB", "TK_LE", "TK_LP", "TK_LT", "TK_MINUS", "TK_MOD",
+  "TK_UNEQUAL", "TK_OF", "TK_OR", "TK_OTHERWISE", "TK_BEGIN", "TK_PLUS",
+  "TK_PROCEDURE", "TK_PROGRAM", "TK_RB", "TK_REAL", "TK_RECORD",
+  "TK_REPEAT", "TK_RP", "TK_SYS_PROC", "TK_READ", "TK_SEMI", "TK_MUL",
+  "TK_THEN", "TK_NOT", "TK_TO", "TK_UNTIL", "TK_UPARROW", "TK_VAR",
+  "TK_WHILE", "TK_SET", "TK_STARSTAR", "TK_CHAR", "TK_STRING",
+  "TK_INTEGER", "TK_SYS_CON", "TK_SYS_FUNCT", "TK_WITH", "TK_NIL", "ERROR",
+  "TK_PROGRAM_HEAD", "TK_ROUTINE", "TK_ROUTINE_PART", "TK_ROUTINE_HEAD",
+  "TK_ROUTINE_BODY", "TK_CONST_PART", "TK_CONST_PART_END", "TK_TYPE_PART",
+  "TK_TYPE_PART_END", "TK_VAR_PART", "TK_VAR_PART_END",
+  "TK_ROUTINE_PART_RF", "TK_ROUTINE_PART_RP", "TK_ROUTINE_PART_FUNC",
+  "TK_ROUTINE_PART_PROC", "TK_ROUTINE_PART_NULL", "TK_STMT_LIST",
+  "TK_STMT_LIST_NULL", "TK_STMT_LABEL", "TK_STMT", "TK_CP_STMT",
+  "TK_VAL_PARA_LIST", "TK_NON_LABEL_STMT_ASSIGN", "TK_NON_LABEL_STMT_PROC",
   "TK_NON_LABEL_STMT_CP", "TK_NON_LABEL_STMT_IF", "TK_NON_LABEL_STMT_REP",
   "TK_NON_LABEL_STMT_WHILE", "TK_NON_LABEL_STMT_FOR",
   "TK_NON_LABEL_STMT_CASE", "TK_NON_LABEL_STMT_GOTO", "TK_EXP_LIST",
@@ -871,14 +873,15 @@ static const yytype_uint16 yytoknum[] =
      385,   386,   387,   388,   389,   390,   391,   392,   393,   394,
      395,   396,   397,   398,   399,   400,   401,   402,   403,   404,
      405,   406,   407,   408,   409,   410,   411,   412,   413,   414,
-     415,   416,   417,   418,   419,   420,   421,   422,   423,   424
+     415,   416,   417,   418,   419,   420,   421,   422,   423,   424,
+     425
 };
 # endif
 
-#define YYPACT_NINF -143
+#define YYPACT_NINF -145
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-143)))
+  (!!((Yystate) == (-145)))
 
 #define YYTABLE_NINF -1
 
@@ -889,32 +892,32 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -36,   -14,    34,    33,    -3,  -143,    45,    71,    49,    87,
-    -143,    75,    86,  -143,  -143,  -143,  -143,    88,    58,   231,
-      97,     4,   100,    88,  -143,    98,    48,  -143,  -143,  -143,
-    -143,  -143,    89,   231,   132,  -143,   117,    82,    15,   132,
-    -143,   120,   122,   132,   154,   116,  -143,  -143,  -143,  -143,
-    -143,  -143,  -143,  -143,  -143,  -143,    14,  -143,  -143,    29,
-      98,  -143,   148,   149,    48,  -143,   125,  -143,   127,  -143,
-     128,    91,   132,   132,   132,   151,  -143,   267,    77,     6,
-    -143,   180,  -143,   132,   161,   132,   132,   185,   101,   132,
-     132,   252,   183,  -143,   162,  -143,   178,    98,    98,   188,
-     155,  -143,  -143,  -143,    14,   186,  -143,   181,   181,  -143,
-    -143,    33,    33,  -143,   191,   132,   132,   216,  -143,  -143,
-     132,   132,   132,   132,   132,   132,   132,    68,   132,   132,
-     132,   132,   132,   132,   132,   132,   285,   215,   225,   285,
-      13,   121,   132,    17,   285,   177,   121,  -143,   137,   200,
-      18,    16,  -143,    95,   231,  -143,   192,  -143,   -24,   220,
-    -143,   193,   195,  -143,   237,    40,  -143,    60,    77,    77,
-      77,    77,    77,    77,   223,   226,    36,  -143,     6,     6,
-       6,  -143,  -143,  -143,  -143,   204,   132,   247,   132,  -143,
-     236,   285,   132,  -143,  -143,  -143,   210,  -143,  -143,  -143,
-    -143,    14,  -143,  -143,    98,   246,    32,  -143,   255,   258,
-     137,  -143,  -143,  -143,  -143,  -143,   121,   121,  -143,  -143,
-    -143,  -143,   132,   285,   132,   285,   121,  -143,   285,   230,
-     227,   246,  -143,   -24,   137,   137,  -143,   229,   233,   266,
-     285,  -143,    14,  -143,  -143,  -143,  -143,  -143,  -143,   121,
-    -143,  -143
+     -35,    -6,    24,    25,    17,  -145,    35,    31,    56,    94,
+    -145,    83,    84,  -145,  -145,  -145,  -145,    89,    69,   194,
+     113,     0,   116,    89,  -145,   111,    14,  -145,  -145,  -145,
+    -145,  -145,    91,   194,   179,  -145,   117,    81,   148,   179,
+    -145,   115,   118,   179,   150,   107,  -145,  -145,  -145,  -145,
+    -145,  -145,  -145,  -145,  -145,  -145,     7,  -145,  -145,    86,
+     111,  -145,   137,   140,    14,  -145,   121,  -145,   122,  -145,
+     124,    16,   179,   179,   179,   142,  -145,   283,    67,    30,
+    -145,   174,  -145,   179,   155,   179,   179,   229,    76,   179,
+     179,   268,   172,  -145,   153,  -145,   177,   111,   111,   186,
+     138,  -145,  -145,  -145,     7,   168,  -145,   170,   170,  -145,
+    -145,    25,    25,  -145,   178,   179,   179,   244,  -145,  -145,
+     179,   179,   179,   179,   179,   179,   179,   173,   179,   179,
+     179,   179,   179,   179,   179,   179,   179,   301,   200,    51,
+     301,     3,   120,   179,     9,   301,   158,   120,  -145,   123,
+     188,    10,    18,  -145,   105,   194,  -145,   166,  -145,   -20,
+     213,  -145,   175,   176,  -145,   253,    15,  -145,    19,    67,
+      67,    67,    67,    67,    67,   218,   221,   145,  -145,    30,
+      30,    30,  -145,  -145,  -145,  -145,  -145,   230,   179,   226,
+     179,  -145,   215,   301,   179,  -145,  -145,  -145,   190,  -145,
+    -145,  -145,  -145,     7,  -145,  -145,   111,   222,    36,  -145,
+     233,   240,   123,  -145,  -145,  -145,  -145,  -145,   120,   120,
+    -145,  -145,  -145,  -145,   179,   301,   179,   301,   120,  -145,
+     301,   211,   217,   222,  -145,   -20,   123,   123,  -145,   219,
+     220,   282,   301,  -145,     7,  -145,  -145,  -145,  -145,  -145,
+    -145,   120,  -145,  -145
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -929,47 +932,47 @@ static const yytype_uint8 yydefact[] =
       59,    76,     0,     0,     0,     0,    61,    62,    63,    64,
       65,    66,    67,    68,    69,    70,     0,    17,    29,     0,
       35,    38,     0,     0,     5,    42,     0,    43,     0,     9,
-       0,   112,     0,     0,     0,     0,   115,     0,   102,   106,
-     111,     0,    93,     0,     0,     0,     0,     0,     0,     0,
+       0,   113,     0,     0,     0,     0,   116,     0,   102,   106,
+     112,     0,    93,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,    58,     0,    30,    31,     0,     0,     0,
        0,    21,    22,    20,     0,     0,    37,    50,    50,    40,
-      41,     7,     7,     8,     0,     0,     0,     0,   118,   117,
+      41,     7,     7,     8,     0,     0,     0,     0,   119,   118,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,    71,     0,     0,   122,
-       0,     0,     0,     0,    95,     0,     0,    60,     0,     0,
-       0,     0,    26,     0,     0,    19,     0,    28,     0,     0,
-      48,     0,     0,   120,     0,     0,   116,     0,   100,    96,
-      97,    98,    99,   101,     0,     0,     0,    90,   104,   105,
-     103,   110,   108,   109,   107,     0,     0,     0,     0,    75,
-      82,    83,     0,    77,    78,    84,     0,    34,    32,    24,
-      25,     0,    33,    39,     0,    56,     0,    52,     0,     0,
-       0,    45,    47,   119,   113,   114,     0,     0,    88,    89,
-      87,    86,     0,    73,     0,   121,     0,    80,    94,     0,
-       0,    55,    49,     0,     0,     0,    46,     0,     0,     0,
-      72,    81,     0,    27,    51,    53,    54,    92,    91,     0,
-      23,    85
+       0,     0,     0,     0,     0,     0,     0,    71,     0,     0,
+     123,     0,     0,     0,     0,    95,     0,     0,    60,     0,
+       0,     0,     0,    26,     0,     0,    19,     0,    28,     0,
+       0,    48,     0,     0,   121,     0,     0,   117,     0,   100,
+      96,    97,    98,    99,   101,     0,     0,     0,    90,   104,
+     105,   103,   111,   108,   109,   110,   107,     0,     0,     0,
+       0,    75,    82,    83,     0,    77,    78,    84,     0,    34,
+      32,    24,    25,     0,    33,    39,     0,    56,     0,    52,
+       0,     0,     0,    45,    47,   120,   114,   115,     0,     0,
+      88,    89,    87,    86,     0,    73,     0,   122,     0,    80,
+      94,     0,     0,    55,    49,     0,     0,     0,    46,     0,
+       0,     0,    72,    81,     0,    27,    51,    53,    54,    92,
+      91,     0,    23,    85
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -143,  -143,  -143,    62,  -143,  -143,  -143,   -19,  -143,  -143,
-     249,  -103,  -143,  -143,  -143,   124,   -93,  -142,  -143,  -143,
-     242,  -143,   219,  -143,   243,  -143,   205,  -143,    79,  -143,
-    -143,  -143,   268,  -129,   218,  -143,  -143,   306,  -143,  -143,
-    -143,  -143,  -143,  -143,  -143,  -143,   139,  -143,  -143,   -32,
-     202,     8,   -58,   -95
+    -145,  -145,  -145,    21,  -145,  -145,  -145,   -19,  -145,  -145,
+     251,  -103,  -145,  -145,  -145,   101,   -95,  -144,  -145,  -145,
+     216,  -145,   225,  -145,   228,  -145,   192,  -145,    46,  -145,
+    -145,  -145,   245,  -138,   204,  -145,  -145,   290,  -145,  -145,
+    -145,  -145,  -145,  -145,  -145,  -145,   125,  -145,  -145,   -27,
+      -2,    26,   -56,   -89
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
       -1,     2,     3,     7,     8,     9,    12,    76,    18,    23,
-      24,   100,   101,   102,   151,   152,    59,   103,    26,    60,
-      61,    64,    65,    66,    67,    68,   159,   206,   207,   208,
-     209,    15,    21,    45,    46,    47,    48,    49,    50,   227,
-      51,    52,    53,   222,    54,   176,   177,    55,   143,   139,
-      78,    79,    80,   140
+      24,   100,   101,   102,   152,   153,    59,   103,    26,    60,
+      61,    64,    65,    66,    67,    68,   160,   208,   209,   210,
+     211,    15,    21,    45,    46,    47,    48,    49,    50,   229,
+      51,    52,    53,   224,    54,   177,   178,    55,   144,   140,
+      78,    79,    80,   141
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -977,126 +980,128 @@ static const yytype_int16 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-      32,   156,    77,    58,   150,   153,   196,    87,     1,   131,
-      34,    91,   190,     4,    70,   118,   119,   195,    94,   132,
-      83,   165,    95,   188,    35,   167,    36,   192,   105,    37,
-      84,    38,   145,    39,     5,   204,   199,    99,   104,   105,
-     117,    96,   133,    58,     6,    14,    85,    97,    86,    10,
-     188,   136,    40,   138,    41,    42,   218,   144,   153,   134,
-      27,    98,   189,   174,    43,   205,   193,   198,   236,    44,
-     188,    62,    11,   181,   182,   183,   184,    28,    29,    30,
-      31,   232,    27,   164,   233,    99,    13,   237,   238,   214,
-      14,    63,   245,   246,    17,   174,    19,   241,   230,    28,
-      29,    30,    31,   185,   201,   105,   114,    34,   175,   215,
-     191,   231,   128,    20,    27,    22,   129,    25,    33,   130,
-     251,    56,   115,    36,   116,    58,    37,    34,    38,    99,
-      39,    28,    29,    30,    31,   202,   178,   179,   180,   250,
-     205,    69,    14,    36,    81,    95,    37,    82,    38,    40,
-      39,    41,    42,    89,   223,    90,   225,   175,   142,    71,
-     228,    43,    14,    92,    96,    72,    44,    73,    93,    40,
-      97,    41,    42,   161,   162,   107,   108,   111,    27,   112,
-     113,    43,    99,    27,   120,   135,    44,    74,   137,    34,
-     239,    99,   240,   148,   149,    28,    29,    30,    31,    75,
-      28,    29,    30,    31,   154,    36,   121,   155,    37,   122,
-      38,   123,    39,   157,   158,    99,    99,   124,   163,   125,
-     186,   220,   126,    99,    14,   121,   194,   197,   122,   210,
-     123,    40,   216,    41,    42,   217,   124,   121,   125,   141,
-     122,   126,   123,    43,   203,   211,   121,   212,   124,   122,
-     125,   123,   224,   126,   226,   229,   105,   124,   121,   125,
-     221,   122,   126,   123,   234,   166,   146,   235,   242,   124,
-     187,   125,    57,   121,   126,   200,   122,    27,   123,   243,
-     249,   247,   213,   109,   124,   248,   125,   121,   121,   126,
-     122,   122,   123,   123,    28,    29,    30,    31,   124,   124,
-     125,   125,   106,   126,   126,   127,   121,   110,    88,   122,
-     147,   123,   244,   160,    16,   219,     0,   124,     0,   125,
-       0,     0,   126,   168,   169,   170,   171,   172,   173
+      32,   157,   151,   154,   192,   198,    34,    77,    58,   197,
+       1,    94,    87,   190,    70,    95,    91,   118,   119,   194,
+     105,    35,     4,    36,     5,   190,    37,   166,    38,   190,
+      39,   168,   114,   131,   146,    96,     6,    99,    62,   201,
+     206,    97,    14,   132,   133,   117,    58,    13,   115,    40,
+     116,    41,    42,   191,    27,    98,   137,   154,    63,   195,
+     200,    43,   145,    11,   207,   216,    44,   134,   238,   217,
+      10,    28,    29,    30,    31,   182,   183,   184,   185,   186,
+     239,   240,    34,   139,   135,    99,   234,   128,   165,   235,
+     243,   129,   247,   248,   130,   104,   105,   189,    14,    36,
+     232,    17,    37,   128,    38,    19,    39,   129,   176,   187,
+     130,   233,    20,   253,   203,   105,   193,    22,    14,   169,
+     170,   171,   172,   173,   174,    40,    34,    41,    42,    25,
+      99,    95,   162,   163,   143,    33,   204,    43,    56,    58,
+     207,   252,    44,    36,    69,    81,    37,    82,    38,    89,
+      39,    96,    90,    83,   179,   180,   181,    97,   176,    92,
+      93,   225,    14,   227,    84,   107,   220,   230,   108,    40,
+      27,    41,    42,   175,   111,   112,   120,   113,    34,   136,
+      85,    43,    86,   138,    99,   149,    44,    28,    29,    30,
+      31,   156,    27,    99,   150,    36,   158,   241,    37,   242,
+      38,   175,    39,   155,   159,   188,   164,    71,   196,    28,
+      29,    30,    31,    72,    14,    73,   199,    99,    99,   205,
+      27,    40,   212,    41,    42,    99,    27,   218,   213,   214,
+     219,   226,   105,    43,   228,    74,   231,    28,    29,    30,
+      31,    27,   236,    28,    29,    30,    31,    75,   222,   237,
+     244,   121,   121,   202,   122,   122,   123,   123,    28,    29,
+      30,    31,   124,   124,   125,   125,   121,   126,   126,   122,
+     245,   123,   249,   250,    57,   121,   106,   124,   122,   125,
+     123,   246,   126,   147,   142,    88,   124,   223,   125,   109,
+     121,   126,   110,   122,   167,   123,   148,   251,    16,   215,
+     161,   124,   221,   125,   121,   121,   126,   122,   122,   123,
+     123,     0,     0,     0,     0,   124,   124,   125,   125,     0,
+     126,   126,   127,   121,     0,     0,   122,     0,   123,     0,
+       0,     0,     0,     0,   124,     0,   125,     0,     0,   126
 };
 
 static const yytype_int16 yycheck[] =
 {
-      19,   104,    34,    27,    97,    98,   148,    39,    44,     3,
-       6,    43,   141,    27,    33,    73,    74,   146,     4,    13,
-       5,   116,     8,    10,    20,   120,    22,    10,    10,    25,
-      15,    27,    90,    29,     0,    59,    20,    56,     9,    10,
-      72,    27,    36,    27,    11,    41,    31,    33,    33,    52,
-      10,    83,    48,    85,    50,    51,    20,    89,   151,    53,
-      46,    47,    49,    27,    60,   158,    49,    49,   210,    65,
-      10,    23,    27,   131,   132,   133,   134,    63,    64,    65,
-      66,    49,    46,   115,    52,   104,    15,   216,   217,    49,
-      41,    43,   234,   235,     7,    27,    21,   226,   201,    63,
-      64,    65,    66,   135,     9,    10,    15,     6,   127,    49,
-     142,   204,    35,    27,    46,    27,    39,    59,    21,    42,
-     249,    21,    31,    22,    33,    27,    25,     6,    27,   148,
-      29,    63,    64,    65,    66,   154,   128,   129,   130,   242,
-     233,    52,    41,    22,    27,     8,    25,    65,    27,    48,
-      29,    50,    51,    33,   186,    33,   188,   176,    57,    27,
-     192,    60,    41,     9,    27,    33,    65,    35,    52,    48,
-      33,    50,    51,   111,   112,    27,    27,    52,    46,    52,
-      52,    60,   201,    46,    33,     5,    65,    55,    27,     6,
-     222,   210,   224,    31,    16,    63,    64,    65,    66,    67,
-      63,    64,    65,    66,    16,    22,    21,    52,    25,    24,
-      27,    26,    29,    27,    33,   234,   235,    32,    27,    34,
-       5,    17,    37,   242,    41,    21,    49,    27,    24,     9,
-      26,    48,     9,    50,    51,     9,    32,    21,    34,    54,
-      24,    37,    26,    60,    52,    52,    21,    52,    32,    24,
-      34,    26,     5,    37,    18,    45,    10,    32,    21,    34,
-      56,    24,    37,    26,     9,    49,    14,     9,    38,    32,
-      45,    34,    23,    21,    37,   151,    24,    46,    26,    52,
-      14,    52,    45,    64,    32,    52,    34,    21,    21,    37,
-      24,    24,    26,    26,    63,    64,    65,    66,    32,    32,
-      34,    34,    60,    37,    37,    38,    21,    64,    40,    24,
-      92,    26,   233,   108,     8,   176,    -1,    32,    -1,    34,
-      -1,    -1,    37,   121,   122,   123,   124,   125,   126
+      19,   104,    97,    98,   142,   149,     6,    34,    28,   147,
+      45,     4,    39,    10,    33,     8,    43,    73,    74,    10,
+      10,    21,    28,    23,     0,    10,    26,   116,    28,    10,
+      30,   120,    16,     3,    90,    28,    11,    56,    24,    21,
+      60,    34,    42,    13,    14,    72,    28,    16,    32,    49,
+      34,    51,    52,    50,    47,    48,    83,   152,    44,    50,
+      50,    61,    89,    28,   159,    50,    66,    37,   212,    50,
+      53,    64,    65,    66,    67,   131,   132,   133,   134,   135,
+     218,   219,     6,    85,    54,   104,    50,    36,   115,    53,
+     228,    40,   236,   237,    43,     9,    10,    46,    42,    23,
+     203,     7,    26,    36,    28,    22,    30,    40,   127,   136,
+      43,   206,    28,   251,     9,    10,   143,    28,    42,   121,
+     122,   123,   124,   125,   126,    49,     6,    51,    52,    60,
+     149,     8,   111,   112,    58,    22,   155,    61,    22,    28,
+     235,   244,    66,    23,    53,    28,    26,    66,    28,    34,
+      30,    28,    34,     5,   128,   129,   130,    34,   177,     9,
+      53,   188,    42,   190,    16,    28,    21,   194,    28,    49,
+      47,    51,    52,    28,    53,    53,    34,    53,     6,     5,
+      32,    61,    34,    28,   203,    32,    66,    64,    65,    66,
+      67,    53,    47,   212,    17,    23,    28,   224,    26,   226,
+      28,    28,    30,    17,    34,     5,    28,    28,    50,    64,
+      65,    66,    67,    34,    42,    36,    28,   236,   237,    53,
+      47,    49,     9,    51,    52,   244,    47,     9,    53,    53,
+       9,     5,    10,    61,    19,    56,    46,    64,    65,    66,
+      67,    47,     9,    64,    65,    66,    67,    68,    18,     9,
+      39,    22,    22,   152,    25,    25,    27,    27,    64,    65,
+      66,    67,    33,    33,    35,    35,    22,    38,    38,    25,
+      53,    27,    53,    53,    23,    22,    60,    33,    25,    35,
+      27,   235,    38,    15,    55,    40,    33,    57,    35,    64,
+      22,    38,    64,    25,    50,    27,    92,    15,     8,    46,
+     108,    33,   177,    35,    22,    22,    38,    25,    25,    27,
+      27,    -1,    -1,    -1,    -1,    33,    33,    35,    35,    -1,
+      38,    38,    39,    22,    -1,    -1,    25,    -1,    27,    -1,
+      -1,    -1,    -1,    -1,    33,    -1,    35,    -1,    -1,    38
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    44,   171,   172,    27,     0,    11,   173,   174,   175,
-      52,    27,   176,    15,    41,   201,   207,     7,   178,    21,
-      27,   202,    27,   179,   180,    59,   188,    46,    63,    64,
-      65,    66,   177,    21,     6,    20,    22,    25,    27,    29,
-      48,    50,    51,    60,    65,   203,   204,   205,   206,   207,
-     208,   210,   211,   212,   214,   217,    21,   180,    27,   186,
-     189,   190,    23,    43,   191,   192,   193,   194,   195,    52,
-     177,    27,    33,    35,    55,    67,   177,   219,   220,   221,
-     222,    27,    65,     5,    15,    31,    33,   219,   202,    33,
-      33,   219,     9,    52,     4,     8,    27,    33,    47,   177,
-     181,   182,   183,   187,     9,    10,   190,    27,    27,   192,
-     194,    52,    52,    52,    15,    31,    33,   219,   222,   222,
-      33,    21,    24,    26,    32,    34,    37,    38,    35,    39,
-      42,     3,    13,    36,    53,     5,   219,    27,   219,   219,
-     223,    54,    57,   218,   219,   222,    14,   204,    31,    16,
-     186,   184,   185,   186,    16,    52,   181,    27,    33,   196,
-     196,   173,   173,    27,   219,   223,    49,   223,   220,   220,
-     220,   220,   220,   220,    27,   177,   215,   216,   221,   221,
-     221,   222,   222,   222,   222,   219,     5,    45,    10,    49,
-     203,   219,    10,    49,    49,   203,   187,    27,    49,    20,
-     185,     9,   177,    52,    59,   186,   197,   198,   199,   200,
-       9,    52,    52,    45,    49,    49,     9,     9,    20,   216,
-      17,    56,   213,   219,     5,   219,    18,   209,   219,    45,
-     181,   186,    49,    52,     9,     9,   187,   203,   203,   219,
-     219,   203,    38,    52,   198,   187,   187,    52,    52,    14,
-     181,   203
+       0,    45,   172,   173,    28,     0,    11,   174,   175,   176,
+      53,    28,   177,    16,    42,   202,   208,     7,   179,    22,
+      28,   203,    28,   180,   181,    60,   189,    47,    64,    65,
+      66,    67,   178,    22,     6,    21,    23,    26,    28,    30,
+      49,    51,    52,    61,    66,   204,   205,   206,   207,   208,
+     209,   211,   212,   213,   215,   218,    22,   181,    28,   187,
+     190,   191,    24,    44,   192,   193,   194,   195,   196,    53,
+     178,    28,    34,    36,    56,    68,   178,   220,   221,   222,
+     223,    28,    66,     5,    16,    32,    34,   220,   203,    34,
+      34,   220,     9,    53,     4,     8,    28,    34,    48,   178,
+     182,   183,   184,   188,     9,    10,   191,    28,    28,   193,
+     195,    53,    53,    53,    16,    32,    34,   220,   223,   223,
+      34,    22,    25,    27,    33,    35,    38,    39,    36,    40,
+      43,     3,    13,    14,    37,    54,     5,   220,    28,   221,
+     220,   224,    55,    58,   219,   220,   223,    15,   205,    32,
+      17,   187,   185,   186,   187,    17,    53,   182,    28,    34,
+     197,   197,   174,   174,    28,   220,   224,    50,   224,   221,
+     221,   221,   221,   221,   221,    28,   178,   216,   217,   222,
+     222,   222,   223,   223,   223,   223,   223,   220,     5,    46,
+      10,    50,   204,   220,    10,    50,    50,   204,   188,    28,
+      50,    21,   186,     9,   178,    53,    60,   187,   198,   199,
+     200,   201,     9,    53,    53,    46,    50,    50,     9,     9,
+      21,   217,    18,    57,   214,   220,     5,   220,    19,   210,
+     220,    46,   182,   187,    50,    53,     9,     9,   188,   204,
+     204,   220,   220,   204,    39,    53,   199,   188,   188,    53,
+      53,    15,   182,   204
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,   170,   171,   172,   173,   174,   175,   175,   176,   176,
-     177,   177,   177,   177,   177,   178,   178,   179,   179,   180,
-     181,   181,   181,   182,   183,   184,   184,   185,   186,   186,
-     187,   187,   187,   187,   187,   188,   188,   189,   189,   190,
-     191,   191,   191,   191,   191,   192,   193,   194,   195,   196,
-     196,   197,   197,   198,   198,   199,   200,   201,   202,   202,
-     203,   203,   204,   204,   204,   204,   204,   204,   204,   204,
-     204,   205,   205,   205,   206,   206,   206,   206,   206,   207,
-     208,   209,   209,   210,   211,   212,   213,   213,   214,   215,
-     215,   216,   216,   217,   218,   218,   219,   219,   219,   219,
-     219,   219,   219,   220,   220,   220,   220,   221,   221,   221,
-     221,   221,   222,   222,   222,   222,   222,   222,   222,   222,
-     222,   223,   223
+       0,   171,   172,   173,   174,   175,   176,   176,   177,   177,
+     178,   178,   178,   178,   178,   179,   179,   180,   180,   181,
+     182,   182,   182,   183,   184,   185,   185,   186,   187,   187,
+     188,   188,   188,   188,   188,   189,   189,   190,   190,   191,
+     192,   192,   192,   192,   192,   193,   194,   195,   196,   197,
+     197,   198,   198,   199,   199,   200,   201,   202,   203,   203,
+     204,   204,   205,   205,   205,   205,   205,   205,   205,   205,
+     205,   206,   206,   206,   207,   207,   207,   207,   207,   208,
+     209,   210,   210,   211,   212,   213,   214,   214,   215,   216,
+     216,   217,   217,   218,   219,   219,   220,   220,   220,   220,
+     220,   220,   220,   221,   221,   221,   221,   222,   222,   222,
+     222,   222,   222,   223,   223,   223,   223,   223,   223,   223,
+     223,   223,   224,   224
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -1113,8 +1118,8 @@ static const yytype_uint8 yyr2[] =
        5,     2,     0,     4,     4,     8,     1,     1,     5,     2,
        1,     4,     4,     2,     3,     1,     3,     3,     3,     3,
        3,     3,     1,     3,     3,     3,     1,     3,     3,     3,
-       3,     1,     1,     4,     4,     1,     3,     2,     2,     4,
-       3,     3,     1
+       3,     3,     1,     1,     4,     4,     1,     3,     2,     2,
+       4,     3,     3,     1
 };
 
 
@@ -1805,7 +1810,7 @@ yyreduce:
 
             ROOT = (yyval);
         }
-#line 1809 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1814 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
@@ -1820,7 +1825,7 @@ yyreduce:
             (yyval)->child_number = 0;
             (yyval)->child = NULL;
         }
-#line 1824 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1829 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
@@ -1836,7 +1841,7 @@ yyreduce:
 
             (yyval)->lineno = MIN((yyvsp[-1]),(yyvsp[0]));
         }
-#line 1840 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1845 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
@@ -1856,7 +1861,7 @@ yyreduce:
             (yyval)->lineno = MIN((yyval),(yyvsp[-1]));
             (yyval)->lineno = MIN((yyval),(yyvsp[0]));
         }
-#line 1860 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1865 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
@@ -1868,7 +1873,7 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 1872 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1877 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
@@ -1879,7 +1884,7 @@ yyreduce:
             }
             (yyval) = NULL;
         }
-#line 1883 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1888 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
@@ -1906,7 +1911,7 @@ yyreduce:
 
                     free(tmp);
                 }
-#line 1910 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1915 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
@@ -1929,7 +1934,7 @@ yyreduce:
 
 
                 }
-#line 1933 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1938 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
@@ -1940,7 +1945,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1944 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1949 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
@@ -1951,7 +1956,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1955 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1960 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
@@ -1962,7 +1967,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1966 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1971 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
@@ -1973,7 +1978,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1977 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1982 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
@@ -1984,7 +1989,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 1988 "yy.tab.cpp" /* yacc.c:1646  */
+#line 1993 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
@@ -1996,7 +2001,7 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 2000 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2005 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
@@ -2008,7 +2013,7 @@ yyreduce:
                   }
                 (yyval)=NULL;
                 }
-#line 2012 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2017 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
@@ -2028,7 +2033,7 @@ yyreduce:
                     }
                     (yyval)->child[i] = (yyvsp[0]);
                 }
-#line 2032 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2037 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
@@ -2042,7 +2047,7 @@ yyreduce:
                     (yyval)->child[0] = (yyvsp[0]);
                     (yyval)->lineno = (yyvsp[0])->lineno;
                }
-#line 2046 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2051 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
@@ -2058,7 +2063,7 @@ yyreduce:
 
                     (yyval)->lineno = MIN((yyvsp[-3]),(yyvsp[-1]));
                 }
-#line 2062 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2067 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
@@ -2072,7 +2077,7 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
           }
-#line 2076 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2081 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 21:
@@ -2086,7 +2091,7 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
           }
-#line 2090 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2095 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 22:
@@ -2100,7 +2105,7 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
           }
-#line 2104 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2109 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 23:
@@ -2120,7 +2125,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[0]));
             }
-#line 2124 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2129 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 24:
@@ -2132,7 +2137,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[-1]);
             }
-#line 2136 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2141 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 25:
@@ -2153,7 +2158,7 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2157 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2162 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 26:
@@ -2168,7 +2173,7 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2172 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2177 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 27:
@@ -2185,7 +2190,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]),(yyvsp[-1]));
             }
-#line 2189 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2194 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 28:
@@ -2207,7 +2212,7 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2211 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2216 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 29:
@@ -2222,7 +2227,7 @@ yyreduce:
 
                   (yyval)->lineno = (yyvsp[0])->lineno;
               }
-#line 2226 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2231 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 30:
@@ -2238,7 +2243,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2242 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2247 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 31:
@@ -2253,7 +2258,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2257 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2262 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 32:
@@ -2268,7 +2273,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[-2])->lineno;
                 }
-#line 2272 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2277 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 33:
@@ -2284,7 +2289,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[-2])->lineno;
                 }
-#line 2288 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2293 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 34:
@@ -2300,7 +2305,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[-2])->lineno;
                 }
-#line 2304 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2309 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 35:
@@ -2312,7 +2317,7 @@ yyreduce:
               }
               (yyval) = (yyvsp[0]);
         }
-#line 2316 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2321 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 36:
@@ -2323,7 +2328,7 @@ yyreduce:
               }
              (yyval) = NULL;
         }
-#line 2327 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2332 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 37:
@@ -2344,7 +2349,7 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2348 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2353 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 38:
@@ -2359,7 +2364,7 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2363 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2368 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 39:
@@ -2376,7 +2381,7 @@ yyreduce:
 
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
         }
-#line 2380 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2385 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 40:
@@ -2397,7 +2402,7 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2401 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2406 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 41:
@@ -2418,7 +2423,7 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2422 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2427 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 42:
@@ -2433,7 +2438,7 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2437 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2442 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 43:
@@ -2448,7 +2453,7 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2452 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2457 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 44:
@@ -2459,7 +2464,7 @@ yyreduce:
                  }
                  (yyval) = NULL;
              }
-#line 2463 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2468 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 45:
@@ -2476,7 +2481,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
             }
-#line 2480 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2485 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 46:
@@ -2499,7 +2504,7 @@ yyreduce:
                 (yyval)->lineno = MIN((yyval),(yyvsp[0]));
 
             }
-#line 2503 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2508 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 47:
@@ -2516,7 +2521,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
             }
-#line 2520 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2525 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 48:
@@ -2533,7 +2538,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-1]), (yyvsp[0]));
             }
-#line 2537 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2542 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 49:
@@ -2545,7 +2550,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[-1]);
             }
-#line 2549 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2554 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 50:
@@ -2557,7 +2562,7 @@ yyreduce:
                 }
                 (yyval) = NULL;
             }
-#line 2561 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2566 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 51:
@@ -2579,7 +2584,7 @@ yyreduce:
 
                 free(tmp);
             }
-#line 2583 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2588 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 52:
@@ -2595,7 +2600,7 @@ yyreduce:
 
                 (yyval)->lineno = (yyvsp[0])->lineno;
             }
-#line 2599 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2604 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 53:
@@ -2615,7 +2620,7 @@ yyreduce:
 
                     (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
                 }
-#line 2619 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2624 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 54:
@@ -2635,7 +2640,7 @@ yyreduce:
 
                     (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
                 }
-#line 2639 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2644 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 55:
@@ -2647,7 +2652,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2651 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2656 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 56:
@@ -2658,7 +2663,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2662 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2667 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 57:
@@ -2669,7 +2674,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 2673 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2678 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 58:
@@ -2699,7 +2704,7 @@ yyreduce:
                 free(tmp);
           	}
         }
-#line 2703 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2708 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 59:
@@ -2710,7 +2715,7 @@ yyreduce:
               }
               (yyval)=NULL;
         }
-#line 2714 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2719 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 60:
@@ -2727,7 +2732,7 @@ yyreduce:
 
          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
     }
-#line 2731 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2736 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 61:
@@ -2743,7 +2748,7 @@ yyreduce:
 
          (yyval)->lineno = (yyvsp[0])->lineno;
      }
-#line 2747 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2752 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 62:
@@ -2758,7 +2763,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2762 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2767 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 63:
@@ -2773,7 +2778,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2777 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2782 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 64:
@@ -2788,7 +2793,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 2792 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2797 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 65:
@@ -2799,7 +2804,7 @@ yyreduce:
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2803 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2808 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 66:
@@ -2810,7 +2815,7 @@ yyreduce:
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2814 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2819 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 67:
@@ -2821,7 +2826,7 @@ yyreduce:
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2825 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2830 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 68:
@@ -2832,7 +2837,7 @@ yyreduce:
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2836 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2841 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 69:
@@ -2843,7 +2848,7 @@ yyreduce:
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2847 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2852 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 70:
@@ -2854,7 +2859,7 @@ yyreduce:
                     }
                     (yyval) = (yyvsp[0]);
                 }
-#line 2858 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2863 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 71:
@@ -2871,7 +2876,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
             }
-#line 2875 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2880 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 72:
@@ -2890,7 +2895,7 @@ yyreduce:
                 (yyval)->lineno = MIN((yyvsp[-5]), (yyvsp[-3]));
                 (yyval)->lineno = MIN((yyval), (yyvsp[0]));
             }
-#line 2894 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2899 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 73:
@@ -2909,7 +2914,7 @@ yyreduce:
 
                 (yyvsp[-4])->record = (yyvsp[-2]);
             }
-#line 2913 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2918 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 74:
@@ -2924,7 +2929,7 @@ yyreduce:
 
            (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 2928 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2933 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 75:
@@ -2941,7 +2946,7 @@ yyreduce:
 
            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
           }
-#line 2945 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2950 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 76:
@@ -2956,7 +2961,7 @@ yyreduce:
 
            (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 2960 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2965 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 77:
@@ -2973,7 +2978,7 @@ yyreduce:
 
            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
           }
-#line 2977 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2982 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 78:
@@ -2990,7 +2995,7 @@ yyreduce:
 
            (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
           }
-#line 2994 "yy.tab.cpp" /* yacc.c:1646  */
+#line 2999 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 79:
@@ -3001,7 +3006,7 @@ yyreduce:
             }
             (yyval) = (yyvsp[-1]);
         }
-#line 3005 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3010 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 80:
@@ -3020,7 +3025,7 @@ yyreduce:
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
             (yyval)->lineno = MIN((yyval), (yyvsp[0]));
         }
-#line 3024 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3029 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 81:
@@ -3031,7 +3036,7 @@ yyreduce:
                 }
                 (yyval) = (yyvsp[0]);
             }
-#line 3035 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3040 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 82:
@@ -3042,7 +3047,7 @@ yyreduce:
                 }
                 (yyval) = NULL;
             }
-#line 3046 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3051 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 83:
@@ -3059,7 +3064,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
             }
-#line 3063 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3068 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 84:
@@ -3076,7 +3081,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
             }
-#line 3080 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3085 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 85:
@@ -3099,7 +3104,7 @@ yyreduce:
             (yyval)->lineno = MIN((yyval), (yyvsp[-2]));
             (yyval)->lineno = MIN((yyval), (yyvsp[0]));
         }
-#line 3103 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3108 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 86:
@@ -3111,7 +3116,7 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 3115 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3120 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 87:
@@ -3123,7 +3128,7 @@ yyreduce:
             }
             (yyval) = (yyvsp[0]);
         }
-#line 3127 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3132 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 88:
@@ -3141,7 +3146,7 @@ yyreduce:
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
 
         }
-#line 3145 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3150 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 89:
@@ -3163,7 +3168,7 @@ yyreduce:
 
                 free(tmp);
         }
-#line 3167 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3172 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 90:
@@ -3179,7 +3184,7 @@ yyreduce:
 
             (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 3183 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3188 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 91:
@@ -3197,7 +3202,7 @@ yyreduce:
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
 
         }
-#line 3201 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3206 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 92:
@@ -3214,7 +3219,7 @@ yyreduce:
 
             (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
         }
-#line 3218 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3223 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 93:
@@ -3228,7 +3233,7 @@ yyreduce:
             (yyval)->type = TK_GOTO;
            	setName((yyval), TK_GOTO);
         }
-#line 3232 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3237 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 94:
@@ -3250,7 +3255,7 @@ yyreduce:
 
                 	free(tmp);
                 }
-#line 3254 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3259 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 95:
@@ -3265,7 +3270,7 @@ yyreduce:
 
                     (yyval)->lineno = (yyvsp[0])->lineno;
                 }
-#line 3269 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3274 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 96:
@@ -3282,7 +3287,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3286 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3291 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 97:
@@ -3298,7 +3303,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3302 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3307 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 98:
@@ -3314,7 +3319,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3318 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3323 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 99:
@@ -3330,7 +3335,7 @@ yyreduce:
 
                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3334 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3339 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 100:
@@ -3345,7 +3350,7 @@ yyreduce:
                                 (yyval)->child[1] = (yyvsp[0]);
                  (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3349 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3354 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 101:
@@ -3360,7 +3365,7 @@ yyreduce:
                                 (yyval)->child[1] = (yyvsp[0]);
                                 (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
            }
-#line 3364 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3369 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 102:
@@ -3374,7 +3379,7 @@ yyreduce:
                 (yyval)->child[0] = (yyvsp[0]);
                 (yyval)->lineno = (yyvsp[0])->lineno;
            }
-#line 3378 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3383 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 103:
@@ -3390,7 +3395,7 @@ yyreduce:
                          (yyval)->child[1] = (yyvsp[0]);
                          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3394 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3399 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 104:
@@ -3406,7 +3411,7 @@ yyreduce:
                          (yyval)->child[1] = (yyvsp[0]);
                          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3410 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3415 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 105:
@@ -3422,7 +3427,7 @@ yyreduce:
                          (yyval)->child[1] = (yyvsp[0]);
                          (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3426 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3431 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 106:
@@ -3438,7 +3443,7 @@ yyreduce:
 
          (yyval)->lineno = (yyvsp[0])->lineno;
      }
-#line 3442 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3447 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 107:
@@ -3453,7 +3458,7 @@ yyreduce:
                                   (yyval)->child[1] = (yyvsp[0]);
                                   (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3457 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3462 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 108:
@@ -3468,11 +3473,26 @@ yyreduce:
                                  (yyval)->child[1] = (yyvsp[0]);
                                  (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3472 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3477 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 109:
 #line 1287 "syntax.y" /* yacc.c:1646  */
+    {
+               if(DEBUG){
+                   printf("PARSING TK_REM\n");
+               }
+               (yyval) = NEWNODE(TK_REM);
+              (yyval)->child = MALLOC((yyval),2);
+                                       (yyval)->child[0] = (yyvsp[-2]);
+                                       (yyval)->child[1] = (yyvsp[0]);
+                                       (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
+           }
+#line 3492 "yy.tab.cpp" /* yacc.c:1646  */
+    break;
+
+  case 110:
+#line 1297 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_MOD\n");
@@ -3483,11 +3503,11 @@ yyreduce:
                                  (yyval)->child[1] = (yyvsp[0]);
                                  (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3487 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3507 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 110:
-#line 1297 "syntax.y" /* yacc.c:1646  */
+  case 111:
+#line 1307 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TK_AND\n");
@@ -3498,11 +3518,11 @@ yyreduce:
                                   (yyval)->child[1] = (yyvsp[0]);
                                   (yyval)->lineno = MIN((yyvsp[-2]), (yyvsp[0]));
      }
-#line 3502 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3522 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 111:
-#line 1307 "syntax.y" /* yacc.c:1646  */
+  case 112:
+#line 1317 "syntax.y" /* yacc.c:1646  */
     {
          if(DEBUG){
              printf("PARSING TERM : FIRST ONE\n");
@@ -3513,11 +3533,11 @@ yyreduce:
 
          (yyval)->lineno = (yyvsp[0])->lineno;
      }
-#line 3517 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3537 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 112:
-#line 1319 "syntax.y" /* yacc.c:1646  */
+  case 113:
+#line 1329 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: THERE IS NO TK_FACTOR BUT 'TK_FACTOR' FOLLOWED BY A TYPE
         if(DEBUG){
@@ -3529,11 +3549,11 @@ yyreduce:
 
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3533 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3553 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 113:
-#line 1330 "syntax.y" /* yacc.c:1646  */
+  case 114:
+#line 1340 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3545,11 +3565,11 @@ yyreduce:
         (yyval)->child[1] = (yyvsp[-1]);
         (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
     }
-#line 3549 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3569 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 114:
-#line 1341 "syntax.y" /* yacc.c:1646  */
+  case 115:
+#line 1351 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3561,11 +3581,11 @@ yyreduce:
         (yyval)->child[1] = (yyvsp[-1]);
         (yyval)->lineno = MIN((yyvsp[-3]), (yyvsp[-1]));
     }
-#line 3565 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3585 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 115:
-#line 1352 "syntax.y" /* yacc.c:1646  */
+  case 116:
+#line 1362 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3575,11 +3595,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[0]);
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3579 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3599 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 116:
-#line 1361 "syntax.y" /* yacc.c:1646  */
+  case 117:
+#line 1371 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LP TK_RP
         if(DEBUG){
@@ -3590,11 +3610,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[-1]);
         (yyval)->lineno = (yyvsp[-1])->lineno;
     }
-#line 3594 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3614 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 117:
-#line 1371 "syntax.y" /* yacc.c:1646  */
+  case 118:
+#line 1381 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3604,11 +3624,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[0]);
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3608 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3628 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 118:
-#line 1380 "syntax.y" /* yacc.c:1646  */
+  case 119:
+#line 1390 "syntax.y" /* yacc.c:1646  */
     {
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -3618,11 +3638,11 @@ yyreduce:
         (yyval)->child[0] = (yyvsp[0]);
         (yyval)->lineno = (yyvsp[0])->lineno;
     }
-#line 3622 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3642 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 119:
-#line 1389 "syntax.y" /* yacc.c:1646  */
+  case 120:
+#line 1399 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: IGNORE TK_LB TK_RB
         if(DEBUG){
@@ -3634,11 +3654,11 @@ yyreduce:
         (yyval)->child[1] = (yyvsp[-1]);
         (yyval)->lineno = MIN((yyvsp[-3]),(yyvsp[-1]));
     }
-#line 3638 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3658 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 120:
-#line 1400 "syntax.y" /* yacc.c:1646  */
+  case 121:
+#line 1410 "syntax.y" /* yacc.c:1646  */
     {
     //NOTE: ID->ID IS IN ONE NODE
         if(DEBUG){
@@ -3650,11 +3670,11 @@ yyreduce:
         (yyval)->lineno = (yyvsp[-2])->lineno;
         (yyvsp[-2])->record = (yyvsp[-1]);
     }
-#line 3654 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3674 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 121:
-#line 1413 "syntax.y" /* yacc.c:1646  */
+  case 122:
+#line 1423 "syntax.y" /* yacc.c:1646  */
     {
             //NOTE: IGNORE TK_COMMA
             if(DEBUG){
@@ -3672,11 +3692,11 @@ yyreduce:
 
                 free(tmp);
         }
-#line 3676 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3696 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
-  case 122:
-#line 1430 "syntax.y" /* yacc.c:1646  */
+  case 123:
+#line 1440 "syntax.y" /* yacc.c:1646  */
     {
             if(DEBUG){
                 printf("PARSING ARGS LIST : FIRST ONE\n");
@@ -3686,11 +3706,11 @@ yyreduce:
             (yyval)->child[0] = (yyvsp[0]);
             (yyval)->lineno = (yyvsp[0])->lineno;
         }
-#line 3690 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3710 "yy.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 3694 "yy.tab.cpp" /* yacc.c:1646  */
+#line 3714 "yy.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3918,7 +3938,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1441 "syntax.y" /* yacc.c:1906  */
+#line 1451 "syntax.y" /* yacc.c:1906  */
 
 
 int yyerror(string s){
