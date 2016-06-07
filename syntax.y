@@ -1212,9 +1212,8 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION : FIRST ONE\n");
                 }
                 $$ = NEWNODE(TK_EXP);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = NULL;
-                $$->child[1] = $1;
+                $$->child = MALLOC($$,1);
+                $$->child[0] = $1;
                 $$->lineno = $1->lineno;
            }
            ;
@@ -1258,9 +1257,8 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_EXPR);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = NULL;
-         $$->child[1] = $1;
+         $$->child = MALLOC($$,1);
+         $$->child[0] = $1;
 
          $$->lineno = $1->lineno;
      }
@@ -1311,9 +1309,8 @@ term : term TK_MUL factor{
              printf("PARSING TERM : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_TERM);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = NULL;
-         $$->child[1] = $1;
+         $$->child = MALLOC($$,1);
+         $$->child[0] = $1;
 
          $$->lineno = $1->lineno;
      }
