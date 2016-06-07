@@ -17,6 +17,8 @@ Type::Type(const string &x) {
     isSimpleType = true;
     simpleType = new SimpleType(x);
 }
+
+
 Type::Type(const vector<string> &x) {
     null = false;
     isSimpleType = false;
@@ -63,6 +65,16 @@ Type findType(SymbolTable* symbolTable, const string &varName) {
     return Type();
 }
 
+Type findConstType(SymbolTable* symbolTable, const string &constName) {
+    for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
+        auto y = x->findConst(constName);
+        if (!y.invalid) {
+            return parseValueType(y);
+        }
+    }
+    return Type();
+}
+
 Value findConst(SymbolTable* symbolTable, const string &constName) {
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
@@ -71,4 +83,21 @@ Value findConst(SymbolTable* symbolTable, const string &constName) {
         }
     }
     return Value();
+}
+
+Type parseValueType(const Value &x) {
+    switch (x.type) {
+        case type_integer:
+            return Type("longint");
+        case type_real:
+            return Type("double");
+        case type_boolean:
+            return Type("boolean");
+        case type_char:
+            return Type("char");
+        case type_string:
+            return Type("string");
+    }
+    assert(0);
+    return Type();
 }

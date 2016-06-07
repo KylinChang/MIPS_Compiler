@@ -98,14 +98,18 @@ public:
         for (auto &x: labelRef) {
             if (labelMap.find(x.first) == labelMap.end()) {
                 LOGERR(4, "error in line", to_string(x.second).c_str(), ":", "use a unavailable label");
+                return false;
             }
         }
+        return true;
     }
 };
 
 Type findVar(SymbolTable* symbolTable, const string &varName);
 
 Type findType(SymbolTable* symbolTable, const string &varName);
+
+Type findConstType(SymbolTable* symbolTable, const string &varName);
 
 Value findConst(SymbolTable* symbolTable, const string &constName);
 

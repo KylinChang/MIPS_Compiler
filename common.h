@@ -88,9 +88,9 @@ public:
 			return !bval && b.bval;
 		} else if (type == type_char) {
 			return cval < b.cval;
-		} else {
-			assert(0);
 		}
+        assert(0);
+        return false;
 	}
 	bool invalid;
 	SimpleTypeEnum type;
@@ -129,6 +129,20 @@ public:
 	SimpleType *simpleType;
 	ComplexType *complexType;
 };
+
+Type parseValueType(const Value &x);
+
+
+/* NOTE: simple type transform:
+ * shortint <-> byte
+ * smallint <-> word
+ * longint <-> dword
+ * int64 <-> qword
+ * and the type occupies less memory -> the type occupies more memory
+ * will be done automatically
+ * IR generator should be carefull
+ * */
+
 
 class SimpleType {
 

@@ -5,6 +5,7 @@
 #include <assert.h>
 #include "semanticAnalysis.h"
 #include "symbolTable.h"
+#include "common.h"
 
 list<SymbolTable*> symbolTableList;
 
@@ -37,8 +38,9 @@ void sa_init() {
     typeName["single"] = "single";
     typeName["double"] = "double";
     typeName["extended"] = "extended";
-    typeName["comp"] = "int64";
-    typeName["currency"] = "currency";
+    // NOTE: we do not support comp and currency
+//    typeName["comp"] = "int64";
+//    typeName["currency"] = "currency";
     typeName["boolean"] = "boolean";
     // NOTE: we do not support bytebool, wordbool and longbool
     typeName["char"] = "ansichar";
@@ -198,9 +200,9 @@ Type parseType(NODE* root) {
         assert(!a.isSimpleType && a.complexType->complexType == type_range);
         Type b = parseType(root->child[1]);
         return Type(a.complexType->rangeType.start.ival, a.complexType->rangeType.end.ival, b);
-    } else {
-        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown type");
     }
+    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown type");
+    return Type();
 }
 
 Value parseConst(NODE* root) {
@@ -252,8 +254,212 @@ void varAnalysis(NODE** varList, int varListNum) {
     }
 }
 
-Type expressionAnalysis(NODE* root) {
+Type upcast(const Type &a, const Type &b) {
+    // assume a and b are both simple type and not string and char
+    if (a.simpleType->simpleType == type_integer && b.simpleType->simpleType == type_integer) {
+        if (a.simpleType->intType == t_int64 || a.simpleType->intType == t_qword || b.simpleType->intType == t_int64 || b.simpleType->intType == t_qword) {
+            return Type("int64");
+        }
+        if (a.simpleType->intType == t_longint || a.simpleType->intType == t_dword || b.simpleType->intType == t_longint || b.simpleType->intType == t_dword) {
+            return Type("longint");
+        }
+        if (a.simpleType->intType == t_smallint || a.simpleType->intType == t_word || b.simpleType->intType == t_smallint || b.simpleType->intType == t_word) {
+            return Type("smallint");
+        }
+        if (a.simpleType->intType == t_shortint || a.simpleType->intType == t_byte || b.simpleType->intType == t_shortint || b.simpleType->intType == t_byte) {
+            return Type("shortint");
+        }
+    } else {
+        if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_extended) || (b.simpleType->simpleType == type_real && b.simpleType->realType == t_extended)) {
+            return Type("extended");
+        }
+        if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_double) || (b.simpleType->simpleType == type_real && b.simpleType->realType == t_double)) {
+            return Type("double");
+        }
+        if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_single) || (b.simpleType->simpleType == type_real && b.simpleType->realType == t_single)) {
+            return Type("single");
+        }
+    }
+    return Type();
+}
 
+
+Type factorAnalysis(NODE* root) {
+    Type lhst, rhst;
+    Value v;
+    unordered_map<string, Type>::iterator tmp;
+    switch (root->type) {
+        case TK_FACTOR_ID:
+            lhst = findVar(symbolTableList.front(), root->child[0]->name);
+            if (lhst.null) {
+                lhst = findConstType(symbolTableList.front(), root->child[0]->name);
+            }
+            if (lhst.null) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable or const");
+                break;
+            }
+            root->dataType = lhst;
+            break;
+        case TK_FACTOR_ID_ARGS:
+        case TK_FACTOR_SYS_FUNCT:
+            break;
+        case TK_FACTOR_CONST:
+            v = parseConst(root->child[0]);
+            root->dataType = parseValueType(v);
+            break;
+        case TK_FACTOR_EXP:
+            root->dataType = expressionAnalysis(root->child[0]);
+            break;
+        case TK_FACTOR_NOT:
+            lhst = factorAnalysis(root->child[0]);
+            if (!lhst.isSimpleType || lhst.simpleType->simpleType != type_boolean) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = lhst;
+            break;
+        case TK_FACTOR_MINUS:
+            lhst = factorAnalysis(root->child[0]);
+            if (!lhst.isSimpleType || (lhst.simpleType->simpleType != type_integer && lhst.simpleType->simpleType != type_real)) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = lhst;
+            break;
+        case TK_FACTOR_ID_EXP:
+            lhst = findVar(symbolTableList.front(), root->child[0]->name);
+            if (lhst.isSimpleType || lhst.complexType->complexType != type_array) {
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), root->child[0]->name.c_str(), "is not an array");
+                break;
+            }
+            rhst = expressionAnalysis(root->child[1]);
+            if (!rhst.isSimpleType || rhst.simpleType->simpleType != type_integer) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), "index must be integer");
+                break;
+            }
+            root->dataType = lhst.complexType->arrayType.elementType;
+            break;
+        case TK_FACTOR_DD:
+            lhst = findVar(symbolTableList.front(), root->child[0]->name);
+            if (lhst.isSimpleType || lhst.complexType->complexType != type_record) {
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), root->child[0]->name.c_str(), "is not a record");
+                break;
+            }
+            tmp = lhst.complexType->recordType.attrType.find(root->child[0]->record->name);
+            if (tmp == lhst.complexType->recordType.attrType.end()) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute");
+                break;
+            }
+            rhst = tmp->second;
+            root->dataType = rhst;
+            break;
+        default:
+            assert(0);
+    }
+    return root->dataType;
+}
+
+Type termAnalysis(NODE* root) {
+    Type lhst, rhst;
+    switch (root->type) {
+        case TK_MUL:
+            lhst = termAnalysis(root->child[0]);
+            rhst = factorAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType ||
+                (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
+                (lhst.simpleType->simpleType == type_char || rhst.simpleType->simpleType == type_char)) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = upcast(lhst, rhst);
+        case TK_DIV:
+        case TK_MOD:
+            lhst = termAnalysis(root->child[0]);
+            rhst = factorAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType || lhst.simpleType->simpleType != type_integer || rhst.simpleType->simpleType != type_integer) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = upcast(lhst, rhst);
+        case TK_AND:
+            lhst = termAnalysis(root->child[0]);
+            rhst = factorAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType || lhst.simpleType->simpleType != type_boolean || rhst.simpleType->simpleType != type_boolean) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = lhst;
+            break;
+        case TK_TERM:
+            lhst = factorAnalysis(root->child[0]);
+            root->dataType = lhst;
+        default:
+            assert(0);
+    }
+    return root->dataType;
+}
+
+
+Type exprAnalysis(NODE* root) {
+    Type lhst, rhst;
+    switch (root->type) {
+        case TK_PLUS:
+        case TK_MINUS:
+            lhst = exprAnalysis(root->child[0]);
+            rhst = termAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType ||
+                (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
+                (lhst.simpleType->simpleType == type_char || rhst.simpleType->simpleType == type_char)) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = upcast(lhst, rhst);
+        case TK_OR:
+            lhst = exprAnalysis(root->child[0]);
+            rhst = termAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType || lhst.simpleType->simpleType != type_boolean || rhst.simpleType->simpleType != type_boolean) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = lhst;
+            break;
+        case TK_EXPR:
+            lhst = termAnalysis(root->child[0]);
+            root->dataType = lhst;
+        default:
+            assert(0);
+    }
+    return root->dataType;
+}
+
+Type expressionAnalysis(NODE* root) {
+    Type lhst, rhst;
+    switch (root->type) {
+        case TK_GE:
+        case TK_GT:
+        case TK_LE:
+        case TK_LT:
+        case TK_EQUAL:
+        case TK_UNEQUAL:
+            lhst = expressionAnalysis(root->child[0]);
+            rhst = exprAnalysis(root->child[1]);
+            if (!lhst.isSimpleType || !rhst.isSimpleType ||
+                (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
+                (lhst.simpleType->simpleType == type_char && rhst.simpleType->simpleType != type_char) ||
+                (lhst.simpleType->simpleType != type_char && rhst.simpleType->simpleType == type_char)) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch");
+                break;
+            }
+            root->dataType = Type("boolean");
+            break;
+        case TK_EXP:
+            lhst = exprAnalysis(root->child[0]);
+            root->dataType = lhst;
+            break;
+        default:
+            assert(0);
+    }
+    return root->dataType;
 }
 
 void statementAnalysis(NODE* root) {
@@ -274,24 +480,35 @@ void statementAnalysis(NODE* root) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable", root->child[0]->name.c_str());
             return;
         }
-        if (!lhst.isSimpleType && (lhst.complexType->complexType != type_record && lhst.complexType->complexType != type_enum)) {
+        if (!lhst.isSimpleType && (lhst.complexType->complexType != type_record && lhst.complexType->complexType != type_enum && lhst.complexType->complexType != type_func)) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "unsupport assignment operator");
             return;
         }
         Type index, t;
         unordered_map<string, Type>::iterator tmp;
-
         switch (root->type) {
             case TK_ASSIGN_ID:
                 rhst = expressionAnalysis(root->child[1]);
-                if (!typeMatch(lhst, rhst)) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch between assignment operator");
-                    break;
-                }
-                if (lhst < rhst) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
-                } else if (rhst < lhst) {
-                    root->child[1]->dataType = lhst;
+                if (!lhst.isSimpleType && lhst.complexType->complexType == type_func) {
+                    // NOTE: special case: if a is a func, a can be assigned to a value
+                    if (!typeMatch(lhst.complexType->fpType.retType, rhst)) {
+                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch between assignment operator");
+                    }
+                    if (lhst.complexType->fpType.retType < rhst) {
+                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
+                    } else if (rhst < lhst.complexType->fpType.retType) {
+                        root->child[1]->dataType = lhst.complexType->fpType.retType;
+                    }
+                } else {
+                    if (!typeMatch(lhst, rhst)) {
+                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch between assignment operator");
+                        break;
+                    }
+                    if (lhst < rhst) {
+                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
+                    } else if (rhst < lhst) {
+                        root->child[1]->dataType = lhst;
+                    }
                 }
                 break;
             case TK_ASSIGN_ID_EXPR:
