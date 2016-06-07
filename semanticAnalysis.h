@@ -16,8 +16,9 @@
 
 using namespace std;
 
-unordered_map<string, string> typeName;
+extern unordered_map<string, string> typeName;
 
+extern int semanticAnalysisError;
 
 void sa_init();
 void parseRecordType(unordered_map<string, Type> &nameMap, NODE* root);

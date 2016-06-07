@@ -8,8 +8,12 @@
 #include "common.h"
 
 list<SymbolTable*> symbolTableList;
+unordered_map<string, string> typeName;
+int semanticAnalysisError;
+
 
 void LOGERR(int cnt, ...) {
+    semanticAnalysisError++;
     va_list args;
     va_start(args, cnt);
     while (cnt--) {
@@ -21,6 +25,9 @@ void LOGERR(int cnt, ...) {
 }
 
 void sa_init() {
+
+    semanticAnalysisError = 0;
+
     // integer:
     typeName["byte"] = "byte";
     typeName["shortint"] = "shortint";

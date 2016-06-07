@@ -6,6 +6,7 @@
 #define MIPS_COMPILER_SYMBOLTABLE_H
 
 #include "common.h"
+#include "semanticAnalysis.h"
 #include <set>
 #include <list>
 #include <vector>
