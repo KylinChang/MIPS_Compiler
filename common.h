@@ -234,8 +234,54 @@ public:
 class ArrayType {
 public:
 	ArrayType(){}
-	ArrayType(int _start, int _end, const Type &_elementType): start(_start), end(_end), elementType(_elementType){}
-	int start, end;
+	ArrayType(int _start, int _end, const Type &_elementType): start(_start), end(_end), elementType(_elementType){
+		assert(elementType.isSimpleType);
+		switch (elementType.simpleType->simpleType) {
+			case type_integer:
+				switch (elementType.simpleType->intType) {
+					case t_shortint:
+					case t_byte:
+						elementSize = 1;
+						break;
+					case t_smallint:
+					case t_word:
+						elementSize = 2;
+						break;
+					case t_longint:
+					case t_dword:
+						elementSize = 4;
+						break;
+					case t_int64:
+					case t_qword:
+						elementSize = 8;
+						break;
+				}
+				break;
+			case type_real:
+				switch (elementType.simpleType->realType) {
+					case t_single:
+						elementSize = 4;
+						break;
+					case t_double:
+						elementSize = 8;
+						break;
+					case t_extended:
+						elementSize = 12;
+						break;
+				}
+				break;
+			case type_boolean:
+				elementSize = 1;
+				break;
+			case type_char:
+				elementSize = 1;
+				break;
+			case type_string:
+				assert(0);
+				break;
+		}
+	}
+	int start, end, elementSize;
 	Type elementType;
 };
 
