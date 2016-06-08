@@ -202,6 +202,41 @@ public:
 	SimpleTypeEnum simpleType;
 	IntType intType;
 	RealType realType;
+	int size() {
+		switch (simpleType) {
+			case type_integer:
+				switch (intType) {
+					case t_shortint:
+					case t_byte:
+						return 1;
+					case t_smallint:
+					case t_word:
+						return 2;
+					case t_longint:
+					case t_dword:
+						return 4;
+					case t_int64:
+					case t_qword:
+						return 8;
+				}
+			case type_real:
+				switch (realType) {
+					case t_single:
+						return 4;
+					case t_double:
+						return 8;
+					case t_extended:
+						return 12;
+				}
+			case type_boolean:
+				return 1;
+			case type_char:
+				return 1;
+			case type_string:
+				assert(0);
+				break;
+		}
+	}
 };
 
 class EnumType {
@@ -215,8 +250,23 @@ public:
 class RecordType {
 public:
 	RecordType(){}
-	RecordType(const unordered_map<string, Type> &x): attrType(x){}
+	RecordType(const unordered_map<string, Type> &x): attrType(x){
+		int o = 0;
+		for (const auto &t: attrType) {
+			offset[t.first] = o;
+			o += t.second.simpleType->size();
+		}
+	}
+	// NOTE: here we assume string in different unordered_map should have the same order
 	unordered_map<string, Type> attrType;
+	unordered_map<string, int> offset;
+	// NOTE: here caller should guarantee attr x in this record
+	Type getType(const string &x) {
+		return attrType[x];
+	}
+	int getOffset(const string &x) {
+		return offset[x];
+	}
     bool operator ==(const RecordType &o) const {
         if (this->attrType.size() != o.attrType.size()) {
             return false;
@@ -236,50 +286,7 @@ public:
 	ArrayType(){}
 	ArrayType(int _start, int _end, const Type &_elementType): start(_start), end(_end), elementType(_elementType){
 		assert(elementType.isSimpleType);
-		switch (elementType.simpleType->simpleType) {
-			case type_integer:
-				switch (elementType.simpleType->intType) {
-					case t_shortint:
-					case t_byte:
-						elementSize = 1;
-						break;
-					case t_smallint:
-					case t_word:
-						elementSize = 2;
-						break;
-					case t_longint:
-					case t_dword:
-						elementSize = 4;
-						break;
-					case t_int64:
-					case t_qword:
-						elementSize = 8;
-						break;
-				}
-				break;
-			case type_real:
-				switch (elementType.simpleType->realType) {
-					case t_single:
-						elementSize = 4;
-						break;
-					case t_double:
-						elementSize = 8;
-						break;
-					case t_extended:
-						elementSize = 12;
-						break;
-				}
-				break;
-			case type_boolean:
-				elementSize = 1;
-				break;
-			case type_char:
-				elementSize = 1;
-				break;
-			case type_string:
-				assert(0);
-				break;
-		}
+		elementSize = elementType.simpleType->size();
 	}
 	int start, end, elementSize;
 	Type elementType;
