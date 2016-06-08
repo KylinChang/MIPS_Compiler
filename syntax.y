@@ -2,7 +2,7 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
-int DEBUG = 0;
+int DEBUG = 1;
 NODE* ROOT;
 extern int yylineno;
 
@@ -14,7 +14,7 @@ extern int yylineno;
 %token     TK_FUNCTION TK_GE TK_GOTO TK_GT TK_ID TK_REF TK_IF TK_IN TK_LB
 %token     TK_LE TK_LP TK_LT TK_MINUS TK_MOD TK_UNEQUAL TK_OF TK_OR
 %token     TK_OTHERWISE TK_BEGIN TK_PLUS TK_PROCEDURE
-%token     TK_PROGRAM TK_RB TK_REAL TK_RECORD TK_REPEAT TK_RP TK_SYS_PROC TK_READ
+%token     TK_PROGRAM TK_RB TK_REAL TK_RECORD TK_REPEAT TK_RP TK_SYS_PROC TK_READ TK_READLN
 %token     TK_SEMI TK_MUL TK_THEN TK_NOT
 %token     TK_TO TK_UNTIL TK_UPARROW TK_VAR TK_WHILE TK_SET TK_STARSTAR
 %token     TK_CHAR TK_STRING TK_INTEGER TK_SYS_CON TK_SYS_FUNCT TK_WITH TK_NIL
@@ -34,7 +34,7 @@ extern int yylineno;
         TK_STD_SYS_TYPE TK_STD_ID TK_STD_NL TK_STD_DD TK_STD_DD_M TK_STD_DD_MM TK_STD_DD_ID TK_DL TK_DL_END TK_VAR_DECL TK_FUNC_DECL TK_FUNC_HEAD 
         TK_PROC_DECL TK_PROC_HEAD TK_PARA  TK_PARA_TL TK_PARA_NULL TK_PARA_DL TK_PARA_DL_END TK_PARA_TL_VAR TK_PARA_TL_VAL TK_PARA_TL_END TK_PROC
         TK_CASE_EL TK_CASE_EL_END TK_CASE_EXPR TK_CASE_EXPR_END TK_EXPR TK_ASSIGN_ID TK_ASSIGN_ID_EXPR TK_ASSIGN_DD
-        TK_PROC_ID TK_PROC_ID_ARGS TK_PROC_SYS TK_PROC_SYS_ARGS TK_PROC_READ
+        TK_PROC_ID TK_PROC_ID_ARGS TK_PROC_SYS TK_PROC_SYS_ARGS TK_PROC_READ TK_PROC_READLN
         TK_STMT_ASSIGN TK_STMT_PROC TK_STMT_CP
 
 %%
@@ -925,6 +925,18 @@ proc_stmt : TK_ID{
            $$->child[1] = $3;
 
            $$->lineno = MIN($1, $3);
+          }
+          | TK_READLN TK_LP factor TK_RP{
+                     //NOTE: IGNROE TK_LP TK_RP
+                     if(DEBUG){
+                         printf("PARSING PROC STMT\n");
+                     }
+                     $$ = NEWNODE(TK_PROC_READLN);
+                     $$->child = MALLOC($$,2);
+                     $$->child[0] = $1;
+                     $$->child[1] = $3;
+
+                     $$->lineno = MIN($1, $3);
           }
           ;
 

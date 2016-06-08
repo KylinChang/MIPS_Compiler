@@ -61,6 +61,7 @@ FUNCTION "FUNCTION"
 PROCEDURE "PROCEDURE"
 ASSIGN ":="
 SYS_PROC "write"|"writeln"
+READLN "READLN"
 READ "READ"
 BEGIN "BEGIN"
 IF "IF"
@@ -169,6 +170,12 @@ ID [A-Z]([_A-Z0-9])*
 	yylval->lineno = yylineno;
 	yylval->name = genString(yytext, yyleng);
 	return TK_SYS_PROC;
+}
+{READLN} {
+	yylval = NEWNODE(TK_READLN);
+	yylval->lineno = yylineno;
+	yylval->name = genString(yytext, yyleng);
+	return TK_READLN;
 }
 {READ} {
 	yylval = NEWNODE(TK_READ);
