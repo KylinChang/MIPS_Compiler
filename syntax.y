@@ -2,14 +2,14 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
-int DEBUG = 1;
+int DEBUG = 0;
 NODE* ROOT;
 extern int yylineno;
 
 %}
 
 %token     TK_AND TK_ARRAY TK_ASSIGN TK_CASE TK_TYPE TK_SYS_TYPE 
-%token     TK_COLON TK_COMMA TK_CONST TK_DIGITS TK_DIV TK_DO TK_DOT TK_DOTDOT
+%token     TK_COLON TK_COMMA TK_CONST TK_DIGITS TK_DIV  TK_REM TK_DO TK_DOT TK_DOTDOT
 %token     TK_DOWNTO TK_ELSE  TK_ELSE_NULL TK_END TK_EQUAL TK_FOR
 %token     TK_FUNCTION TK_GE TK_GOTO TK_GT TK_ID TK_REF TK_IF TK_IN TK_LB
 %token     TK_LE TK_LP TK_LT TK_MINUS TK_MOD TK_UNEQUAL TK_OF TK_OR
@@ -275,7 +275,10 @@ array_type_decl : TK_ARRAY TK_LB simple_type_decl TK_RB TK_OF type_decl{
                 }
                 $$ = NEWNODE(TK_ARRAY);
                 $$->child = MALLOC($$,2);
-                $$->child[0] = $3;
+                $$->child[0] = NEWNODE(TK_TYPE_DECL);
+                $$->child[0]->lineno = $3->lineno;
+                $$->child[0]->child = MALLOC($$, 1);
+                $$->child[0]->child[0] = $3;
                 $$->child[1] = $6;
 
                 $$->lineno = MIN($3, $6);
@@ -557,7 +560,10 @@ function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl{
                 $$->child = MALLOC($$,3);
                 $$->child[0] = $2;
                 $$->child[1] = $3;
-                $$->child[2] = $5;
+                $$->child[2] = NEWNODE(TK_TYPE_DECL);
+                $$->child[2]->lineno = $5->lineno;
+                $$->child[2]->child = MALLOC($$, 1);
+                $$->child[2]->child[0] = $5;
 
                 $$->lineno = MIN($2,$3);
                 $$->lineno = MIN($$,$5);
@@ -647,7 +653,10 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     $$ = NEWNODE(TK_PARA_TL_VAR);
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
-                    $$->child[1] = $3;
+                    $$->child[1] = NEWNODE(TK_TYPE_DECL);
+                    $$->child[1]->lineno = $3->lineno;
+                    $$->child[1]->child = MALLOC($$, 1);
+                    $$->child[1]->child[0] = $3;
 
                     $$->lineno = MIN($1, $3);
                 }
@@ -659,7 +668,10 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
                     $$ = NEWNODE(TK_PARA_TL_VAL);
                     $$->child = MALLOC($$,2);
                     $$->child[0] = $1;
-                    $$->child[1] = $3;
+                    $$->child[1] = NEWNODE(TK_TYPE_DECL);
+                    $$->child[1]->lineno = $3->lineno;
+                    $$->child[1]->child = MALLOC($$, 1);
+                    $$->child[1]->child[0] = $3;
 
                     $$->lineno = MIN($1, $3);
                 }
@@ -828,7 +840,7 @@ assign_stmt : TK_ID TK_ASSIGN expression{
 
                 $$->lineno = MIN($1, $3);
             }
-            | TK_ID TK_LB expression TK_RB TK_ASSIGN expression{
+            | TK_ID TK_LB expr TK_RB TK_ASSIGN expression{
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
                 if(DEBUG){
                     printf("PARSING ASSIGN\n");
@@ -934,6 +946,9 @@ if_stmt : TK_IF expression TK_THEN stmt else_clause{
             $$->child[0] = $2;
             $$->child[1] = $4;
             $$->child[2] = $5;
+
+            $$->lineno = MIN($2, $4);
+            $$->lineno = MIN($$, $5);
         }
         ;
 
@@ -1197,9 +1212,8 @@ expression : expression TK_GE expr{
                     printf("PARSING EXPRESSION : FIRST ONE\n");
                 }
                 $$ = NEWNODE(TK_EXP);
-                $$->child = MALLOC($$,2);
-                $$->child[0] = NULL;
-                $$->child[1] = $1;
+                $$->child = MALLOC($$,1);
+                $$->child[0] = $1;
                 $$->lineno = $1->lineno;
            }
            ;
@@ -1243,9 +1257,8 @@ expr : expr TK_PLUS term{
              printf("PARSING EXPR : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_EXPR);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = NULL;
-         $$->child[1] = $1;
+         $$->child = MALLOC($$,1);
+         $$->child[0] = $1;
 
          $$->lineno = $1->lineno;
      }
@@ -1271,6 +1284,16 @@ term : term TK_MUL factor{
                                  $$->child[1] = $3;
                                  $$->lineno = MIN($1, $3);
      }
+     |term TK_REM factor{
+               if(DEBUG){
+                   printf("PARSING TK_REM\n");
+               }
+               $$ = NEWNODE(TK_REM);
+              $$->child = MALLOC($$,2);
+                                       $$->child[0] = $1;
+                                       $$->child[1] = $3;
+                                       $$->lineno = MIN($1, $3);
+           }
      | term TK_MOD factor{
          if(DEBUG){
              printf("PARSING TK_MOD\n");
@@ -1296,9 +1319,8 @@ term : term TK_MUL factor{
              printf("PARSING TERM : FIRST ONE\n");
          }
          $$ = NEWNODE(TK_TERM);
-         $$->child = MALLOC($$,2);
-         $$->child[0] = NULL;
-         $$->child[1] = $1;
+         $$->child = MALLOC($$,1);
+         $$->child[0] = $1;
 
          $$->lineno = $1->lineno;
      }
@@ -1374,7 +1396,7 @@ factor : TK_ID{
         $$->child[0] = $2;
         $$->lineno = $2->lineno;
     }
-    | TK_ID TK_LB expression TK_RB{
+    | TK_ID TK_LB expr TK_RB{
     //NOTE: IGNORE TK_LB TK_RB
         if(DEBUG){
             printf("PARSING FACTOR \n");

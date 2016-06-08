@@ -83,7 +83,8 @@ UNEQUAL "<>"
 PLUS "+"
 OR "OR"
 MUL "*"
-DIV "DIV"|"/"
+DIV "DIV"
+REM "/"
 MOD "MOD"
 AND "AND"
 SYS_FUNCT "abs"|"chr"|"odd"|"ord"|"pred"|"sqr"|"sqrt"|"succ"
@@ -209,10 +210,16 @@ ID [A-Z]([_A-Z0-9])*
 {OR} { return TK_OR; }
 {MUL} { return TK_MUL; }
 {DIV} {
-	yylval = NEWNODE(TK_DIV);
-	yylval->lineno = yylineno;
-	yylval->name = genString(yytext, yyleng);
+	//yylval = NEWNODE(TK_DIV);
+	//yylval->lineno = yylineno;
+	//yylval->name = genString(yytext, yyleng);
 	return TK_DIV;
+}
+{REM} {
+	//yylval = NEWNODE(TK_REM);
+	//yylval->lineno = yylineno;
+	//yylval->name = genString(yytext, yyleng);
+	return TK_REM;
 }
 {MOD} { return TK_MOD; }
 {AND} { return TK_AND; }
