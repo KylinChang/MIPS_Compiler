@@ -37,8 +37,8 @@ CONST "CONST"
 EQUAL "="
 
 DIGITS ([0-9])+
-INTEGER_10 ("+"|"-")?{DIGITS}
-INTEGER ("+"|"-")?$?{DIGITS}
+INTEGER_10 {DIGITS}
+INTEGER $?{DIGITS}
 REAL {INTEGER_10}"."{DIGITS}(E{INTEGER_10})?
 CHAR '([^'\n]|'')'
 STRING '([^\'\n]|'')*'
@@ -115,16 +115,16 @@ ID [A-Z]([_A-Z0-9])*
 	yylval = NEWNODE(TK_INTEGER);
 	yylval->lineno = yylineno;
 	char *ts = yytext;
-	int sign = 1;
-	if (*ts == '+' || *ts == '-') {
-		sign = (*ts=='+') ? 1 : -1;
-		ts++;
-	}
+	//int sign = 1;
+	//if (*ts == '+' || *ts == '-') {
+	//	sign = (*ts=='+') ? 1 : -1;
+	//	ts++;
+	//}
 
 	int tmp;
 	if (*ts == '$') sscanf(++ts, "%x", &tmp);
 	else            sscanf(ts, "%d", &tmp);
-	yylval->value = Value(tmp*sign);
+	yylval->value = Value(tmp);
 	return TK_INTEGER;
 }
 {CHAR} {
