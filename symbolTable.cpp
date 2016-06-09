@@ -4,6 +4,148 @@
 
 #include "symbolTable.h"
 
+bool Value::operator<(const Value &b) const {
+    // NOTE: here we assume a and b are the same type
+    if (type == type_integer) {
+        return ival < b.ival;
+    } else if (type == type_real) {
+        return dval < b.dval;
+    } else if (type == type_boolean) {
+        return !bval && b.bval;
+    } else if (type == type_char) {
+        return cval < b.cval;
+    }
+    assert(0);
+    return false;
+}
+
+SimpleType::SimpleType(const string &x) {
+    if (x == "shortint") {
+        simpleType = type_integer;
+        intType = t_shortint;
+    } else if (x == "smallint") {
+        simpleType = type_integer;
+        intType = t_smallint;
+    } else if (x == "longint") {
+        simpleType = type_integer;
+        intType = t_longint;
+    } else if (x == "int64") {
+        simpleType = type_integer;
+        intType = t_int64;
+    } else if (x == "byte") {
+        simpleType = type_integer;
+        intType = t_byte;
+    } else if (x == "word") {
+        simpleType = type_integer;
+        intType = t_word;
+    } else if (x == "dword") {
+        simpleType = type_integer;
+        intType = t_dword;
+    } else if (x == "qword") {
+        simpleType = type_integer;
+        intType = t_qword;
+    }
+
+    if (x == "single") {
+        simpleType = type_real;
+        realType = t_single;
+    } else if (x == "double") {
+        simpleType = type_real;
+        realType = t_double;
+    } else if (x == "extended") {
+        simpleType = type_real;
+        realType = t_extended;
+//		} else if (x == "currency") {
+//			simpleType = type_real;
+//			realType = t_currency;
+    }
+
+    if (x == "boolean") {
+        simpleType = type_boolean;
+    }
+    if (x == "char") {
+        simpleType = type_char;
+    }
+
+    if (x == "string") {
+        simpleType = type_string;
+    }
+}
+
+int SimpleType::size() {
+    switch (simpleType) {
+        case type_integer:
+            switch (intType) {
+                case t_shortint:
+                case t_byte:
+                    return 1;
+                case t_smallint:
+                case t_word:
+                    return 2;
+                case t_longint:
+                case t_dword:
+                    return 4;
+                case t_int64:
+                case t_qword:
+                    return 8;
+            }
+        case type_real:
+            switch (realType) {
+                case t_single:
+                    return 4;
+                case t_double:
+                    return 8;
+                case t_extended:
+                    return 12;
+            }
+        case type_boolean:
+            return 1;
+        case type_char:
+            return 1;
+        case type_string:
+            assert(0);
+            break;
+    }
+}
+
+RecordType::RecordType(const unordered_map<string, Type> &x): attrType(x) {
+    int o = 0;
+    for (const auto &t: attrType) {
+        offset[t.first] = o;
+        o += t.second.simpleType->size();
+    }
+}
+
+bool RecordType::operator==(const RecordType &o) const {
+    if (this->attrType.size() != o.attrType.size()) {
+        return false;
+    }
+    for (const auto &x: this->attrType) {
+        auto y = o.attrType.find(x.first);
+        if (y == o.attrType.end() || !(y->second == x.second)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+ArrayType::ArrayType(int _start, int _end, const Type &_elementType) : start(_start), end(_end), elementType(_elementType) {
+    assert(elementType.isSimpleType);
+    elementSize = elementType.simpleType->size();
+}
+
+bool FPType::operator==(const FPType &o) const {
+    if (argTypeList.size() != o.argTypeList.size()) {
+        return false;
+    }
+    for (int i = 0; i < argTypeList.size(); i++) {
+        if (!(argTypeList[i] == o.argTypeList[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 Type::Type(const Type &o) {
     null = o.null;
@@ -17,7 +159,6 @@ Type::Type(const string &x) {
     isSimpleType = true;
     simpleType = new SimpleType(x);
 }
-
 
 Type::Type(const vector<string> &x) {
     null = false;
