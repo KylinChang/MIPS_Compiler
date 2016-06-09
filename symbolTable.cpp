@@ -103,10 +103,11 @@ int SimpleType::size() {
         case type_char:
             return 1;
         case type_string:
-            return 0;
+            // NOTE: here we return a pointer size
+            return 12;
             LOGERR(1, "error: cannot determine string's size in semantic analysis phase");
 //            assert(0);
-            break;
+//            break;
     }
 }
 
