@@ -178,5 +178,7 @@ void node_init(){
 	NODE_NAMES[TK_INTEGER] = "TK_INTEGER";
 	NODE_NAMES[TK_REAL] = "TK_REAL";
 	NODE_NAMES[TK_CHAR] = "TK_CHAR";
+	
+	NODE_NAMES[TK_ID] = "TK_ID";
 
 }
