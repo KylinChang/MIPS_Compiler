@@ -26,7 +26,7 @@ extern int yylineno;
 %token     TK_VAL_PARA_LIST TK_NON_LABEL_STMT_ASSIGN TK_NON_LABEL_STMT_PROC TK_NON_LABEL_STMT_CP 	
 		TK_NON_LABEL_STMT_IF TK_NON_LABEL_STMT_REP TK_NON_LABEL_STMT_WHILE TK_NON_LABEL_STMT_FOR
 		TK_NON_LABEL_STMT_CASE TK_NON_LABEL_STMT_GOTO
-		TK_EXP_LIST TK_EXP_LIST_END TK_EXP TK_TERM 
+		TK_EXP_LIST TK_EXP_LIST_END TK_EXP TK_TERM  TK_CONST_MINUS
         TK_FACTOR_ID TK_FACTOR_ID_ARGS TK_FACTOR_SYS_FUNCT TK_FACTOR_CONST TK_FACTOR_EXP TK_FACTOR_NOT
         TK_FACTOR_MINUS TK_FACTOR_ID_EXP TK_FACTOR_DD TK_ARGS_LIST TK_ARGS_LIST_END
         TK_CONST_DL TK_CONST_DL_END TK_TYPE_DL TK_TYPE_DL_END TK_TYPE_DEF TK_TYPE_DECL TK_TYPE_DECL_SIM TK_TYPE_DECL_ARR TK_TYPE_DECL_REC
@@ -147,8 +147,6 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
 
                     $$->child = MALLOC($$,1);
                     $$->child[0] = node;
-
-
                 }
                 ;
 
@@ -407,6 +405,45 @@ simple_type_decl : TK_SYS_TYPE{
 
                     $$->lineno = $1->lineno;
                 }
+                 | TK_MINUS const_value TK_DOTDOT const_value{
+                                      if(DEBUG){
+                                         printf("PARSING SIMPLE TYPE DECL ID\n");
+                                     }
+                                     $$ = NEWNODE(TK_STD_DD);
+                                     $$->child = MALLOC($$,2);
+
+                                     NODE* minus_const = NEWNODE(TK_CONST_MINUS);
+                                     minus_const->child = MALLOC(minus_const, 1);
+                                     minus_const->child[0] = $2;
+                                     minus_const->lineno = $2->lineno;
+
+                                     $$->child[0] = minus_const;
+                                     $$->child[1] = $4;
+
+                                     $$->lineno = $2->lineno;
+                   }
+                 | TK_MINUS const_value TK_DOTDOT TK_MINUS const_value{
+                                      if(DEBUG){
+                                         printf("PARSING SIMPLE TYPE DECL ID\n");
+                                      }
+                                      $$ = NEWNODE(TK_STD_DD);
+                                      $$->child = MALLOC($$,2);
+
+                                      NODE* minus_const1 = NEWNODE(TK_CONST_MINUS);
+                                      minus_const1->child = MALLOC(minus_const1, 1);
+                                      minus_const1->child[0] = $2;
+                                      minus_const1->lineno = $2->lineno;
+
+                                      NODE* minus_const2 = NEWNODE(TK_CONST_MINUS);
+                                      minus_const2->child = MALLOC(minus_const2, 1);
+                                      minus_const2->child[0] = $5;
+                                      minus_const2->lineno = $5->lineno;
+
+                                      $$->child[0] = minus_const1;
+                                      $$->child[1] = minus_const2;
+
+                                      $$->lineno = $2->lineno;
+                 }
                  | TK_ID TK_DOTDOT TK_ID{
                      if(DEBUG){
                         printf("PARSING SIMPLE TYPE DECL ID\n");

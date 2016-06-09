@@ -33,9 +33,6 @@ procedure ptest1;
 begin
 end;
 function ftest1:integer;
-function ftest2(x1, y1:integer):real;
-begin
-end;
 begin
 end;
 begin

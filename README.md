@@ -64,7 +64,12 @@ y := c+d;
 
 In the above example, x is -2147483646 and y is -5, but when writeln(a+b), it outputs 2147483650, which means the pascal can auto translates the values according to type. So we let the final expression as a longint-dword type.
 
+The code generation step should carefully consider this case and know that if the type is different here, it means that the value may be auto-transformed.
+
 * the arguments can only be integer, boolean, real, string, char.
+
+* keyword 'not', 'and', 'or' can only be followed by integer or boolean. for example, not 1 is -2 and not true is false.
+
 
 
 
