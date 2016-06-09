@@ -2,7 +2,7 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
-int DEBUG = 1;
+int DEBUG = 0;
 NODE* ROOT;
 extern int yylineno;
 
