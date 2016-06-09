@@ -78,20 +78,7 @@ public:
 		sval = x;
 		type = type_string;
 	}
-	bool operator < (const Value &b) const {
-		// NOTE: here we assume a and b are the same type
-		if (type == type_integer) {
-			return ival < b.ival;
-		} else if (type == type_real) {
-			return dval < b.dval;
-		} else if (type == type_boolean) {
-			return !bval && b.bval;
-		} else if (type == type_char) {
-			return cval < b.cval;
-		}
-        assert(0);
-        return false;
-	}
+	bool operator < (const Value &b) const;
 	bool invalid;
 	SimpleTypeEnum type;
 	int ival;
@@ -150,96 +137,11 @@ class SimpleType {
 
 public:
 	SimpleType(){}
-	SimpleType(const string &x) {
-		if (x == "shortint") {
-			simpleType = type_integer;
-			intType = t_shortint;
-		} else if (x == "smallint") {
-			simpleType = type_integer;
-			intType = t_smallint;
-		} else if (x == "longint") {
-			simpleType = type_integer;
-			intType = t_longint;
-		} else if (x == "int64") {
-			simpleType = type_integer;
-			intType = t_int64;
-		} else if (x == "byte") {
-			simpleType = type_integer;
-			intType = t_byte;
-		} else if (x == "word") {
-			simpleType = type_integer;
-			intType = t_word;
-		} else if (x == "dword") {
-			simpleType = type_integer;
-			intType = t_dword;
-		} else if (x == "qword") {
-			simpleType = type_integer;
-			intType = t_qword;
-		}
-
-		if (x == "single") {
-			simpleType = type_real;
-			realType = t_single;
-		} else if (x == "double") {
-			simpleType = type_real;
-			realType = t_double;
-		} else if (x == "extended") {
-			simpleType = type_real;
-			realType = t_extended;
-//		} else if (x == "currency") {
-//			simpleType = type_real;
-//			realType = t_currency;
-		}
-
-		if (x == "boolean") {
-			simpleType = type_boolean;
-		}
-		if (x == "char") {
-			simpleType = type_char;
-		}
-
-		if (x == "string") {
-			simpleType = type_string;
-		}
-	}
+	SimpleType(const string &x);
 	SimpleTypeEnum simpleType;
 	IntType intType;
 	RealType realType;
-	int size() {
-		switch (simpleType) {
-			case type_integer:
-				switch (intType) {
-					case t_shortint:
-					case t_byte:
-						return 1;
-					case t_smallint:
-					case t_word:
-						return 2;
-					case t_longint:
-					case t_dword:
-						return 4;
-					case t_int64:
-					case t_qword:
-						return 8;
-				}
-			case type_real:
-				switch (realType) {
-					case t_single:
-						return 4;
-					case t_double:
-						return 8;
-					case t_extended:
-						return 12;
-				}
-			case type_boolean:
-				return 1;
-			case type_char:
-				return 1;
-			case type_string:
-				assert(0);
-				break;
-		}
-	}
+	int size();
 };
 
 class EnumType {
@@ -253,13 +155,7 @@ public:
 class RecordType {
 public:
 	RecordType(){}
-	RecordType(const unordered_map<string, Type> &x): attrType(x){
-		int o = 0;
-		for (const auto &t: attrType) {
-			offset[t.first] = o;
-			o += t.second.simpleType->size();
-		}
-	}
+	RecordType(const unordered_map<string, Type> &x);
 	// NOTE: here we assume string in different unordered_map should have the same order
 	unordered_map<string, Type> attrType;
 	unordered_map<string, int> offset;
@@ -270,27 +166,13 @@ public:
 	int getOffset(const string &x) {
 		return offset[x];
 	}
-    bool operator ==(const RecordType &o) const {
-        if (this->attrType.size() != o.attrType.size()) {
-            return false;
-        }
-        for (const auto &x: this->attrType) {
-            auto y = o.attrType.find(x.first);
-            if (y == o.attrType.end() || !(y->second == x.second)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    bool operator ==(const RecordType &o) const;
 };
 
 class ArrayType {
 public:
 	ArrayType(){}
-	ArrayType(int _start, int _end, const Type &_elementType): start(_start), end(_end), elementType(_elementType){
-		assert(elementType.isSimpleType);
-		elementSize = elementType.simpleType->size();
-	}
+	ArrayType(int _start, int _end, const Type &_elementType);
 	int start, end, elementSize;
 	Type elementType;
 };
@@ -310,17 +192,7 @@ public:
 	FPType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
 	vector<Type> argTypeList;
 	Type retType;
-    bool operator ==(const FPType &o) const {
-        if (argTypeList.size() != o.argTypeList.size()) {
-            return false;
-        }
-        for (int i = 0; i < argTypeList.size(); i++) {
-            if (!(argTypeList[i] == o.argTypeList[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
+    bool operator ==(const FPType &o) const;
 };
 
 class ComplexType {
