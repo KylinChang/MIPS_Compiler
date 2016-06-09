@@ -27,7 +27,17 @@ using namespace std;
 		变量定义(大括号中的项目是必填的)：
 			{Type} a {value} local f
 			{Type} a {value} global
+		目前有的变量定义：
+			int, double
 	
+		得到局部变量i在站上的位置：
+			t0 = rsp + ...; 得到i在栈上的位置
+			load double t1 t0; t0为地址，t1为该地址取出的double型变量
+		load目前有以下几种：
+			load int
+			load float
+			load double
+		
 	pascal参数传递顺序：
 		1.参数按出现顺序，从左至右地进栈。
     	2.被调用函数在返回调用前负责栈的平衡。
@@ -41,7 +51,7 @@ using namespace std;
 	->
 		t3 = t1 - {start_position_of(a)};    //这里start_position_of(a)会直接给出一个整数
 		t3 = t3 * {elem_size(a)};  //这里elem_size(a)会直接给出一个整数
-		t3 = a + t3
+		t3 = &a + t3
 		t2 = *t3
 
 
@@ -320,6 +330,8 @@ string getName(piv a) {
 	else if (a.first == 4) {  // 其他情况(不依靠符号表，强行生成代码)
 		return a.second;
 	}
+	else if (a.first == 5) {  // 存储在栈上的局部变量
+	}
 }
 void output(string s) {
 	printf("%s\n", s.c_str());
@@ -336,10 +348,23 @@ void output(string c, string a, string op, string b) {
 void output(piv c, piv a, string op, piv b) {
 	output(getName(c), getName(a), op, getName(b));
 }
+void output(piv c, piv a, string op, string b) {
+	output(getName(c), getName(a), op, b);
+}
+void output(piv c, piv a, const char op[], string b) {
+	output(getName(c), getName(a), op, b);
+}
 void output(vector<string> ss) {
 	for (int i=0; i<ss.size(); i++)
 		printf("%s\n", ss[i].c_str());
 }
+// piv output(NODE *t, piv a) {  //临时变量装载
+// 	// if (a.first != 5) return a;
+// 	// piv t0 = mp(0, TempVars::getAnother()), t1 = mp(0, TempVars::getAnother());
+// 	// output(string(t0.second) + " = rsp + " + ..);  //计算时要注意数组和record的情况，还得判断是不是函数本身
+// 	// output(string("") + "load " + t->.. + " " + string(t1.second) + " " + string(a.second));
+// 	// TempVars::release(a); return t1;
+// }
 string _output(string s) {  //没有自带回车
 	return s;
 }
@@ -451,8 +476,25 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		
 		/*  变量  */
 		case TK_ID:
-			return mp(2, _Value(t->name));
+			// if (..是局部变量)
+			// 	return output(t, mp(5, _Value(t->name)));
+			// else
+				return mp(2, _Value(t->name));
 			break;
+			
+		/*  变量定义  */
+		// case TK_DL:
+		// 	for (int i=0; i<child_number; i++)
+		// 		genCode(SON(i));
+		// 	break;
+		// case TK_VAR_DECL:
+		// 	genCode(SON(0));
+		// 	break;
+		// //name_list
+		// case TK_NL:  //默认已经知道type了
+		// 	for (int i=0; i<child_number; i++)
+		// 		output(string(t->dataType) + "" + string(genCode(SON(i)).second));
+		// 	break;
 
 		/*  操作符  */
 		case TK_PLUS:
@@ -512,7 +554,7 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		case TK_FUNC_HEAD:
 			a = genCode(t->child[0]);
 			a.first!=2 ? throw Error(string(a.second) + "cannot be the name of a function."): 0;
-			output("entry" + string(a.second));
+			output("entry " + string(a.second));
 			//parameters ignored
 			break;
 		case TK_PARA:
@@ -563,8 +605,8 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			output(string((tmp=mp(0, TempVars::getAnother())).second)
 							+ " = " + string(tmp.second)
 								+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
-			output(tmp, a, "+", tmp);
-			output(string("*" + string(tmp.second) + " = " + string(x.second));
+			output(string(tmp.second) + " = &" + string(a.second) + " + " + string(tmp.second));
+			output("*" + string(tmp.second) + " = " + string(x.second));
 			output(string((c=mp(0, TempVars::getAnother())).second) + " = *" + string(tmp.second));
 			TempVars::release(b); TempVars::release(x); TempVars::release(tmp); return c;
 			break;
@@ -824,7 +866,7 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			output(string((tmp=mp(0, TempVars::getAnother())).second)
 							+ " = " + string(tmp.second)
 								+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
-			output(tmp, a, "+", tmp);
+			output(string(tmp.second) + " = &" + string(a.second) + " + " + string(tmp.second));
 			output(string((c=mp(0, TempVars::getAnother())).second) + " = *" + string(tmp.second));
 			TempVars::release(b); TempVars::release(tmp); return c;
 			break;

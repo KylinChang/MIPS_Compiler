@@ -127,6 +127,9 @@ public:
 	bool isSimpleType;
 	SimpleType *simpleType;
 	ComplexType *complexType;
+	
+	//for ICG
+	operator string();  //暂时只有simple type
 };
 
 Type parseValueType(const Value &x);

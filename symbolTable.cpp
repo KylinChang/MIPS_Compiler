@@ -95,15 +95,53 @@ bool Type::operator ==(const Type &o) const {
 }
 
 
+Type::operator string() {
+    assert(!null);
+    static string wu[200];
+    wu[type_integer * 10 + t_shortint] = "shortint";
+    wu[type_integer * 10 + t_smallint] = "smallint";
+    wu[type_integer * 10 + t_longint] = "longint";
+    wu[type_integer * 10 + t_int64] = "int64";
+    wu[type_integer * 10 + t_byte] = "byte";
+    wu[type_integer * 10 + t_word] = "word";
+    wu[type_integer * 10 + t_dword] = "dword";
+    wu[type_integer * 10 + t_qword] = "qword";
+	wu[type_real * 10 + t_single] = "single";
+	wu[type_real * 10 + t_double] = "double";
+	wu[type_real * 10 + t_extended] = "extended";
+	wu[type_boolean * 10] = "boolean";
+	wu[type_char * 10] = "char";
+	wu[type_string * 10] = "string";
+    
+    if (isSimpleType) {
+        switch (this->simpleType->simpleType) {
+        case type_integer:
+            return wu[this->simpleType->simpleType * 10 + this->simpleType->intType];
+            break;
+        case type_real:
+            return wu[this->simpleType->simpleType * 10 + this->simpleType->realType];
+            break;
+        case type_boolean: case type_char: case type_string:
+            return wu[this->simpleType->simpleType * 10];
+            break;
+        default:
+            assert(0);
+        }
+    }
+    else {  //complexType
+    }
+}
+
 
 Type findVar(SymbolTable* symbolTable, const string &varName, NODE* root) {
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findVar(varName);
         if (!y.null) {
-            root->symbolTable = x;
+            // root->symbolTable = x;
             return y;
         }
     }
+    root->symbolTable = symbolTable;
     return Type();
 }
 
@@ -111,10 +149,11 @@ Type findType(SymbolTable* symbolTable, const string &varName, NODE* root) {
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findType(varName);
         if (!y.null) {
-            root->symbolTable = x;
+            // root->symbolTable = x;
             return y;
         }
     }
+    root->symbolTable = symbolTable;
     return Type();
 }
 
@@ -122,10 +161,11 @@ Type findConstType(SymbolTable* symbolTable, const string &constName, NODE* root
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
         if (!y.invalid) {
-            root->symbolTable = x;
+            // root->symbolTable = x;
             return parseValueType(y);
         }
     }
+    root->symbolTable = symbolTable;
     return Type();
 }
 
@@ -133,10 +173,11 @@ Type findFunc(SymbolTable* symbolTable, const string &varName, NODE* root) {
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findFunc(varName);
         if (!y.null) {
-            root->symbolTable = x;
+            // root->symbolTable = x;
             return y;
         }
     }
+    root->symbolTable = symbolTable;
     return Type();
 }
 
@@ -144,10 +185,11 @@ Type findFunc(SymbolTable* symbolTable, const string &varName, const vector<Type
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findFunc(varName, typeList);
         if (!y.null) {
-            root->symbolTable = x;
+            // root->symbolTable = x;
             return y;
         }
     }
+    root->symbolTable = symbolTable;
     return Type();
 }
 
@@ -155,10 +197,11 @@ Value findConst(SymbolTable* symbolTable, const string &constName, NODE* root) {
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
         if (!y.invalid) {
-            root->symbolTable = x;
+            // root->symbolTable = x;
             return y;
         }
     }
+    root->symbolTable = symbolTable;
     return Value();
 }
 

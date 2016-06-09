@@ -816,18 +816,18 @@ void semanticAnalysis(NODE* ROOT) {
     }
 }
 
-int main(int argc, char** argv){
-//    char FILENAME[100];
-//    printf("Please input the test file: ");
-//    scanf("%s", FILENAME);
+// int main(int argc, char** argv){
+// //    char FILENAME[100];
+// //    printf("Please input the test file: ");
+// //    scanf("%s", FILENAME);
 
-    FILE* file = fopen("./TestCases/test9.pas", "r");
-    yyin = file;
+//     FILE* file = fopen("./TestCases/test9.pas", "r");
+//     yyin = file;
 
-    node_init();
-    yyparse();
+//     node_init();
+//     yyparse();
 
-    semanticAnalysis(ROOT);
+//     semanticAnalysis(ROOT);
 
-    return 0;
-}
+//     return 0;
+// }
