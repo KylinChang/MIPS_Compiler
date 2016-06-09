@@ -108,11 +108,11 @@ begin
 
 
         for a:= -1+2 to 100 do begin
-            c:= c + 2+8*9/3;	
+            c:= c + 2+8*9/3;
 	end;
 
 	for b:= a+100*10 downto -1 do begin
-            c:= c + 2+8*9/3;	
+            c:= c + 2+8*9/3;
 	end;
-   
+
 end.

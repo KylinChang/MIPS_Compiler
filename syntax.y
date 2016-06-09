@@ -466,12 +466,9 @@ simple_type_decl : TK_SYS_TYPE{
                                     $$ = NEWNODE(TK_STD_DD_ID);
                                     $$->child = MALLOC($$,2);
 
-                                    NODE* id_minus = NEWNODE(TK_ID_MINUS);
-                                    id_minus->child = MALLOC(id_minus, 1);
-                                    id_minus->child[0] = $2;
-                                    id_minus->child_number = $2->lineno;
+                                    $2->type = TK_ID_MINUS;
+                                    $$->child[0] = $2;
 
-                                    $$->child[0] = id_minus;
                                     $$->child[1] = $4;
 
                                     $$->lineno = $2->lineno;
@@ -483,13 +480,9 @@ simple_type_decl : TK_SYS_TYPE{
                                     $$ = NEWNODE(TK_STD_DD_ID);
                                     $$->child = MALLOC($$,2);
 
-                                    NODE* id_minus = NEWNODE(TK_ID_MINUS);
-                                    id_minus->child = MALLOC(id_minus, 1);
-                                    id_minus->child[0] = $4;
-                                    id_minus->lineno = $4->lineno;
-
                                     $$->child[0] = $1;
-                                    $$->child[1] = id_minus;
+                                    $4->type = TK_ID_MINUS;
+                                    $$->child[1] = $4;
 
                                     $$->lineno = $1->lineno;
                                 }
@@ -500,18 +493,10 @@ simple_type_decl : TK_SYS_TYPE{
                                      $$ = NEWNODE(TK_STD_DD_ID);
                                      $$->child = MALLOC($$,2);
 
-                                     NODE* id_minus1 = NEWNODE(TK_ID_MINUS);
-                                     id_minus1->child = MALLOC(id_minus1, 1);
-                                     id_minus1->child[0] = $2;
-                                     id_minus1->lineno = $2->lineno;
-
-                                     NODE* id_minus2 = NEWNODE(TK_ID_MINUS);
-                                     id_minus2->child = MALLOC(id_minus2, 1);
-                                     id_minus2->child[0] = $5;
-                                     id_minus2->lineno = $5->lineno;
-
-                                     $$->child[0] = id_minus1;
-                                     $$->child[1] = id_minus2;
+                                     $2->type = TK_ID_MINUS;
+                                     $$->child[0] = $2;
+                                     $5->type = TK_ID_MINUS;
+                                     $$->child[1] = $5;
 
                                      $$->lineno = $2->lineno;
                                  }

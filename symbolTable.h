@@ -49,12 +49,14 @@ public:
     bool insertEnum(const string &identifier) {
         return insertConst(identifier, ++enumCount);
     }
-    bool insertVar(const string &identifier, const Type &x) {
+    bool insertVar(const string &identifier, const Type &x, bool isParameter = false) {
         if (varSymbolTable.find(identifier) != varSymbolTable.end()) {
             return true;
         }
         varSymbolTable[identifier] = x;
-        varSequence.push_back(identifier);
+        if (!isParameter) {
+            varSequence.push_back(identifier);
+        }
         return false;
     }
     bool insertConst(const string &identifier, Value x) {
@@ -108,9 +110,10 @@ public:
     Type findFunc(const string &x) {
         auto y = funcSymbolTable.find(x);
         if (y != funcSymbolTable.end()) {
-            auto type = Type(vector<Type>(), Type());
+            auto ptype = Type(vector<Type>(), Type());
+            auto ftype = Type(vector<Type>(), Type(), true);
             for (const auto &t: y->second) {
-                if (t == type) {
+                if (t == ptype || t == ftype) {
                     return t;
                 }
             }
@@ -120,9 +123,10 @@ public:
     Type findFunc(const string &x, const vector<Type> &typeList) {
         auto y = funcSymbolTable.find(x);
         if (y != funcSymbolTable.end()) {
-            auto type = Type(typeList, Type());
+            auto ptype = Type(typeList, Type());
+            auto ftype = Type(typeList, Type(), true);
             for (const auto &t: y->second) {
-                if (t == type) {
+                if (t == ptype || t == ftype) {
                     return t;
                 }
             }
