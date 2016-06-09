@@ -790,7 +790,7 @@ void routineAnalysis(NODE* root) {
             assert(routineNode->child[1]->type == TK_ROUTINE);
 #endif
             parseFPType(routineNode->child[0], routineNode->type == TK_FUNC_DECL);
-            symbolTableList.push_front(new SymbolTable(symbolTableList.front()));
+            symbolTableList.push_front(new SymbolTable(symbolTableList.front(), routineNode->child[0]->child[0]->name));
             prepareForFP(routineNode->child[0]);
             routineAnalysis(routineNode->child[1]);
             symbolTableList.pop_front();
@@ -809,7 +809,7 @@ void routineAnalysis(NODE* root) {
 void semanticAnalysis(NODE* ROOT) {
     if (ROOT != NULL) {
         symbolTableList.push_front(nullptr);
-        symbolTableList.push_front(new SymbolTable(symbolTableList.front()));
+        symbolTableList.push_front(new SymbolTable(symbolTableList.front(), "__root__"));
         sa_init();
         routineAnalysis(ROOT->child[1]);
         symbolTableList.pop_front();

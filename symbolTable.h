@@ -20,6 +20,7 @@ public:
     SymbolTable* nextSymbolTable;
     unordered_map<string, Value> constSymbolTable;
     unordered_map<string, Type> varSymbolTable;
+    vector<string> varSequence;
     unordered_map<string, Type> typeSymbolTable;
     unordered_map<string, vector<Type>> funcSymbolTable;
     // the following data structures are used to check goto labels' validity
@@ -27,8 +28,9 @@ public:
     unordered_map<int, NODE*> labelMap;
 
     int enumCount;
+    string name;
 //    set<string> enumSet;
-    SymbolTable(SymbolTable* _next = nullptr) {nextSymbolTable = _next; enumCount = 0;}
+    SymbolTable(SymbolTable* _next, const string &_name): name(_name) {nextSymbolTable = _next; enumCount = 0;}
     int insertType(string identifier, const Type &x) {
         // NOTE: here we treat type override is legal
 //        if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
@@ -52,6 +54,7 @@ public:
             return true;
         }
         varSymbolTable[identifier] = x;
+        varSequence.push_back(identifier);
         return false;
     }
     bool insertConst(const string &identifier, Value x) {
