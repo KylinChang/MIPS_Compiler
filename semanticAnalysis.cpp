@@ -95,7 +95,7 @@ void sa_init() {
 
 bool typeMatch(const Type &a, const Type &b) {
     if (a.isSimpleType && b.isSimpleType) {
-        if (a.simpleType->simpleType == b.simpleType->simpleType && a.simpleType->simpleType != type_string) {
+        if (a.simpleType->simpleType == b.simpleType->simpleType) {
             return true;
         } else if ((a.simpleType->simpleType == type_integer || a.simpleType->simpleType == type_real) &&
                    (b.simpleType->simpleType == type_integer || b.simpleType->simpleType == type_real)) {
@@ -172,7 +172,7 @@ void prepareForFP(NODE* root) {
 #endif
             Type t = parseType(x->child[1]);
             for (int j = 0; j < x->child[0]->child_number; j++) {
-                if (symbolTableList.front()->insertVar(x->child[0]->child[j]->name, t)) {
+                if (symbolTableList.front()->insertVar(x->child[0]->child[j]->name, t, true)) {
                     LOGERR(4, "error in line", to_string(x->lineno).c_str(), ":", "duplicate variable name");
                 }
             }
@@ -223,6 +223,9 @@ Type parseType(NODE* root) {
         if (a.type != b.type) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range data type mismatch");
         }
+        if (b < a) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "illegal range");
+        }
         return Type(a.type, a, b);
     } else if (root->type == TK_STD_DD_ID) {
         // NOTE: here a and b must be const
@@ -232,6 +235,12 @@ Type parseType(NODE* root) {
         }
         if (a.type == type_string || a.type == type_real) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unsupported range data type");
+        }
+        if (root->child[0]->type == TK_ID_MINUS) {
+            a.ival = -a.ival;
+        }
+        if (root->child[1]->type == TK_ID_MINUS) {
+            b.ival = -b.ival;
         }
         if (b < a) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "lhs value must be smaller than rhs value in range");
@@ -315,7 +324,13 @@ void varAnalysis(NODE** varList, int varListNum) {
 }
 
 Type upcast(const Type &a, const Type &b) {
-    // assume a and b are both simple type and not string and char
+    // assume a and b are both simple type
+    if (a.simpleType->simpleType == type_string && b.simpleType->simpleType == type_string) {
+        return Type("string");
+    }
+    if (a.simpleType->simpleType == type_char && b.simpleType->simpleType == type_char) {
+        return Type("char");
+    }
     if (a.simpleType->simpleType == type_integer && b.simpleType->simpleType == type_integer) {
         if (a.simpleType->intType == t_int64 || a.simpleType->intType == t_qword || b.simpleType->intType == t_int64 || b.simpleType->intType == t_qword) {
             return Type("int64");
@@ -603,6 +618,7 @@ void statementAnalysis(NODE* root) {
                         break;
                     }
                     rhst = upcast(lhst, rhst);
+
                     if (lhst < rhst) {
                         LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
                     } else if (rhst < lhst) {
@@ -693,7 +709,7 @@ void statementAnalysis(NODE* root) {
                 }
                 break;
             case TK_PROC_READ:
-                // TODO
+            case TK_PROC_READLN:
                 factorAnalysis(root->child[1]);
                 break;
             default:
@@ -816,18 +832,18 @@ void semanticAnalysis(NODE* ROOT) {
     }
 }
 
-// int main(int argc, char** argv){
-// //    char FILENAME[100];
-// //    printf("Please input the test file: ");
-// //    scanf("%s", FILENAME);
+ int main(int argc, char** argv){
+ //    char FILENAME[100];
+ //    printf("Please input the test file: ");
+ //    scanf("%s", FILENAME);
 
-//     FILE* file = fopen("./TestCases/test9.pas", "r");
-//     yyin = file;
+     FILE* file = fopen("./TestCases/test10.pas", "r");
+     yyin = file;
 
-//     node_init();
-//     yyparse();
+     node_init();
+     yyparse();
 
-//     semanticAnalysis(ROOT);
+     semanticAnalysis(ROOT);
 
-//     return 0;
-// }
+     return 0;
+ }

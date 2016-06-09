@@ -103,8 +103,11 @@ int SimpleType::size() {
         case type_char:
             return 1;
         case type_string:
-            assert(0);
-            break;
+            // NOTE: here we return a pointer size
+            return 12;
+            LOGERR(1, "error: cannot determine string's size in semantic analysis phase");
+//            assert(0);
+//            break;
     }
 }
 
@@ -207,7 +210,10 @@ Type::Type(const vector<Type> &argListType, const Type &retType, int isFunc) {
 
 bool Type::operator <(const Type &o) const {
     // NOTE: here we just check for simple type
-    assert(this->isSimpleType && o.isSimpleType && this->simpleType->simpleType == o.simpleType->simpleType);
+    assert(this->isSimpleType && o.isSimpleType);
+    if (this->simpleType->simpleType == type_integer && o.simpleType->simpleType == type_real) {
+        return true;
+    }
     /* integer:
      * byte <= short < word <= small < dword <= longint < qword <= int64
      * real:
