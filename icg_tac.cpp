@@ -331,6 +331,7 @@ string getName(piv a) {
 		return a.second;
 	}
 	else if (a.first == 5) {  // 存储在栈上的局部变量
+	//haha
 	}
 }
 void output(string s) {
