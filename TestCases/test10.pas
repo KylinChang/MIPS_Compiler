@@ -1,4 +1,4 @@
-program test9;
+program test10;
 
 const
     haha = true;
@@ -8,7 +8,9 @@ const
     LARGE = 10000202020202;
 
 type
-    arr = array[1..10] of integer;
+    arr1 = array[1..10] of integer;
+	arr2 = array[-1..10] of integer;
+	arr3 = array[-10..-1] of integer;
     car = record
             number : string;
             legal : boolean;
@@ -17,7 +19,7 @@ type
 
 var
     a, b, c, n:integer;
-    arr_var: arr;
+    arr_var: arr1;
     hhh : integer;
     book: record
         title : integer;
@@ -85,8 +87,8 @@ begin
     test_str1 := book.content;
 
     begin
-        a:=a*2+3-4;
-        b:=(a-b)*(3+4*5);
+        a:=a*2+-3--4;
+        b:=(-a-b)*(3+4*5);
         c:=2;
     end;
 
@@ -97,16 +99,16 @@ begin
 	if (a+8*9 <> b) then
 		c:=a;
 
- 	hhh := (a+b+c) * a + 1+2*3 + 4*a/2;
+ 	hhh := (a+b+c) * a + 1+-2*3 + 4*a/2;
 
 	findMin(a,b,c);
 
 
-        for a:= 1+2 to 100 do begin
+        for a:= -1+2 to 100 do begin
             c:= c + 2+8*9/3;	
 	end;
 
-	for b:= a+100*10 downto 1 do begin
+	for b:= a+100*10 downto -1 do begin
             c:= c + 2+8*9/3;	
 	end;
    
