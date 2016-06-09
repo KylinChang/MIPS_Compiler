@@ -2,25 +2,49 @@
 #include <queue>
 #include <sstream>
 #include "common.h"
+#include "symbolTable.h"
 #include "yy.tab.hpp"
 using namespace std;
 
 /*
 	下面符号，意义和C++中的一样。
-		+ - * /
+		运算符： + - * | & %
 		地址操作符(可在赋值号左边或右边)： & *
 		< <= > >=
+	
+	不太一样的操作符：
+		DIV					整数除
+		/					浮点除
+	
 
-	read x				读入整数x
-	elem_size(...)		返回变量的本身占用的字节长度
-	field_offset(x,a)	返回a变量在x结构中的offset
-		
+	三地址码定义：
+		read x					读入变量x
+		elem_size(...)			返回变量的本身占用的字节长度
+		field_offset(x,a)		返回a变量在x结构中的offset
+		malloc a 16				给a数组分配一个16字节的内存
+		string s0 "..."			字符串定义
+
+		变量定义(大括号中的项目是必填的)：
+			{Type} a {value} local f
+			{Type} a {value} global
+	
 	pascal参数传递顺序：
 		1.参数按出现顺序，从左至右地进栈。
     	2.被调用函数在返回调用前负责栈的平衡。
+	
+	关于常量：
+		true和false直接翻译成1、0。
 */
 
 /*
+	t2 = a[t1]
+	->
+		t3 = t1 - {start_position_of(a)};    //这里start_position_of(a)会直接给出一个整数
+		t3 = t3 * {elem_size(a)};  //这里elem_size(a)会直接给出一个整数
+		t3 = a + t3
+		t2 = *t3
+
+
 	if (E) S1 else S2
 	->
 		<code to evaluate E to t1>
@@ -116,7 +140,7 @@ struct Error {
 	Error(string msg):msg(msg) {}
 };
 
-// struct Value {
+// struct _Value {
 // 	enum Type { INTEGER, FLOAT, CHAR, STRING };
 // 	int type;
 // 	struct Val {
@@ -125,56 +149,56 @@ struct Error {
 // 		char c;
 // 		string s;
 // 	} val;
-// 	Value():type(-1) {}
-// 	Value(int a):type(INTEGER) { val.i = a; }
-// 	Value(double a):type(FLOAT) { val.d = a; }
-// 	Value(char a):type(CHAR) { val.c = a; }
-// 	Value(string a):type(STRING) { val.s = a; }
-// 	Value(char *a,int d=0):type(STRING) {
+// 	_Value():type(-1) {}
+// 	_Value(int a):type(INTEGER) { val.i = a; }
+// 	_Value(double a):type(FLOAT) { val.d = a; }
+// 	_Value(char a):type(CHAR) { val.c = a; }
+// 	_Value(string a):type(STRING) { val.s = a; }
+// 	_Value(char *a,int d=0):type(STRING) {
 // 		val.s = string(a);
 // 		if (d) delete a;
 // 	}
 // };
-// inline Value operator+(const Value &a, const Value &b) {
-// 	if (a.type == Value::INTEGER) {
-// 		if (b.type == Value::INTEGER)
-// 			return Value(a.val.i + b.val.i);
-// 		else if (b.type == Value::FLOAT)
-// 			return Value(a.val.i + b.val.d);
-// 		else if (b.type == Value::CHAR)
-// 			return Value(a.val.i + b.val.c);
-// 		else //if (b.type == Value::STRING)
-// 			return Value(a.val.i + b.val.s);
+// inline _Value operator+(const _Value &a, const _Value &b) {
+// 	if (a.type == _Value::INTEGER) {
+// 		if (b.type == _Value::INTEGER)
+// 			return _Value(a.val.i + b.val.i);
+// 		else if (b.type == _Value::FLOAT)
+// 			return _Value(a.val.i + b.val.d);
+// 		else if (b.type == _Value::CHAR)
+// 			return _Value(a.val.i + b.val.c);
+// 		else //if (b.type == _Value::STRING)
+// 			return _Value(a.val.i + b.val.s);
 // 	}
-// 	else if (a.type == Value::FLOAT) {
-// 		if (b.type == Value::INTEGER)
-// 			return Value(a.val.d + b.val.i);
-// 		else if (b.type == Value::FLOAT)
-// 			return Value(a.val.d + b.val.d);
-// 		else if (b.type == Value::CHAR)
-// 			return Value(a.val.d + b.val.c);
-// 		else //if (b.type == Value::STRING)
-// 			return Value(a.val.d + b.val.s);
+// 	else if (a.type == _Value::FLOAT) {
+// 		if (b.type == _Value::INTEGER)
+// 			return _Value(a.val.d + b.val.i);
+// 		else if (b.type == _Value::FLOAT)
+// 			return _Value(a.val.d + b.val.d);
+// 		else if (b.type == _Value::CHAR)
+// 			return _Value(a.val.d + b.val.c);
+// 		else //if (b.type == _Value::STRING)
+// 			return _Value(a.val.d + b.val.s);
 // 	}
-// 	else if (a.type == Value::CHAR) {
-// 		if (b.type == Value::INTEGER)
-// 			return Value(a.val.c + b.val.i);
-// 		else if (b.type == Value::FLOAT)
-// 			return Value(a.val.c + b.val.d);
-// 		else if (b.type == Value::CHAR)
-// 			return Value(a.val.c + b.val.c);
-// 		else //if (b.type == Value::STRING)
-// 			return Value(a.val.c + b.val.s);
+// 	else if (a.type == _Value::CHAR) {
+// 		if (b.type == _Value::INTEGER)
+// 			return _Value(a.val.c + b.val.i);
+// 		else if (b.type == _Value::FLOAT)
+// 			return _Value(a.val.c + b.val.d);
+// 		else if (b.type == _Value::CHAR)
+// 			return _Value(a.val.c + b.val.c);
+// 		else //if (b.type == _Value::STRING)
+// 			return _Value(a.val.c + b.val.s);
 // 	}
-// 	else if (a.type == Value::STRING) {
-// 		if (b.type == Value::INTEGER)
-// 			return Value(a.val.s + b.val.i);
-// 		else if (b.type == Value::FLOAT)
-// 			return Value(a.val.s + b.val.d);
-// 		else if (b.type == Value::CHAR)
-// 			return Value(a.val.s + b.val.c);
-// 		else //if (b.type == Value::STRING)
-// 			return Value(a.val.s + b.val.s);
+// 	else if (a.type == _Value::STRING) {
+// 		if (b.type == _Value::INTEGER)
+// 			return _Value(a.val.s + b.val.i);
+// 		else if (b.type == _Value::FLOAT)
+// 			return _Value(a.val.s + b.val.d);
+// 		else if (b.type == _Value::CHAR)
+// 			return _Value(a.val.s + b.val.c);
+// 		else //if (b.type == _Value::STRING)
+// 			return _Value(a.val.s + b.val.s);
 // 	}
 // }
 inline string operator+(const int &a, const string &b) {
@@ -202,7 +226,7 @@ string toString(int a) {
 	return s;
 }
 
-struct Value {
+struct _Value {
 	enum Type {
 		INTEGER, FLOAT, CHAR, STRING, Variable,
 		MYINT, MYSTRING
@@ -213,19 +237,19 @@ struct Value {
 		double d;
 		char c;
 		int strid;
-		string var;
+		string varName;
 	} val;
 	int i;
 	string s;
-	Value():type(-1) {}
-	Value(int a):type(INTEGER) { val.i = a; }
-	Value(double a):type(FLOAT) { val.d = a; }
-	Value(char a):type(CHAR) { val.c = a; }
-	Value(string a):type(Variable) { val.var = a; }
+	_Value():type(-1) {}
+	_Value(int a):type(INTEGER) { val.i = a; }
+	_Value(double a):type(FLOAT) { val.d = a; }
+	_Value(char a):type(CHAR) { val.c = a; }
+	_Value(string a):type(Variable) { val.varName = a; }
 	
-	Value(int a, int d):type(MYINT),i(a) {}
-	Value(char *s, int d):type(MYSTRING),s(s) {}
-	Value(string s, int d) { Value(s.c_str()); }
+	_Value(int a, int d):type(MYINT),i(a) {}
+	_Value(char *s, int d):type(MYSTRING),s(s) {}
+	_Value(string s, int d) { _Value(s.c_str()); }
 	
 	operator string() {
 		stringstream ss;
@@ -234,7 +258,7 @@ struct Value {
 			case FLOAT: ss<<val.d; break;
 			case CHAR: ss<<val.c; break;
 			//case STRING: ... break;  // TO-DO
-			case Variable: ss<<val.var; break;
+			case Variable: ss<<val.varName; break;
 			case MYINT: ss<<i; break;
 			case MYSTRING: ss<<s; break;
 			default: break;
@@ -245,11 +269,10 @@ struct Value {
 	int toInt() {
 		//if (type == INTEGER) return val.i;
 		if (type == MYINT) return i;
-		throw Error("Value cast value: Current value is not an integer");
+		throw Error("_Value cast value: Current value is not an integer");
 	}
 };
-typedef pair<int, Value> piv;
-
+typedef pair<int, _Value> piv;
 
 struct TempVars {
 	static int ind;
@@ -267,11 +290,13 @@ struct TempVars {
 	static void release(int TempVar) {
 		idleTemp.push(TempVar);
 	}
-	static void release(pair<int, Value> a) {
+	static void release(pair<int, _Value> a) {
 		if (a.first == 0) release(a.second.toInt());
 	}
 };
 int TempVars::ind = 0;
+
+static int stringVars = 0;
 
 struct Label {
 	static int ind;
@@ -287,12 +312,13 @@ string getName(piv a) {
 		return a.second;
 	}
 	else if (a.first == 2) {  // 代码里(符号表里)的变量 (可能带的是变量名、函数名、Program名)
-		// TO-DO
+		return '_' + string(a.second);
 	}
-	else if (a.first == 3) {  // 符号表里的字符串常量
-		// TO-DO
+	else if (a.first == 3) {  // 字符串常量
+		return 's' + string(a.second);
 	}
 	else if (a.first == 4) {  // 其他情况(不依靠符号表，强行生成代码)
+		return a.second;
 	}
 }
 void output(string s) {
@@ -372,15 +398,13 @@ void chkOpnd(piv a, string side, string op) {
 void chkOpnd(piv a, string side, char op) {
 	chkOpnd(a, side, string("") + '\'' + op + '\'');
 }
-void genSymbolTable() {  // TO-DO
-}
 
 // /*  返回当前的计算值放在哪个临时变量中  **
 // **  返回-1表示当前表达式不产生返回值   */
 #define SON(d) ((t)->child[(d)])
 static piv getTempVar(piv a) {
 	if (a.first == 0) return a;
-	piv c = mp(0, Value(TempVars::getAnother()));
+	piv c = mp(0, _Value(TempVars::getAnother()));
 	output(c, "=", a);
 	return c;
 }
@@ -392,36 +416,42 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		switch (t->type) {
 		/*  常量  */
 		case TK_REAL:
-			return mp(1, Value(t->dval));
+			return mp(1, _Value(t->value.dval));
 			break;
 		case TK_INTEGER:
-			return mp(1, Value(t->ival));
+			return mp(1, _Value(t->value.ival));
 			break;
 		case TK_CHAR:
-			return mp(1, Value(t->ch));
+			return mp(1, _Value(t->value.cval));
 			break;
-		// case TK_STRING:
-		// 	return mp(3, Value());  // TO-DO
-		// 	break;
-		// case TK_SYS_CON:
-		// 	return mp(1, );
-		// 	break;
+		case TK_STRING:
+			a = mp(3, _Value(stringVars++));
+			output("string " + string(a.second) + " " + "\"" + t->value.sval + "\"");
+			return a;
+			break;
+		case TK_SYS_CON:
+			if (t->value.type == type_integer) a = mp(1, _Value(t->value.ival));
+			else if (t->value.type == type_real) a = mp(1, _Value(t->value.dval));
+			else if (t->value.type == type_boolean) a = mp(1, _Value(t->value.bval));
+			else if (t->value.type == type_char) a = mp(1, _Value(t->value.cval));
+			return a;
+			break;
 		case TK_SYS_PROC:
-			return mp(4, Value(t->name, TK_SYS_PROC));
+			return mp(4, _Value(t->name, TK_SYS_PROC));
 			break;
 		case TK_READ:
-			return mp(4, Value(t->name, TK_READ));
+			return mp(4, _Value(t->name, TK_READ));
 			break;
 		case TK_TO:
-			return mp(4, Value(t->name, TK_TO));
+			return mp(4, _Value(t->name, TK_TO));
 			break;
 		case TK_DOWNTO:
-			return mp(4, Value(t->name, TK_DOWNTO));
+			return mp(4, _Value(t->name, TK_DOWNTO));
 			break;
 		
 		/*  变量  */
 		case TK_ID:
-			return mp(2, Value(t->name));  //TO-DO 目前还不知道是哪种变量
+			return mp(2, _Value(t->name));
 			break;
 
 		/*  操作符  */
@@ -434,12 +464,6 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		case TK_MINUS:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '-');  chkOpnd(b, "Right", '-');
-			output(c=mp(0, TempVars::getAnother()), a, "-", b);  // TO-DO a=a+b??
-			TempVars::release(a); TempVars::release(b); return c;
-			break;
-		case TK_FACTOR_MINUS:
-			a = genCode(t->child[0]);
-			chkOpnd(a, "Left", "factor minus operator '-'");
 			output(c=mp(0, TempVars::getAnother()), a, "-", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
@@ -457,22 +481,26 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_DIV:
-			// TO-DO 浮点除
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'DIV'");  chkOpnd(b, "Right", "'DIV'");
 			output(c=mp(0, TempVars::getAnother()), a, "DIV", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
+		case TK_REM:
+			a = genCode(t->child[0]), b = genCode(t->child[1]);
+			output(c=mp(0, TempVars::getAnother()), a, "/", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
+			break;
 		case TK_MOD:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
-			chkOpnd(a, "Left", "'MOD'");  chkOpnd(b, "Right", "'MOD'");
-			output(c=mp(0, TempVars::getAnother()), a, "MOD", b);  // TO-DO a=a+b??
+			chkOpnd(a, "Left", "'MOD'");  chkOpnd(b, "%", "'MOD'");
+			output(c=mp(0, TempVars::getAnother()), a, "%", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_AND:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'AND'");  chkOpnd(b, "Right", "'AND'");
-			output(c=mp(0, TempVars::getAnother()), a, "AND", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother()), a, "&", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 			
@@ -514,7 +542,7 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			break;
 		case TK_STMT_LABEL:  /*  stmt其实不需要一个返回值  */
 			a = genCode(t->child[0]);
-			a.first!=1||a.second.type!=Value::INTEGER ? throw Error("Wrong syntax tree under TK_STMT, above TK_INTEGER"): 0;
+			a.first!=1||a.second.type!=_Value::INTEGER ? throw Error("Wrong syntax tree under TK_STMT, above TK_INTEGER"): 0;
 			output("Label LUER" + string(a.second));
 			return genCode(t->child[1]);
 			break;
@@ -528,11 +556,18 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			output(c, "=", a);
 			TempVars::release(a); return c;
 			break;
-		// case TK_ASSIGN_ID_EXPR:  //TO-DO  P321 数组计算的时候还要考虑lower_bound
-		// 	c = genCode(SON(0)); b = genCode (SON(1)); a = genCode (SON(2));
-		// 	b = getTempVar(b);
-		// 	//TempVars::release(a); TempVars::release(b); TempVars::release(c);
-		// 	break;
+		case TK_ASSIGN_ID_EXPR:  //TO-DO  P321 数组计算的时候还要考虑lower_bound
+			a = genCode(SON(0));  b = genCode(SON(1));  x = genCode(SON(1));
+			output(tmp, b, "-", string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.start)));
+			//output(string((d=mp(0, TempVars::getAnother())).second) + " = " + string(tmp.second) + " * " + "elem_size(" + string(a.second) + ")");
+			output(string((tmp=mp(0, TempVars::getAnother())).second)
+							+ " = " + string(tmp.second)
+								+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
+			output(tmp, a, "+", tmp);
+			output(string("*" + string(tmp.second) + " = " + string(x.second));
+			output(string((c=mp(0, TempVars::getAnother())).second) + " = *" + string(tmp.second));
+			TempVars::release(b); TempVars::release(x); TempVars::release(tmp); return c;
+			break;
 		// case TK_ASSIGN_DD:  //TO-DO
 		// 	break;
 		
@@ -670,7 +705,7 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			break;
 		//goto_stmt
 		case TK_GOTO:
-			output("goto LUER" + toString(t->ival));
+			output("goto LUER" + toString(t->value.ival));
 			break;
 			
 		//args_list
@@ -705,42 +740,47 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		
 		//expression  //TO-DO
 		case TK_GE:
-			a = genCode(SON(0));
-			if (SON(1)) b = genCode(SON(1));
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(c=mp(0, TempVars::getAnother()), a, ">=", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_GT:
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(c=mp(0, TempVars::getAnother()), a, ">", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_LE:
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(c=mp(0, TempVars::getAnother()), a, "<=", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_LT:
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(c=mp(0, TempVars::getAnother()), a, "<", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_EQUAL:
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(c=mp(0, TempVars::getAnother()), a, "==", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_UNEQUAL:
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(c=mp(0, TempVars::getAnother()), a, "!=", b);  // TO-DO a=a+b??
+			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_EXP:
+			return genCode(SON(0));
 			break;
 		
-		//expr  //TO-DO
-		case TK_PLUS:
-			break;
-		case TK_MINUS:
-			break;
-		case TK_OR:
-			break;
+		//expr
 		case TK_EXPR:
+			return genCode(SON(0));
 			break;
 		
 		//term  //TO-DO
-		case TK_MUL:
-			break;
-		case TK_DIV:
-			break;
-		case TK_MOD:
-			break;
-		case TK_AND:
-			break;
 		case TK_TERM:
+			return genCode(SON(0));
 			break;
 		
 		//factor
@@ -770,18 +810,26 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		case TK_FACTOR_NOT:
 			a = genCode(SON(0));
 			output(tmp=mp(0, TempVars::getAnother()), "= NOT", a);
-			TempVars::release(a);
+			TempVars::release(a);  return tmp;
 			break;
 		case TK_FACTOR_MINUS:
 			a = genCode(SON(0));
 			output(tmp=mp(0, TempVars::getAnother()), "= -", a);
-			TempVars::release(a);
+			TempVars::release(a);  return tmp;
 			break;
 		case TK_FACTOR_ID_EXP:
-			//需要得到数组的每个元素的字节长度 TO-DO
+			a = genCode(SON(0));  b = genCode(SON(1));
+			output(tmp, b, "-", string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.start)));
+			//output(string((d=mp(0, TempVars::getAnother())).second) + " = " + string(tmp.second) + " * " + "elem_size(" + string(a.second) + ")");
+			output(string((tmp=mp(0, TempVars::getAnother())).second)
+							+ " = " + string(tmp.second)
+								+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
+			output(tmp, a, "+", tmp);
+			output(string((c=mp(0, TempVars::getAnother())).second) + " = *" + string(tmp.second));
+			TempVars::release(b); TempVars::release(tmp); return c;
 			break;
 		case TK_FACTOR_DD:
-			//?? TO-DO
+			// TO-DO
 			break;
 			
 		//procedure??
@@ -791,19 +839,16 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		case TK_SYS_TYPE:
 			break;
 			
-		case TK_PROGRAM_HEAD:
-			//??
-			break;
 		case TK_PROGRAM:
-			//??
+			//暂时不做处理
+			break;
+		case TK_PROGRAM_HEAD:
+			//暂时不做处理
 			break;
 		case TK_ROUTINE_HEAD:
 			//??
 			break;
 		case TK_CONST_PART:
-			//??
-			break;
-		case TK_CONST_EL:
 			//??
 			break;
 		default:

@@ -1428,7 +1428,7 @@ factor : TK_ID{
         $$->child = MALLOC($$,1);
         $$->child[0] = $1;
         $$->lineno = $1->lineno;
-        $1->record = $2;
+        $1->record = $3;
     }
     ;
 
