@@ -147,6 +147,25 @@ bool FPType::operator==(const FPType &o) const {
 }
 
 
+int ComplexType::size() {
+    int ret = 0;
+    switch (complexType) {
+        case type_array:
+            return arrayType.elementSize * (arrayType.end - arrayType.start + 1);
+        case type_record:
+            for (auto &x: recordType.attrType) {
+                ret += x.second.size();
+            }
+            return ret;
+        case type_range:
+        case type_enum:
+        case type_func:
+        case type_proc:
+            assert(0);
+    }
+    return 0;
+}
+
 Type::Type(const Type &o) {
     null = o.null;
     isSimpleType = o.isSimpleType;
@@ -233,6 +252,11 @@ bool Type::operator ==(const Type &o) const {
     } else {
         return false;
     }
+}
+
+int Type::size() {
+    assert(!null);
+    return isSimpleType ? simpleType->size() : complexType->size();
 }
 
 

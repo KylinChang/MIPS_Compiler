@@ -109,6 +109,7 @@ public:
 
     bool operator <(const Type &o) const;
     bool operator ==(const Type &o) const;
+	int size();
 
 	bool null;
 	bool isSimpleType;
@@ -212,6 +213,7 @@ public:
 	ComplexType(const vector<Type> &argTypeList, Type retType, int isFunc = 0): fpType(argTypeList, retType) {
 		complexType = isFunc ? type_func : type_proc;
 	}
+	int size();
 	ComplexTypeEnum complexType;
 	EnumType enumType;
 	RecordType recordType;
