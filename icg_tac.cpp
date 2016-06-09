@@ -4,6 +4,7 @@
 #include "common.h"
 #include "symbolTable.h"
 #include "yy.tab.hpp"
+#include "icg_tac.h"
 using namespace std;
 
 /*
@@ -37,6 +38,11 @@ using namespace std;
 			load int
 			load float
 			load double
+		
+		输入输出：
+			write
+			writeln
+		
 		
 	pascal参数传递顺序：
 		1.参数按出现顺序，从左至右地进栈。
@@ -145,10 +151,7 @@ using namespace std;
 
 #define mp make_pair
 
-struct Error {
-	string msg;
-	Error(string msg):msg(msg) {}
-};
+Error::Error(string msg):msg(msg) {}
 
 // struct _Value {
 // 	enum Type { INTEGER, FLOAT, CHAR, STRING };
@@ -236,53 +239,37 @@ string toString(int a) {
 	return s;
 }
 
-struct _Value {
-	enum Type {
-		INTEGER, FLOAT, CHAR, STRING, Variable,
-		MYINT, MYSTRING
-	};
-	int type;
-	struct Val {
-		int i;
-		double d;
-		char c;
-		int strid;
-		string varName;
-	} val;
-	int i;
-	string s;
-	_Value():type(-1) {}
-	_Value(int a):type(INTEGER) { val.i = a; }
-	_Value(double a):type(FLOAT) { val.d = a; }
-	_Value(char a):type(CHAR) { val.c = a; }
-	_Value(string a):type(Variable) { val.varName = a; }
-	
-	_Value(int a, int d):type(MYINT),i(a) {}
-	_Value(char *s, int d):type(MYSTRING),s(s) {}
-	_Value(string s, int d) { _Value(s.c_str()); }
-	
-	operator string() {
-		stringstream ss;
-		switch (type) {
-			case INTEGER: ss<<val.i; break;
-			case FLOAT: ss<<val.d; break;
-			case CHAR: ss<<val.c; break;
-			//case STRING: ... break;  // TO-DO
-			case Variable: ss<<val.varName; break;
-			case MYINT: ss<<i; break;
-			case MYSTRING: ss<<s; break;
-			default: break;
-		}
-		string s; ss>>s;
-		return s;
+
+_Value::_Value():type(-1) {}
+_Value::_Value(int a):type(INTEGER) { val.i = a; }
+_Value::_Value(double a):type(FLOAT) { val.d = a; }
+_Value::_Value(char a):type(CHAR) { val.c = a; }
+_Value::_Value(string a):type(Variable) { val.varName = a; }
+
+_Value::_Value(int a, int d):type(MYINT),i(a) {}
+_Value::_Value(char *s, int d):type(MYSTRING),s(s) {}
+_Value::_Value(string s, int d) { _Value(s.c_str()); }
+
+_Value::operator string() {
+	stringstream ss;
+	switch (type) {
+		case INTEGER: ss<<val.i; break;
+		case FLOAT: ss<<val.d; break;
+		case CHAR: ss<<val.c; break;
+		//case STRING: ... break;  // TO-DO
+		case Variable: ss<<val.varName; break;
+		case MYINT: ss<<i; break;
+		case MYSTRING: ss<<s; break;
+		default: break;
 	}
-	int toInt() {
-		//if (type == INTEGER) return val.i;
-		if (type == MYINT) return i;
-		throw Error("_Value cast value: Current value is not an integer");
-	}
-};
-typedef pair<int, _Value> piv;
+	string s; ss>>s;
+	return s;
+}
+int _Value::toInt() {
+	//if (type == INTEGER) return val.i;
+	if (type == MYINT) return i;
+	throw Error("_Value cast value: Current value is not an integer");
+}
 
 struct TempVars {
 	static int ind;
@@ -305,6 +292,7 @@ struct TempVars {
 	}
 };
 int TempVars::ind = 0;
+priority_queue<int, vector<int>, greater<int> > TempVars::idleTemp;
 
 static int stringVars = 0;
 
@@ -359,13 +347,15 @@ void output(vector<string> ss) {
 	for (int i=0; i<ss.size(); i++)
 		printf("%s\n", ss[i].c_str());
 }
-// piv output(NODE *t, piv a) {  //临时变量装载
-// 	// if (a.first != 5) return a;
-// 	// piv t0 = mp(0, TempVars::getAnother()), t1 = mp(0, TempVars::getAnother());
-// 	// output(string(t0.second) + " = rsp + " + ..);  //计算时要注意数组和record的情况，还得判断是不是函数本身
-// 	// output(string("") + "load " + t->.. + " " + string(t1.second) + " " + string(a.second));
-// 	// TempVars::release(a); return t1;
-// }
+piv output(NODE *t, piv a) {  //临时变量装载
+	// if (a.first != 5) return a;
+	// piv t0 = mp(0, TempVars::getAnother()), t1 = mp(0, TempVars::getAnother());
+	// t->symbolTable->findFunc();
+	
+	// output(string(t0.second) + " = bsp - " + ..);  //计算时要注意数组和record的情况，还得判断是不是函数本身
+	// output(string("") + "load " + string(t->dataType） + " " + string(t1.second) + " " + string(a.second));
+	// TempVars::release(a); return t1;
+}
 string _output(string s) {  //没有自带回车
 	return s;
 }
@@ -415,7 +405,8 @@ struct CaseParse {
 		scases[scases.size() - 1].push_back(CaseExpr(a, label));
 	}
 };
-
+vector<vector<CaseExpr> > CaseParse::scases;
+int CaseParse::endLabel;
 
 
 void chkOpnd(piv a, string side, string op) {
@@ -434,8 +425,10 @@ static piv getTempVar(piv a) {
 	output(c, "=", a);
 	return c;
 }
-piv genCode(NODE *t, int extraMsg=-1) {
+extern map<int, string> NODE_NAMES;
+piv genCode(NODE *t, int extraMsg) {
 	if (t) {
+	cout<<NODE_NAMES[t->type]<<endl;
 		piv a, b, c;
 		piv x, d, tmp;
 		int w1, w2, ww;
@@ -477,7 +470,7 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		
 		/*  变量  */
 		case TK_ID:
-			// if (..是局部变量)
+			// if (t->symbolTable->nextSymbolTable != nullptr)
 			// 	return output(t, mp(5, _Value(t->name)));
 			// else
 				return mp(2, _Value(t->name));
@@ -578,10 +571,8 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			}
 			break;
 		case TK_STMT_LIST:
-			if (t->child[0]) {
-				genCode(t->child[0]);
-				return genCode(t->child[1]);
-			}
+			for (int i=0; i<t->child_number; i++)
+				genCode(SON(i));
 			break;
 		case TK_STMT_LABEL:  /*  stmt其实不需要一个返回值  */
 			a = genCode(t->child[0]);
@@ -592,8 +583,13 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		case TK_STMT:
 			return genCode(t->child[0]);
 			break;
+		//assign_stmt
+		case TK_STMT_ASSIGN:
+			genCode(SON(0));
+			break;
 		case TK_ASSIGN_ID:
 			c = genCode(SON(0)); a = genCode(SON(1));
+			cout<<NODE_NAMES[t->type]<<" back"<<endl;
 			c.first!=2 ? throw Error("L-value must be a changeable variable"): 0;
 			a.first==-1 ? throw Error("R-value must not be empty"): 0;
 			output(c, "=", a);
@@ -883,6 +879,7 @@ piv genCode(NODE *t, int extraMsg=-1) {
 			break;
 			
 		case TK_PROGRAM:
+			genCode(SON(1));
 			//暂时不做处理
 			break;
 		case TK_PROGRAM_HEAD:
@@ -897,9 +894,10 @@ piv genCode(NODE *t, int extraMsg=-1) {
 		default:
 			break;
 		}
+		cout<<NODE_NAMES[t->type]<<" back"<<endl;
 	}
 	else {
-		throw Error("This syntax tree has errors, parsing has to stop.");
+		throw Error("Unexpected null pointer of the syntax tree, parsing has to stop.");
 		exit(0);
 	}
 	return mp(-1, 0);

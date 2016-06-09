@@ -38,4 +38,6 @@ void statementListAnalysis(NODE* statementList);
 void routineAnalysis(NODE* root);
 vector<Type> expressionListAnalysis(NODE* root);
 
+void semanticAnalysis(NODE* ROOT);
+
 #endif //MIPS_COMPILER_SEMENTICANALYSIS_H

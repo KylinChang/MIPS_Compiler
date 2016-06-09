@@ -1,12 +1,21 @@
-#include "icg_tac.cpp"
+#include "common.h"
+#include "icg_tac.h"
+#include "yy.tab.hpp"
+#include "semanticAnalysis.h"
 
-NODE *bt;
-int main() {
-	bt = new NODE();
-	bt->type = TK_PLUS;
-	bt->child = MALLOC(bt,2);
+int main(int argc, char *argv[]) {
+	if (argc<=1) return 0;
+	FILE* file = fopen(argv[1], "r");
+    yyin = file;
 
-	bt->child[0] = new NODE();
-	bt->type = TK_PLUS;
+    node_init();
+    yyparse();
+    semanticAnalysis(ROOT);
+	
+	try {
+		genCode(ROOT);
+	} catch (Error e) {
+		cout<<e.msg<<endl;
+	}
 	return 0;
 }
