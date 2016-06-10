@@ -384,18 +384,14 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 				break;
 			}
 		}
-		dbg(flag);
+		// dbg(flag);
 		if (flag) {  //函数内部局部变量
-			dbg(semanticAnalysisError);
-			cout<<varName<<endl;
+			// dbg(semanticAnalysisError);
 			for (int i=0; i<st->varSequence.size(); i++) {
-				cout<<st->varSequence[i]<<" haha";
 				offset += st->varSymbolTable[st->varSequence[i]].size();
-				cout<<"survived\n";
 				if (varName == st->varSequence[i])
 					break;
 			}
-			cout<<" ??";
 			output(getName(mp(0, t0.second)) + " = bp - " + string(_Value(offset)));  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(t0));
 			TempVars::release(a); return t0;
@@ -412,8 +408,12 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 		}
 	}
 	else {  //函数名
+		dbg(string(a.second));
+		dbg(st->findVar(varName).null);
+		dbg(st->findVar(varName).complexType);
+		piv t0 = mp(2, _Value(string(a.second), st->findVar(varName).complexType->complexType == type_func));
 		TempVars::release(a);
-		return mp(2, a.second);
+		return t0;
 	}
 	return a;
 }
@@ -714,11 +714,13 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
+			getReturnNum();
 			break;
 		case TK_PROC_ID_ARGS:
 			a = genCode(SON(0));
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
+			dbg(t->symbolTable);
 			output("call " + getName(a));
 			break;
 		
