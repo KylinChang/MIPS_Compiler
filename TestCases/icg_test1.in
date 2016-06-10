@@ -1,0 +1,31 @@
+program test9;
+var n:real;
+	i:integer;
+begin
+	if n>1 then
+		n:=1
+	else
+		n:=2;
+
+    case 1 of
+    1: n:=0;
+    2: n:=1;
+    end;
+
+    while true do
+        begin
+			n:=sqrt(n);
+        end;
+	
+    for i:= 1*10 to 1000 DIV 10 do begin
+    	n:= i DIV 2 MOD 2;
+	end;
+    for i:= 2 downto 1 do begin
+    	n:= 1;
+	end;
+
+	repeat
+		n:=1;
+	until n>1;
+end.
+

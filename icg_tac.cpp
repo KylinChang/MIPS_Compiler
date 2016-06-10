@@ -24,7 +24,6 @@ void outDebug() { puts("haha"); }
 
 	三地址码定义：
 		read x					读入变量x
-		elem_size(...)			返回变量的本身占用的字节长度
 		field_offset(x,a)		返回a变量在x结构中的offset
 		malloc a 16				给a数组分配一个16字节的内存
 		string s0 "..."			字符串定义
@@ -222,14 +221,23 @@ Error::Error(string msg):msg(msg) {}
 // 			return _Value(a.val.s + b.val.s);
 // 	}
 // }
-inline string operator+(const int &a, const string &b) {
+string toString(int a) {
 	stringstream ss;
-	string c;
-	ss<<a; ss>>c;
-	return c+b;
+	string s;
+	ss<<a; ss>>s;
+	return s;
+}
+string toString(double a) {
+	stringstream ss;
+	string s;
+	ss<<a; ss>>s;
+	return s;
+}
+inline string operator+(const int &a, const string &b) {
+	return toString(a) + b;
 }
 inline string operator+(const string &a, const int &b) {
-	return b+a;
+	return a + toString(b);
 }
 inline string operator+(const double &a, const string &b) {
 	stringstream ss;
@@ -238,13 +246,10 @@ inline string operator+(const double &a, const string &b) {
 	return c+b;
 }
 inline string operator+(const string &a, const double &b) {
-	return b+a;
-}
-string toString(int a) {
 	stringstream ss;
-	string s;
-	ss<<a; ss>>s;
-	return s;
+	string c;
+	ss<<b; ss>>c;
+	return a+c;
 }
 
 
@@ -255,8 +260,8 @@ _Value::_Value(char a):type(CHAR) { val.c = a; }
 _Value::_Value(string a):type(Variable) { val.varName = a; }
 
 _Value::_Value(int a, int d):type(MYINT),i(a) {}
-_Value::_Value(char *s, int d):type(MYSTRING),s(s) {}
-_Value::_Value(string s, int d):type(MYSTRING),s(s) {}
+_Value::_Value(char *s, int d):type(MYSTRING),s(s) { i = d; }
+_Value::_Value(string s, int d):type(MYSTRING),s(s) { i = d; }
 
 _Value::operator string() {
 	stringstream ss;
@@ -279,7 +284,9 @@ int _Value::toInt() {
 	throw Error("_Value cast value: Current value is not an integer");
 }
 
-bool isTempVar(piv a);
+bool isTempVar(piv a) {
+	return a.first == 0 || a.first == 6;
+}
 struct TempVars {
 	static int ind;
 	static priority_queue<int, vector<int>, greater<int> > idleTemp;  // 注意别用size()来判断是否empty，用empty()
@@ -311,9 +318,6 @@ struct Label {
 };
 int Label::ind = 0;
 
-bool isTempVar(piv a) {
-	return a.first == 0 || a.first == 6;
-}
 string getName(piv a) {
 	if (a.first == 0) {  // t开头的临时变量(type==INTEGER，val.i保存值)
 		return 't' + string(a.second);
@@ -408,10 +412,10 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 		}
 	}
 	else {  //函数名
-		dbg(string(a.second));
-		dbg(st->findVar(varName).null);
-		dbg(st->findVar(varName).complexType);
-		piv t0 = mp(2, _Value(string(a.second), st->findVar(varName).complexType->complexType == type_func));
+		// dbg(string(a.second));
+		// dbg(st->findVar(varName).null);
+		// dbg(st->findFunc(varName).complexType);
+		piv t0 = mp(2, _Value(string(a.second), st->findFunc(varName).complexType->complexType == type_func));
 		TempVars::release(a);
 		return t0;
 	}
@@ -714,14 +718,14 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
-			getReturnNum();
+			if (a.second.i == 1) return getReturnNum();
 			break;
 		case TK_PROC_ID_ARGS:
 			a = genCode(SON(0));
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
-			dbg(t->symbolTable);
 			output("call " + getName(a));
+			if (a.second.i == 1) return getReturnNum();
 			break;
 		
 		//SYS_PROC
@@ -729,12 +733,14 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
+			if (a.second.i == 1) return getReturnNum();
 			break;
 		case TK_PROC_SYS_ARGS:
 			a = genCode(SON(0));
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
+			if (a.second.i == 1) return getReturnNum();
 			break;
 		
 		//TK_READ
@@ -840,7 +846,7 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			output("Label L" + toString(ww=Label::newLabel()));
 			genCode(SON(1));
-			output("goto L" + CaseParse::getEndLabel());
+			output(string("goto L") + CaseParse::getEndLabel());
 			CaseParse::addCase(a, ww);
 			break;
 		//goto_stmt
@@ -939,7 +945,7 @@ piv genCode(NODE *t, int extraMsg) {
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS1"<<endl;
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			getReturnNum(); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS2"<<endl;
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;
@@ -950,7 +956,7 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			getReturnNum(); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;
 			//返回值?? TO-DO
