@@ -142,26 +142,51 @@ void parseFPType(NODE* root, bool isFunc) {
         if (symbolTableList.front()->insertFunc(identifier, Type(argTypeList, parseType(root->child[2]), 1))) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "duplicate function definition");
         }
-        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, parseType(root->child[2]), 1))) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
-        }
+//        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, parseType(root->child[2]), 1))) {
+//            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
+//        }
     } else {
         if (symbolTableList.front()->insertFunc(identifier, Type(argTypeList, Type()))) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "duplicate procedure definition");
         }
-        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, Type()))) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
-        }
+//        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, Type()))) {
+//            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
+//        }
     }
 }
 
 
-void prepareForFP(NODE* root) {
+void prepareForFP(NODE* root, bool isFunc) {
 #ifdef DEBUG
     assert(root->child[0]->type == TK_ID);
     assert(root->child[1] == NULL || root->child[1]->type == TK_PARA_DL);
     assert(!isFunc || root->child[2]->type == TK_TYPE_DECL);
 #endif
+
+    string identifier = root->child[0]->name;
+    // travel TK_PARA_DL
+    vector<Type> argTypeList;
+    if (root->child[1] != NULL) {
+        for (int i = 0; i < root->child[1]->child_number; i++) {
+            auto x = root->child[1]->child[i];
+#ifdef DEBUG
+            assert(x->type == TK_PARA_TL_VAL || x->type == TK_PARA_TL_VAR);
+            assert(x->child[0]->type == TK_NL);
+            assert(x->child[1]->type == TK_TYPE_DECL);
+#endif
+            Type t = parseType(x->child[1]);
+            for (int j = 0; j < x->child[0]->child_number; j++) {
+                argTypeList.push_back(t);
+            }
+        }
+    }
+    // NOTE: we only insert a var when it is a func
+    if (isFunc) {
+        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, parseType(root->child[2])))) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
+        }
+    }
+
     if (root->child[1] != NULL) {
         for (int i = 0; i < root->child[1]->child_number; i++) {
             auto x = root->child[1]->child[i];
@@ -807,7 +832,7 @@ void routineAnalysis(NODE* root) {
 #endif
             parseFPType(routineNode->child[0], routineNode->type == TK_FUNC_DECL);
             symbolTableList.push_front(new SymbolTable(symbolTableList.front(), routineNode->child[0]->child[0]->name));
-            prepareForFP(routineNode->child[0]);
+            prepareForFP(routineNode->child[0], routineNode->type == TK_FUNC_DECL);
             routineAnalysis(routineNode->child[1]);
             symbolTableList.pop_front();
         }
