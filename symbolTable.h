@@ -21,6 +21,7 @@ public:
     unordered_map<string, Value> constSymbolTable;
     unordered_map<string, Type> varSymbolTable;
     vector<string> varSequence;
+    vector<string> paraSequence;
     unordered_map<string, Type> typeSymbolTable;
     unordered_map<string, vector<Type>> funcSymbolTable;
     // the following data structures are used to check goto labels' validity
@@ -56,6 +57,8 @@ public:
         varSymbolTable[identifier] = x;
         if (!isParameter) {
             varSequence.push_back(identifier);
+        } else {
+            paraSequence.push_back(identifier);
         }
         return false;
     }
