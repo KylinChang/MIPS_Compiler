@@ -160,9 +160,10 @@ int ComplexType::size() {
                 ret += x.second.size();
             }
             return ret;
+        case type_func:
+            return fpType.retType.size();
         case type_range:
         case type_enum:
-        case type_func:
         case type_proc:
             assert(0);
     }
