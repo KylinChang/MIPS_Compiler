@@ -2,6 +2,8 @@
 #include "icg_tac.h"
 #include "yy.tab.hpp"
 #include "semanticAnalysis.h"
+#include <queue>
+using namespace std;
 
 int main(int argc, char *argv[]) {
 	if (argc<=1) return 0;
@@ -12,6 +14,7 @@ int main(int argc, char *argv[]) {
     yyparse();
     semanticAnalysis(ROOT);
 	
+	cout<<(ROOT==NULL)<<endl;
 	try {
 		genCode(ROOT);
 	} catch (Error e) {

@@ -807,6 +807,7 @@ void statementListAnalysis(NODE* statementList) {
 }
 
 void routineAnalysis(NODE* root) {
+    root->symbolTable = symbolTableList.front();
     // routineHead
     NODE* routineHead = root->child[0];
     // CONST

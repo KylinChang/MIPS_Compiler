@@ -182,5 +182,7 @@ void node_init(){
 	NODE_NAMES[TK_CHAR] = "TK_CHAR";
 	
 	NODE_NAMES[TK_ID] = "TK_ID";
+	NODE_NAMES[TK_SYS_FUNCT] = "TK_SYS_FUNCT";
+	NODE_NAMES[TK_REM] = "TK_REM";
 
 }
