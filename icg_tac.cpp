@@ -460,7 +460,7 @@ struct CaseParse {
 		vector<string> ret;
 		vector<CaseExpr> &cases = *scases.rbegin();
 		for (int i=0; i<cases.size(); i++)
-			ret.push_back("if " + getName(E) + "==" + getName(cases[i].a) + " then goto L" + toString(cases[i].label));
+			ret.push_back("if_false " + getName(E) + " != " + getName(cases[i].a) + " then goto L" + toString(cases[i].label));
 		scases.pop_back();
 		return ret;
 	}

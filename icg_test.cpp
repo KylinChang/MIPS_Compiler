@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     yyparse();
     semanticAnalysis(ROOT);
 	
-	cout<<(ROOT==NULL)<<endl;
+	//cout<<(ROOT==NULL)<<endl;
 	try {
 		genCode(ROOT);
 	} catch (Error e) {
