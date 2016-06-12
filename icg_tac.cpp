@@ -498,7 +498,6 @@ static piv getReturnNum() {
 extern map<int, string> NODE_NAMES;
 int calSize(unordered_map<string, Type> a) {
 	int ret = 0;
-	puts("calSize");
 	for (auto t:a) ret+=t.second.size();
 	return ret;
 }
@@ -649,9 +648,9 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		case TK_ROUTINE:
 			genCode(SON(0));
-			// output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
+			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
-			// output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable))));
+			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable))));
 			//TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:

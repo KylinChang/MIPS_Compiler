@@ -1,4 +1,5 @@
 entry _findmin
+	sp = sp - 12
 	t0 = bp + 4
 	t1 = bp + 0
 	t2 = *t0 < *t1
@@ -12,7 +13,9 @@ entry _findmin
 	t1 = bp + 0
 	*t0 = *t1
 	label L1
+	sp = sp + 12
 	ret
+sp = sp - 12
 t0 = bp - 8
 t1 = *t0 > 1
 if_false t1 goto L2
@@ -98,3 +101,4 @@ t6 = bp - 8
 t6 = bp - 8
 t7 = *t6 > 1
 if_false t7 goto L18
+sp = sp + 12
