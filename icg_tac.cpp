@@ -415,7 +415,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 		// dbg(string(a.second));
 		// dbg(st->findVar(varName).null);
 		// dbg(st->findFunc(varName).complexType);
-		piv t0 = mp(2, _Value(string(a.second), st->findFunc(varName).complexType->complexType == type_func));
+		piv t0 = mp(2, _Value(string(a.second), st->findFunc(varName).complexType->complexType == type_func));  //TO-DO 还需要知道这个函数的返回值大小
 		TempVars::release(a);
 		return t0;
 	}
@@ -648,9 +648,10 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		case TK_ROUTINE:
 			genCode(SON(0));
-			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
+			// output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
-			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable))));
+			ww = 1 ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
+			// output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww)));
 			//TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:
