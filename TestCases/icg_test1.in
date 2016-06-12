@@ -1,6 +1,14 @@
 program test9;
 var n:real;
 	i:integer;
+
+function findMin(x, y:integer):integer;
+begin
+	if x<y then
+		findMin:=x
+	else
+		findMin:=y;
+end;
 begin
 	if n>1 then
 		n:=1
