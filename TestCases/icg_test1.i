@@ -1,27 +1,27 @@
 entry _findmin
-	sp = sp - 12
-	point int t0
-	t0 = bp + 4
-	point int t1
-	t1 = bp + 0
-	var boolean t2
-	t2 = *t0 < *t1
-	if_false t2 goto L0
-	point int t0
-	t0 = bp - 4
-	point int t1
-	t1 = bp + 4
-	*t0 = *t1
-	goto L1
-	label L0
-	point int t0
-	t0 = bp - 4
-	point int t1
-	t1 = bp + 0
-	*t0 = *t1
-	label L1
-	sp = sp + 8
-	ret
+sp = sp - 12
+point int t0
+t0 = bp + 4
+point int t1
+t1 = bp + 0
+var boolean t2
+t2 = *t0 < *t1
+if_false t2 goto L0
+point int t0
+t0 = bp - 4
+point int t1
+t1 = bp + 4
+*t0 = *t1
+goto L1
+label L0
+point int t0
+t0 = bp - 4
+point int t1
+t1 = bp + 0
+*t0 = *t1
+label L1
+sp = sp + 8
+ret
 sp = sp - 12
 point double t0
 t0 = bp - 8
