@@ -1033,8 +1033,6 @@ piv genCode(NODE *t, int extraMsg) {
 			ww = SON(1)->name=="FUNC" ? SON(1)->symbolTable->varSymbolTable[SON(1)->symbolTable->varSequence[0]].size() : 0;
 			output("sp = sp + " + string(_Value(calSize(SON(1)->symbolTable->varSymbolTable) - ww + 4)));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
-			
-			genCode(SON(1)->child[1]);
 			//暂时不做处理
 			
 			if (ICG_DEBUG) {
