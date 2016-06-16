@@ -832,6 +832,7 @@ void routineAnalysis(NODE* root) {
             assert(routineNode->child[0]->type == TK_PROC_HEAD || routineNode->child[0]->type == TK_FUNC_HEAD);
             assert(routineNode->child[1]->type == TK_ROUTINE);
 #endif
+            routineNode->child[1]->name = routineNode->type == TK_FUNC_DECL ? "FUNC" : "PROC";
             parseFPType(routineNode->child[0], routineNode->type == TK_FUNC_DECL);
             symbolTableList.push_front(new SymbolTable(symbolTableList.front(), routineNode->child[0]->child[0]->name));
             prepareForFP(routineNode->child[0], routineNode->type == TK_FUNC_DECL);
