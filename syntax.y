@@ -3,9 +3,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 int DEBUG = 0;
-int syntax_error = 0;
+int IS_SYNTAX_ERROR=0;
+int syntax_const_error = 0;
 NODE* ROOT;
 extern int yylineno;
+
+#define STR_DOT     "\".\""
+#define STR_SEMI    "\";\""
+#define STR_EQU     "\"=\""
+#define STR_COMMA   "\",\""
+#define STR_COLON   "\":\""
+#define STR_ASSIGN  "\":=\""
+#define STR_END     "\"end\""
+
+void LOG_ERROR(string expected, int line);
 
 %}
 
@@ -50,10 +61,29 @@ program : program_head routine TK_DOT{
 
             $$->lineno = MIN($1,$2);
 
-            if(syntax_error)
+            if(syntax_const_error)
                 ROOT = NULL;
             else
                 ROOT = $$;
+        }
+        |program_head routine error{
+            if(DEBUG){
+                printf("PARSING PROGRAM\n");
+            }
+            $$ = NEWNODE(TK_PROGRAM);
+            $$->child = MALLOC($$,2);
+            $$->child[0] = $1;
+            $$->child[1] = $2;
+
+            $$->lineno = MIN($1,$2);
+
+            if(syntax_const_error)
+                ROOT = NULL;
+            else
+                ROOT = $$;
+
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_DOT,yylineno);
         }
         ;
 
@@ -66,6 +96,19 @@ program_head : TK_PROGRAM TK_ID TK_SEMI{
             $$->type = TK_PROGRAM_HEAD;
             $$->child_number = 0;
             $$->child = NULL;
+        }
+        |TK_PROGRAM TK_ID error{
+        //NOTE: PROGRAM HEAD ACTUALLY IS TK_ID
+            if(DEBUG){
+                printf("PROGRAM HEAD:%s\n", $2->name.c_str());
+            }
+            $$ = $2;
+            $$->type = TK_PROGRAM_HEAD;
+            $$->child_number = 0;
+            $$->child = NULL;
+
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_SEMI, $$->lineno);
         }
         ;
 
@@ -136,6 +179,53 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
 
                     free(tmp);
                 }
+                |const_expr_list TK_ID error {  IS_SYNTAX_ERROR = 1;LOG_ERROR(STR_EQU,$2->lineno);} const_value TK_SEMI{
+                //NOTE: IGNORE TK_EQUAL TK_SEMI
+                    if(DEBUG){
+                        printf("PARSING CONST EXPR LIST\n");
+                    }
+                    $$ = $1;
+                    NODE* node = NEWNODE(TK_CONST_DL_END);
+                    node->child = MALLOC(node,2);
+                    node->child[0] = $2;
+                    node->child[1] = $4;
+
+                    NODE** tmp = $$->child;
+                    int old_child_number = $$->child_number;
+                    $$->child = MALLOC($$, (1+old_child_number));
+                    int i;
+                    for(i=0;i<old_child_number;i++){
+                        $$->child[i] = tmp[i];
+                    }
+                    $$->child[i] = node;
+
+                    free(tmp);
+                }
+                |const_expr_list TK_ID TK_EQUAL const_value error{
+                //NOTE: IGNORE TK_EQUAL TK_SEMI
+                    if(DEBUG){
+                        printf("PARSING CONST EXPR LIST\n");
+                    }
+                    $$ = $1;
+                    NODE* node = NEWNODE(TK_CONST_DL_END);
+                    node->child = MALLOC(node,2);
+                    node->child[0] = $2;
+                    node->child[1] = $4;
+
+                    NODE** tmp = $$->child;
+                    int old_child_number = $$->child_number;
+                    $$->child = MALLOC($$, (1+old_child_number));
+                    int i;
+                    for(i=0;i<old_child_number;i++){
+                        $$->child[i] = tmp[i];
+                    }
+                    $$->child[i] = node;
+
+                    free(tmp);
+
+                    IS_SYNTAX_ERROR = 1;
+                    LOG_ERROR(STR_SEMI, $4->lineno);
+                }
                 | TK_ID TK_EQUAL const_value TK_SEMI{
                 //NOTE: IGNORE TK_EQUAL TK_SEMI
                     if(DEBUG){
@@ -151,6 +241,41 @@ const_expr_list : const_expr_list TK_ID TK_EQUAL const_value TK_SEMI{
 
                     $$->child = MALLOC($$,1);
                     $$->child[0] = node;
+                }
+                | TK_ID error { IS_SYNTAX_ERROR = 1;LOG_ERROR(STR_EQU,$1->lineno); } const_value TK_SEMI{
+                //NOTE: IGNORE TK_EQUAL TK_SEMI
+                    if(DEBUG){
+                        printf("PARSING CONST EXPR LIST : FIRST ONE\n");
+                    }
+                    $$ = NEWNODE(TK_CONST_DL);
+                    NODE* node = NEWNODE(TK_CONST_DL_END);
+
+                    node->child = MALLOC(node,2);
+                    node->child[0] = $1;
+                    node->child[1] = $3;
+                    $$->lineno = node->lineno = MIN($1, $3);
+
+                    $$->child = MALLOC($$,1);
+                    $$->child[0] = node;
+                }
+                |TK_ID TK_EQUAL const_value error{
+                //NOTE: IGNORE TK_EQUAL TK_SEMI
+                    if(DEBUG){
+                        printf("PARSING CONST EXPR LIST : FIRST ONE\n");
+                    }
+                    $$ = NEWNODE(TK_CONST_DL);
+                    NODE* node = NEWNODE(TK_CONST_DL_END);
+
+                    node->child = MALLOC(node,2);
+                    node->child[0] = $1;
+                    node->child[1] = $3;
+                    $$->lineno = node->lineno = MIN($1, $3);
+
+                    $$->child = MALLOC($$,1);
+                    $$->child[0] = node;
+
+                    IS_SYNTAX_ERROR = 1;
+                    LOG_ERROR(STR_SEMI, $3->lineno);
                 }
                 ;
 
@@ -239,6 +364,31 @@ type_definition : TK_ID TK_EQUAL type_decl TK_SEMI{
 
                     $$->lineno = MIN($1,$3);
                 }
+                |TK_ID error { IS_SYNTAX_ERROR = 1;LOG_ERROR(STR_EQU,$1->lineno); } type_decl TK_SEMI{
+                    if(DEBUG){
+                        printf("PARSING TYPE DEF\n");
+                    }
+                    $$ = NEWNODE(TK_TYPE_DEF);
+                    $$->child = MALLOC($$,2);
+                    $$->child[0] = $1;
+                    $$->child[1] = $3;
+
+                    $$->lineno = MIN($1,$3);
+                }
+                | TK_ID TK_EQUAL type_decl error{
+                    if(DEBUG){
+                        printf("PARSING TYPE DEF\n");
+                    }
+                    $$ = NEWNODE(TK_TYPE_DEF);
+                    $$->child = MALLOC($$,2);
+                    $$->child[0] = $1;
+                    $$->child[1] = $3;
+
+                    $$->lineno = MIN($1,$3);
+
+                    IS_SYNTAX_ERROR = 1;
+                    LOG_ERROR(STR_SEMI, yylineno);
+                }
                 ;
 
 type_decl : simple_type_decl{
@@ -294,6 +444,16 @@ record_type_decl : TK_RECORD field_decl_list TK_END{
                 }
                 $$ = $2;
             }
+            | TK_RECORD field_decl_list error{
+                //NOTE: IGNORE TK_END
+                if(DEBUG){
+                    printf("PARSING RECORD TYPE DECL\n");
+                }
+                $$ = $2;
+
+                IS_SYNTAX_ERROR = 1;
+                LOG_ERROR(STR_END,$2->lineno);
+            }
             ;
 
 field_decl_list : field_decl_list field_decl{
@@ -335,7 +495,22 @@ field_decl : name_list TK_COLON type_decl TK_SEMI{
                 $$->child[1] = $3;
 
                 $$->lineno = MIN($1,$3);
-            }
+            } 
+            | name_list TK_COLON type_decl error{
+            //NOTE: IGNORE TK_COLON TK_SEMI
+                if(DEBUG){
+                    printf("PARSING FIELD DECL\n");
+                }
+                $$ = NEWNODE(TK_FIELD_DECL);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+
+                $$->lineno = MIN($1,$3);
+
+                IS_SYNTAX_ERROR = 1;
+                LOG_ERROR(STR_SEMI, yylineno);
+            } 
             ;
 
 name_list : name_list TK_COMMA TK_ID{
@@ -416,7 +591,7 @@ simple_type_decl : TK_SYS_TYPE{
                                      $$ = NEWNODE(TK_STD_DD);
                                      $$->child = MALLOC($$,2);
                                      if($2->type!=TK_INTEGER){
-                                        syntax_error  = 1;
+                                        syntax_const_error  = 1;
                                      }else{
                                         $2->value.ival *= -1;
                                      }
@@ -431,17 +606,17 @@ simple_type_decl : TK_SYS_TYPE{
                                          printf("PARSING SIMPLE TYPE DECL ID\n");
                                       }
                                       if($2->type!=TK_INTEGER){
-                                         syntax_error  = 1;
+                                         syntax_const_error  = 1;
                                       }else{
                                            $2->value.ival *= -1;
                                       }
                                       if($5->type!=TK_INTEGER){
-                                         syntax_error  = 1;
+                                         syntax_const_error  = 1;
                                       }else{
                                          $5->value.ival *= -1;
                                       }
 
-                 $$ = NEWNODE(TK_STD_DD);
+                                     $$ = NEWNODE(TK_STD_DD);
                                      $$->child = MALLOC($$,2);
                                      $$->child[0] = $2;
                                      $$->child[1] = $5;
@@ -557,6 +732,33 @@ var_decl : name_list TK_COLON type_decl TK_SEMI{
 
             $$->lineno = MIN($1, $3);
         }
+        |name_list error {IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno)} type_decl TK_SEMI{
+            //NOTE: IGNORE TK_COLON TK_SEMI
+            if(DEBUG){
+                printf("PARSING VAR DECL\n");
+            }
+            $$ = NEWNODE(TK_VAR_DECL);
+            $$->child = MALLOC($$,2);
+            $$->child[0] = $1;
+            $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
+        }
+        | name_list TK_COLON type_decl error{
+            //NOTE: IGNORE TK_COLON TK_SEMI
+            if(DEBUG){
+                printf("PARSING VAR DECL\n");
+            }
+            $$ = NEWNODE(TK_VAR_DECL);
+            $$->child = MALLOC($$,2);
+            $$->child[0] = $1;
+            $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
+
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_SEMI, yylineno);
+        }
         ;
 
 routine_part : routine_part function_decl{
@@ -631,6 +833,33 @@ function_decl : function_head TK_SEMI routine TK_SEMI{
 
                 $$->lineno = MIN($1, $3);
             }
+            |function_head TK_SEMI routine error{
+                //NOTE: IGNORE TK_SEMI
+                if(DEBUG){
+                    printf("PARSING FUNC DECL\n");
+                }
+                $$ = NEWNODE(TK_FUNC_DECL);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
+
+                IS_SYNTAX_ERROR = 1;
+                LOG_ERROR(STR_SEMI, yylineno);
+            }
+            | function_head error { IS_SYNTAX_ERROR = 1;LOG_ERROR(STR_SEMI, $1->lineno); } routine TK_SEMI{
+                //NOTE: IGNORE TK_SEMI
+                if(DEBUG){
+                    printf("PARSING FUNC DECL\n");
+                }
+                $$ = NEWNODE(TK_FUNC_DECL);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
+            }
             ;
 
 function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl{
@@ -651,9 +880,54 @@ function_head : TK_FUNCTION TK_ID parameters TK_COLON simple_type_decl{
                 $$->lineno = MIN($$,$5);
 
             }
+            | TK_FUNCTION TK_ID parameters error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno); } simple_type_decl{
+                //NOTE: IGNORE TK_FUNCTION TK_COLON
+                if(DEBUG){
+                    printf("PARSING TK_FUNCTINO HEAD\n");
+                }
+                $$ = NEWNODE(TK_FUNC_HEAD);
+                $$->child = MALLOC($$,3);
+                $$->child[0] = $2;
+                $$->child[1] = $3;
+                $$->child[2] = NEWNODE(TK_TYPE_DECL);
+                $$->child[2]->lineno = $5->lineno;
+                $$->child[2]->child = MALLOC($$, 1);
+                $$->child[2]->child[0] = $5;
+
+                $$->lineno = MIN($2,$3);
+                $$->lineno = MIN($$,$5);
+
+            }
             ;
 
 procedure_decl : procedure_head TK_SEMI routine TK_SEMI{
+                //NOTE: IGNORE TK_SEMI PROCEDURE_DECL IS 'TK_PROC_DECL'
+                if(DEBUG){
+                    printf("PARSING PROC DECL\n");
+                }
+                $$ = NEWNODE(TK_PROC_DECL);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
+            }
+            | procedure_head TK_SEMI routine error{
+                //NOTE: IGNORE TK_SEMI PROCEDURE_DECL IS 'TK_PROC_DECL'
+                if(DEBUG){
+                    printf("PARSING PROC DECL\n");
+                }
+                $$ = NEWNODE(TK_PROC_DECL);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+
+                $$->lineno = MIN($1, $3);
+
+                IS_SYNTAX_ERROR = 1;
+                LOG_ERROR(STR_SEMI, yylineno);
+            }
+            | procedure_head error { IS_SYNTAX_ERROR = 1;LOG_ERROR(STR_SEMI, $1->lineno); } routine TK_SEMI{
                 //NOTE: IGNORE TK_SEMI PROCEDURE_DECL IS 'TK_PROC_DECL'
                 if(DEBUG){
                     printf("PARSING PROC DECL\n");
@@ -688,6 +962,16 @@ parameters : TK_LP para_decl_list TK_RP{
                 }
                 $$ = $2;
             }
+            | TK_LP para_decl_list error{
+            //NOTE: PARAMETERS IS 'TK_PARA', IGNORE TK_LP TK_RP
+                if(DEBUG){
+                    printf("PARSING PARA\n");
+                }
+                $$ = $2;
+
+                IS_SYNTAX_ERROR=1; 
+                LOG_ERROR(STR_RP, yylineno); 
+            }
             |{
             //NOTE: PARAMETERS IS 'TK_PARA'
                 if(DEBUG){
@@ -709,6 +993,23 @@ para_decl_list : para_decl_list TK_SEMI para_type_list{
                 int i;
                 for(i=0;i<old_child_number;i++){
                 	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $3;
+
+                free(tmp);
+            }
+            |para_decl_list error {  IS_SYNTAX_ERROR = 1; LOG_ERROR(STR_SEMI, yylineno); }  para_type_list{
+                //NOTE: IGNORE TK_SEMI PARA_DECL_LIST IS 'PARA_DL'
+                if(DEBUG){
+                    printf("PARSING PARA DECL LIST\n");
+                }
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                    $$->child[i] = tmp[i];
                 }
                 $$->child[i] = $3;
 
@@ -742,7 +1043,37 @@ para_type_list : var_para_list TK_COLON simple_type_decl{
 
                     $$->lineno = MIN($1, $3);
                 }
-               | val_para_list TK_COLON simple_type_decl{
+                | var_para_list error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno); } simple_type_decl{
+                    //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
+                    if(DEBUG){
+                        printf("PARSING TK_COLON\n");
+                    }
+                    $$ = NEWNODE(TK_PARA_TL_VAR);
+                    $$->child = MALLOC($$,2);
+                    $$->child[0] = $1;
+                    $$->child[1] = NEWNODE(TK_TYPE_DECL);
+                    $$->child[1]->lineno = $3->lineno;
+                    $$->child[1]->child = MALLOC($$, 1);
+                    $$->child[1]->child[0] = $3;
+
+                    $$->lineno = MIN($1, $3);
+                }
+                | val_para_list TK_COLON simple_type_decl{
+                    //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
+                    if(DEBUG){
+                        printf("PARSING TK_COLON\n");
+                    }
+                    $$ = NEWNODE(TK_PARA_TL_VAL);
+                    $$->child = MALLOC($$,2);
+                    $$->child[0] = $1;
+                    $$->child[1] = NEWNODE(TK_TYPE_DECL);
+                    $$->child[1]->lineno = $3->lineno;
+                    $$->child[1]->child = MALLOC($$, 1);
+                    $$->child[1]->child[0] = $3;
+
+                    $$->lineno = MIN($1, $3);
+                }
+                | val_para_list error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno); } simple_type_decl{
                     //NOTE: IGNORE TK_COLON PARA_TYPE_LIST IS 'PARA_TL'
                     if(DEBUG){
                         printf("PARSING TK_COLON\n");
@@ -809,6 +1140,34 @@ stmt_list : stmt_list stmt TK_SEMI{
                 free(tmp);
           	}
         }
+        | stmt_list stmt error{
+            if(DEBUG){
+                printf("PARSING STMT LIST\n");
+            }
+            if($1==NULL){
+                $$ = NEWNODE(TK_STMT_LIST);
+                $$->child = MALLOC($$, 1);
+                $$->child[0] = $2;
+
+                $$->lineno = $2->lineno;
+            }
+            else{
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                    $$->child[i] = tmp[i];
+                }
+                $$->child[i] = $2;
+
+                free(tmp);
+            }
+
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_SEMI, $2->lineno);
+        }
         |{
               if(DEBUG){
                   printf("PARSING STMT LIST NULL\n");
@@ -818,6 +1177,18 @@ stmt_list : stmt_list stmt TK_SEMI{
         ;
 
 stmt : TK_INTEGER TK_COLON non_label_stmt{
+        //NOTE: IGNORE TK_COLON
+        if(DEBUG){
+            printf("PARSING STMT\n");
+        }
+        $$ = NEWNODE(TK_STMT_LABEL);
+         $$->child = MALLOC($$,2);
+         $$->child[0] = $1;
+         $$->child[1] = $3;
+
+         $$->lineno = MIN($1, $3);
+    }    
+    |TK_INTEGER error{ IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, $1->lineno); } non_label_stmt{
         //NOTE: IGNORE TK_COLON
         if(DEBUG){
             printf("PARSING STMT\n");
@@ -1182,6 +1553,22 @@ case_expr : const_value TK_COLON stmt TK_SEMI{
             $$->lineno = MIN($1, $3);
 
         }
+        |const_value TK_COLON stmt error{
+            //NOTE: IGNORE TK_COLON TK_SEMI
+            if(DEBUG){
+                printf("PARSING CASE EXPR\n");
+            }
+            $$ = NEWNODE(TK_CASE_EXPR);
+            $$->child = MALLOC($$,2);
+            $$->child[0] = $1;
+            $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
+
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_SEMI, $3->lineno);
+
+        }
         | TK_ID TK_COLON stmt TK_SEMI{
          //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
@@ -1193,6 +1580,21 @@ case_expr : const_value TK_COLON stmt TK_SEMI{
             $$->child[1] = $3;
 
             $$->lineno = MIN($1, $3);
+        }
+        |TK_ID TK_COLON stmt error{
+         //NOTE: IGNORE TK_COLON TK_SEMI
+            if(DEBUG){
+                printf("PARSING CASE EXPR\n");
+            }
+            $$ = NEWNODE(TK_CASE_EXPR_END);
+            $$->child = MALLOC($$,2);
+            $$->child[0] = $1;
+            $$->child[1] = $3;
+
+            $$->lineno = MIN($1, $3);
+
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_SEMI, $3->lineno);
         }
         ;
 
@@ -1553,3 +1955,6 @@ int yyerror(string s){
     return 1;
 }
 
+void LOG_ERROR(string expected, int line){
+    printf("line %d: error: missing %s\n", line, expected.c_str());
+}

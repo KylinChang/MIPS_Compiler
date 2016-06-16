@@ -1,7 +1,7 @@
 program test2;
 
-var x:integer;
+var x:real;
 
 begin
-	x:=1;
+	x:=1 + 1.2;
 end.

@@ -268,6 +268,6 @@ extern FILE* yyin;
 extern int yyparse();
 extern int DEBUG;
 extern NODE* ROOT;
-
+extern int IS_SYNTAX_ERROR;
 
 #endif
