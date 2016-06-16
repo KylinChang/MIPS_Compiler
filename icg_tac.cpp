@@ -358,10 +358,10 @@ string getName(piv a) {
 
 static string indent;
 void moreIndent() {
-	indent+="\t";
+	//indent+="\t";
 }
 void lessIndent() {
-	indent = indent.substr(0, indent.size()-1);
+	//indent = indent.substr(0, indent.size()-1);
 }
 
 void output(string s) {
@@ -496,8 +496,8 @@ void chkOpnd(piv a, string side, char op) {
 	chkOpnd(a, side, string("") + '\'' + op + '\'');
 }
 
-// /*  返回当前的计算值放在哪个临时变量中  **
-// **  返回-1表示当前表达式不产生返回值   */
+/*  返回当前的计算值放在哪个临时变量中  **
+**  返回-1表示当前表达式不产生返回值   */
 #define SON(d) ((t)->child[(d)])
 static piv getTempVar(piv a) {
 	if (isTempVar(a)) return a;
