@@ -1,5 +1,5 @@
 entry _findmin
-sp = sp - 12
+sp = sp - 8
 point int t0
 t0 = bp + 4
 point int t1
@@ -20,9 +20,9 @@ point int t1
 t1 = bp + 0
 *t0 = *t1
 label L1
-sp = sp + 8
+sp = sp + 12
 ret
-sp = sp - 12
+entry main
 point double t0
 t0 = bp - 8
 var boolean t1
@@ -140,4 +140,3 @@ t6 = bp - 8
 var boolean t7
 t7 = *t6 > 1
 if_false t7 goto L18
-sp = sp + 12

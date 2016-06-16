@@ -2150,8 +2150,9 @@ factor : TK_ID{
             printf("PARSING FACTOR FOR ID->ID\n");
         }
         $$ = NEWNODE(TK_FACTOR_DD);
-        $$->child = MALLOC($$,1);
+        $$->child = MALLOC($$,2);
         $$->child[0] = $1;
+        $$->child[1] = $3;
         $$->lineno = $1->lineno;
         $1->record = $3;
     }

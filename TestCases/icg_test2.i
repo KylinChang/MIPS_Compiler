@@ -1,4 +1,4 @@
-sp = sp - 28
+entry main
 point int t0
 t0 = bp - 4
 *t0 = 1
@@ -30,4 +30,3 @@ t1 = bp - 28
 var double t2
 t2 = *t1 * 5
 *t0 = t2
-sp = sp + 28

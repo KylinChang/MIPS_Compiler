@@ -516,12 +516,18 @@ int calSize(unordered_map<string, Type> a) {
 	for (auto t:a) ret+=t.second.size();
 	return ret;
 }
+int calSize(vector<string> vars, unordered_map<string, Type> a) {
+	int ret = 0;
+	for (auto t:vars) ret+=a[t].size();
+	return ret;
+}
 piv genCode(NODE *t, int extraMsg) {
 	if (t) {
 	if (ICG_DEBUG) cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
 		piv a, b, c;
 		piv x, d, tmp;
 		int w1, w2, ww;
+		string stemp;
 		switch (t->type) {
 		/*  常量  */
 		case TK_REAL:
@@ -664,10 +670,10 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_ROUTINE:
 			genCode(SON(0));
 			// output("int bp sp");
-			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
+			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable) + 4)));  //将sp减去参数和局部变量的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
 			ww = t->name=="FUNC" ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
-			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww)));
+			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww + 4)));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:
@@ -751,22 +757,25 @@ piv genCode(NODE *t, int extraMsg) {
 			output("call " + getName(a));
 			// if (a.second.i == 1) return getReturnNum();
 			break;
-		case TK_PROC_SYS_ARGS:  //这是procedure
+		case TK_PROC_SYS_ARGS:  //这是procedure(只有write和writeln)
 			a = genCode(SON(0));
 			// output("begin_args");
-			TempVars::release(genCode(SON(1)));
-			output("call " + getName(a));
-			// if (a.second.i == 1) return getReturnNum();
+			b = genCode(SON(1)->child[0]);
+			if (b.first == 6) {
+				output(getName(tmp=mp(0, TempVars::getAnother(b.second.getType()))) + " = " + getName(b));
+				TempVars::release(b); b=tmp;
+			}
+			output((string(a.second)=="writeln"?"println ":"print ") + getName(b));  //TO-DO 暂时只处理了单个变量的输出
 			break;
 		
 		//TK_READ
-		// case TK_PROC_READ:  //TO-DO 应该只有ID而不是factor可以read??先当成单个ID来做
-		// 	a = genCode(SON(0));
-		// 	b = genCode(SON(1));
-		// 	switch (getType(b.second.val.var)) {  //TO-DO 从符号表里得到variable的类型
-		// 	}
-		// 	output("begin_args");
-		// 	break;
+		case TK_PROC_READ:  //TO-DO 应该只有ID而不是factor可以read??先当成单个ID来做
+			a = genCode(SON(0));
+			b = genCode(SON(1));
+			stemp = string(SON(1)->child[0]->symbolTable->varSymbolTable[SON(1)->child[0]->name]);
+			// output("begin_args");
+			output("read t" + string(b.second));
+			break;
 		
 		//compound_stmt
 		case TK_STMT_CP:
@@ -1006,6 +1015,8 @@ piv genCode(NODE *t, int extraMsg) {
 			// TempVars::release(b); TempVars::release(tmp); return c;
 			break;
 		case TK_FACTOR_DD:
+			output(getName(tmp=mp(0, TempVars::getAnother("point int"))) + " = t" + string(genCode(SON(0)).second) + " + field_offset(" + SON(0)->name + "," + SON(1)->name + ")");
+			return tmp;
 			// TO-DO
 			break;
 			
@@ -1015,7 +1026,9 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 			
 		case TK_PROGRAM:
-			genCode(SON(1));
+			genCode(SON(1)->child[0]);
+			puts("entry main");
+			genCode(SON(1)->child[1]);
 			//暂时不做处理
 			
 			if (ICG_DEBUG) {

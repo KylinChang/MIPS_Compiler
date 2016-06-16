@@ -49,9 +49,9 @@ t4 = bp + 0
 var int t5
 t5 = *t3 + *t4
 *t2 = t5
-sp = sp + 8
+sp = sp + 12
 ret
-sp = sp - 8
+entry main
 point int t2
 t2 = bp - 8
 arg 10
@@ -61,11 +61,14 @@ t3 = *sp
 *t2 = t3
 point int t2
 t2 = bp - 8
-println *t2
-point int t3
-t3 = bp - 4
-read t3
+var int t3
+t3 = *t2
+println t3
+point int t2
+t2 = bp - 4
+read t2
 point int t4
 t4 = bp - 4
-println *t4
-sp = sp + 8
+var int t5
+t5 = *t4
+println t5
