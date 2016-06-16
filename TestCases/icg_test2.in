@@ -1,0 +1,13 @@
+program test5;
+var 
+	a, b, c:integer; 
+	d, f: real;
+
+begin
+	a := 1;
+	b := a + 2;
+	c := c + 4;
+	d := f + 3;
+	f := f * 5;
+end.
+
