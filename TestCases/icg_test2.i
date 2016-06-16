@@ -1,4 +1,3 @@
-int bp sp
 sp = sp - 28
 point int t0
 t0 = bp - 4
@@ -17,16 +16,16 @@ t1 = bp - 12
 int t2 0
 t2 = *t1 + 4
 *t0 = t2
-point int t0
+point double t0
 t0 = bp - 20
-point int t1
+point double t1
 t1 = bp - 28
 double t2 0
 t2 = *t1 + 3
 *t0 = t2
-point int t0
+point double t0
 t0 = bp - 28
-point int t1
+point double t1
 t1 = bp - 28
 double t2 0
 t2 = *t1 * 5
