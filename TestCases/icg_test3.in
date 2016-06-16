@@ -1,0 +1,22 @@
+program test5;
+var
+	n,a:integer;
+function f(a:integer):integer;
+var
+	i:integer;
+begin
+	f:=1;
+    for i:= 1 to 10 do begin
+		f:=f*i;
+	end;
+	f:=f+a;
+end;
+
+begin
+	a := f(10);
+	writeln(a);
+	read(n);
+	writeln(n);
+end.
+
+
