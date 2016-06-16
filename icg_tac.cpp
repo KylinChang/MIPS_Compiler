@@ -309,7 +309,7 @@ struct TempVars {
 			idleTemp.pop();
 		}
 		if (type.find("point") == string::npos)
-			output(type + " t" + string(_Value(ret)) + " 0");
+			output("var " + type + " t" + string(_Value(ret)));
 		else
 			output(type + " t" + string(_Value(ret)));
 		return ret;
