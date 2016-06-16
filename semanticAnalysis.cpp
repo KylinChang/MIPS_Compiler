@@ -182,7 +182,7 @@ void prepareForFP(NODE* root, bool isFunc) {
     }
     // NOTE: we only insert a var when it is a func
     if (isFunc) {
-        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, parseType(root->child[2]), 1))) {
+        if (symbolTableList.front()->insertVar(identifier, parseType(root->child[2]))) {
         // if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, parseType(root->child[2])))) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
         }
