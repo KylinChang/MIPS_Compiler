@@ -1,8 +1,8 @@
 program test10;
 
 const
-    haha = true;
-    PI=3.14 ;
+    haha = true
+    PI=3.14 
     fir = 1;
     sec = 10;
     LARGE = 10000202020202;
@@ -102,17 +102,16 @@ begin
 	if (a+8*9 <> b) then
 		c:=a;
 
- 	hhh := (a+b+c) * a + 1+-2*3 + 4*a/2;
 
-	findMin(a,b,c);
+	findMin(a,b,c)
 
 
         for a:= -1+2 to 100 do begin
-            c:= c + 2+8*9/3;
-	end;
+            c:= c + 2+8*9;	
+	end
 
 	for b:= a+100*10 downto -1 do begin
-            c:= c + 2+8*9/3;
+            c:= c + 2+8*9;	
 	end;
-
-end.
+   
+end
