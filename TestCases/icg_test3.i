@@ -45,7 +45,7 @@ t2 = bp - 4
 point int t3
 t3 = bp - 4
 point int t4
-t4 = bp + 0
+t4 = bp + 8
 var int t5
 t5 = *t3 + *t4
 *t2 = t5

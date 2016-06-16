@@ -272,7 +272,7 @@ Type::operator string() {
     static string wu[200];
     wu[type_integer * 10 + t_shortint] = "shortint";
     wu[type_integer * 10 + t_smallint] = "smallint";
-    wu[type_integer * 10 + t_longint] = "longint";
+    wu[type_integer * 10 + t_longint] = "int";
     wu[type_integer * 10 + t_int64] = "int64";
     wu[type_integer * 10 + t_byte] = "byte";
     wu[type_integer * 10 + t_word] = "word";
@@ -301,6 +301,8 @@ Type::operator string() {
         }
     }
     else {  //complexType
+        cerr<<"Can't be complexType"<<endl;
+        assert(0);
     }
 }
 

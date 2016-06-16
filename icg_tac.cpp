@@ -421,7 +421,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 				offset += st->varSymbolTable[st->paraSequence[i]].size();
 			}
 			piv t0 = mp(6, TempVars::getAnother("point " + string(st->varSymbolTable[varName])));
-			output(getName(mp(0, t0.second)) + " = bp + " + string(_Value(offset)));  //计算时要注意数组和record的情况，还得判断是不是函数本身
+			output(getName(mp(0, t0.second)) + " = bp + " + string(_Value(offset + 8)));  //需要保存bp和ra，所以要+8  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(a));
 			TempVars::release(a); return t0;
 		}
