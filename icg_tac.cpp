@@ -1028,6 +1028,12 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_PROGRAM:
 			genCode(SON(1)->child[0]);
 			puts("entry main");
+			output("sp = sp - " + string(_Value(calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable) + 4)));  //将sp减去参数和局部变量的大小
+			if (SON(1)->child[1]) TempVars::release(genCode(SON(1)->child[1], TK_ROUTINE));
+			ww = SON(1)->name=="FUNC" ? SON(1)->symbolTable->varSymbolTable[SON(1)->symbolTable->varSequence[0]].size() : 0;
+			output("sp = sp + " + string(_Value(calSize(SON(1)->symbolTable->varSymbolTable) - ww + 4)));
+			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
+			
 			genCode(SON(1)->child[1]);
 			//暂时不做处理
 			
