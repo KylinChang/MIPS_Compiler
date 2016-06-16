@@ -32,6 +32,7 @@ struct _Value {
 	
 	operator string();
 	int toInt();
+	string getType();
 };
 typedef pair<int, _Value> piv;
 piv genCode(NODE *t, int extraMsg=-1);

@@ -283,22 +283,36 @@ int _Value::toInt() {
 	if (type == MYINT) return i;
 	throw Error("_Value cast value: Current value is not an integer");
 }
+string _Value::getType() {
+	if (type == INTEGER) return "int";
+	if (type == FLOAT) return "float";
+	if (type == CHAR) return "char";
+	if (type == STRING) return "string";
+	//if (type == Variable) return ??;
+	assert(0);
+}
 
 bool isTempVar(piv a) {
 	return a.first == 0 || a.first == 6;
 }
+void output(string s);
 struct TempVars {
 	static int ind;
 	static priority_queue<int, vector<int>, greater<int> > idleTemp;  // 注意别用size()来判断是否empty，用empty()
-	static int getAnother() {
+	static int getAnother(string type) {
+		int ret;
 		if (idleTemp.empty()) {
-			return ind++;
+			ret = ind++;
 		}
 		else {
-			int ret = idleTemp.top();
+			ret = idleTemp.top();
 			idleTemp.pop();
-			return ret;
 		}
+		if (type.find("point") == string::npos)
+			output(type + " t" + string(_Value(ret)) + " 0");
+		else
+			output(type + " t" + string(_Value(ret)));
+		return ret;
 	}
 	static void release(int TempVar) {
 		idleTemp.push(TempVar);
@@ -379,7 +393,6 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 	string varName = string(a.second);
 	auto st = t->symbolTable;
 	if (st->funcSymbolTable.find(varName) == st->funcSymbolTable.end()) {
-		piv t0 = mp(6, TempVars::getAnother());  //--  //, t1 = mp(0, TempVars::getAnother());
 		bool flag = 0;
 		int offset = 0;
 		for (int i=0; i<st->varSequence.size(); i++) {
@@ -396,6 +409,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 				if (varName == st->varSequence[i])
 					break;
 			}
+			piv t0 = mp(6, TempVars::getAnother("point " + string(st->varSymbolTable[varName])));  //--  //, t1 = mp(0, TempVars::getAnother());
 			output(getName(mp(0, t0.second)) + " = bp - " + string(_Value(offset)));  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(t0));
 			TempVars::release(a); return t0;
@@ -406,6 +420,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 					break;
 				offset += st->varSymbolTable[st->paraSequence[i]].size();
 			}
+			piv t0 = mp(6, TempVars::getAnother("point " + string(st->varSymbolTable[varName])));
 			output(getName(mp(0, t0.second)) + " = bp + " + string(_Value(offset)));  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(a));
 			TempVars::release(a); return t0;
@@ -486,13 +501,13 @@ void chkOpnd(piv a, string side, char op) {
 #define SON(d) ((t)->child[(d)])
 static piv getTempVar(piv a) {
 	if (isTempVar(a)) return a;
-	piv c = mp(0, _Value(TempVars::getAnother()));
+	piv c = mp(0, _Value(TempVars::getAnother(a.second.getType())));
 	output(c, "=", a);
 	return c;
 }
-static piv getReturnNum() {
+static piv getReturnNum(string type) {
 	piv a;
-	output(getName(a=mp(0, TempVars::getAnother())) + " = *sp");
+	output(getName(a=mp(0, TempVars::getAnother(type))) + " = *sp");
 	return a;
 }
 extern map<int, string> NODE_NAMES;
@@ -573,50 +588,50 @@ piv genCode(NODE *t, int extraMsg) {
 			if (ICG_DEBUG) cout<<TempVars::ind<<endl;
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '+');  chkOpnd(b, "Right", '+');
-			output(c=mp(0, TempVars::getAnother()), a, "+", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "+", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_MINUS:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '-');  chkOpnd(b, "Right", '-');
-			output(c=mp(0, TempVars::getAnother()), a, "-", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "-", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_OR:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '|');  chkOpnd(b, "Right", '|');
-			output(c=mp(0, TempVars::getAnother()), a, "|", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "|", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		
 		case TK_MUL:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '*');  chkOpnd(b, "Right", '*');
-			output(c=mp(0, TempVars::getAnother()), a, "*", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "*", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_DIV:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'DIV'");  chkOpnd(b, "Right", "'DIV'");
-			output(c=mp(0, TempVars::getAnother()), a, "DIV", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "DIV", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_REM:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'/'");  chkOpnd(b, "Right", "'/'");
-			output(c=mp(0, TempVars::getAnother()), a, "/", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "/", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_MOD:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'MOD'");  chkOpnd(b, "%", "'MOD'");
-			output(c=mp(0, TempVars::getAnother()), a, "%", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "%", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_AND:
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'AND'");  chkOpnd(b, "Right", "'AND'");
-			output(c=mp(0, TempVars::getAnother()), a, "&", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "&", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 			
@@ -648,11 +663,12 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		case TK_ROUTINE:
 			genCode(SON(0));
-			// output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
+			// output("int bp sp");
+			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
-			ww = 1 ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
-			// output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww)));
-			//TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
+			ww = t->name=="FUNC" ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
+			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww)));
+			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:
 			//TO-DO 其他部分
@@ -695,17 +711,17 @@ piv genCode(NODE *t, int extraMsg) {
 			output(c, "=", a);
 			TempVars::release(a); return c;
 			break;
-		case TK_ASSIGN_ID_EXPR:  //TO-DO  P321 数组计算的时候还要考虑lower_bound
-			a = genCode(SON(0));  b = genCode(SON(1));  x = genCode(SON(1));
-			output(tmp=mp(0, TempVars::getAnother()), b, "-", string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.start)));
-			//output(getName(d=mp(0, TempVars::getAnother())) + " = " + getName(tmp) + " * " + "elem_size(" + getName(a) + ")");
-			output(getName(tmp)
-							+ " = " + getName(tmp)
-								+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
-			output(getName(tmp) + " = &" + getName(a) + " + " + getName(tmp));
-			output("*" + getName(tmp) + " = " + getName(x));
-			output(getName(c=mp(0, TempVars::getAnother())) + " = *" + getName(tmp));
-			TempVars::release(b); TempVars::release(x); TempVars::release(tmp); return c;
+		case TK_ASSIGN_ID_EXPR:  //  P321 数组计算的时候还要考虑lower_bound
+			// a = genCode(SON(0));  b = genCode(SON(1));  x = genCode(SON(1));
+			// output(tmp=mp(0, TempVars::getAnother()), b, "-", string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.start)));
+			// //output(getName(d=mp(0, TempVars::getAnother())) + " = " + getName(tmp) + " * " + "elem_size(" + getName(a) + ")");
+			// output(getName(tmp)
+			// 				+ " = " + getName(tmp)
+			// 					+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
+			// output(getName(tmp) + " = &" + getName(a) + " + " + getName(tmp));
+			// output("*" + getName(tmp) + " = " + getName(x));
+			// output(getName(c=mp(0, TempVars::getAnother())) + " = *" + getName(tmp));
+			// TempVars::release(b); TempVars::release(x); TempVars::release(tmp); return c;
 			break;
 		// case TK_ASSIGN_DD:  //TO-DO
 		// 	break;
@@ -718,29 +734,29 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum();
+			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType);
 			break;
 		case TK_PROC_ID_ARGS:
 			a = genCode(SON(0));
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum();
+			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType);
 			break;
 		
 		//SYS_PROC
-		case TK_PROC_SYS:
+		case TK_PROC_SYS:  //这是procedure
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum();
+			// if (a.second.i == 1) return getReturnNum();
 			break;
-		case TK_PROC_SYS_ARGS:
+		case TK_PROC_SYS_ARGS:  //这是procedure
 			a = genCode(SON(0));
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum();
+			// if (a.second.i == 1) return getReturnNum();
 			break;
 		
 		//TK_READ
@@ -798,14 +814,14 @@ piv genCode(NODE *t, int extraMsg) {
 			// \ downto -> d=-1
 				tmp = genCode(SON(2));
 				if (string(tmp.second) == "TO")
-					output(d=mp(0, TempVars::getAnother()), "=", mp(1, 1));
+					output(d=mp(0, TempVars::getAnother("int")), "=", mp(1, 1));
 				else
-					output(d=mp(0, TempVars::getAnother()), "=", mp(1, -1));
+					output(d=mp(0, TempVars::getAnother("int")), "=", mp(1, -1));
 				TempVars::release(tmp);
-				
+			
 			//while (x!=b) { stmt; x=x+d; }
 				output("label L" + toString(w1=Label::newLabel()));
-				output(tmp=mp(0, TempVars::getAnother()), x, "!=", b);
+				output(tmp=mp(0, TempVars::getAnother("int")), x, "!=", b);
 				output("if_false " + getName(tmp) + " goto L" + toString(w2=Label::newLabel()));
 				genCode(SON(4)); output(x, x, "+", d);
 				output("goto L" + toString(w1));
@@ -814,7 +830,7 @@ piv genCode(NODE *t, int extraMsg) {
 				
 			//while (x==b) { stmt; x=x+d; }
 				output("label L" + toString(w1=Label::newLabel()));
-				output(tmp=mp(0, TempVars::getAnother()), x, "==", b);
+				output(tmp=mp(0, TempVars::getAnother("int")), x, "==", b);
 				output("if_false " + getName(tmp) + " goto L" + toString(w2=Label::newLabel()));
 				genCode(SON(4)); output(x, x, "+", d);
 				output("goto L" + toString(w1));
@@ -889,32 +905,32 @@ piv genCode(NODE *t, int extraMsg) {
 		//expression  //TO-DO
 		case TK_GE:
 			a = genCode(SON(0));  b = genCode(SON(1));
-			output(c=mp(0, TempVars::getAnother()), a, ">=", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, ">=", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_GT:
 			a = genCode(SON(0));  b = genCode(SON(1));
-			output(c=mp(0, TempVars::getAnother()), a, ">", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, ">", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_LE:
 			a = genCode(SON(0));  b = genCode(SON(1));
-			output(c=mp(0, TempVars::getAnother()), a, "<=", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "<=", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_LT:
 			a = genCode(SON(0));  b = genCode(SON(1));
-			output(c=mp(0, TempVars::getAnother()), a, "<", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "<", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_EQUAL:
 			a = genCode(SON(0));  b = genCode(SON(1));
-			output(c=mp(0, TempVars::getAnother()), a, "==", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "==", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_UNEQUAL:
 			a = genCode(SON(0));  b = genCode(SON(1));
-			output(c=mp(0, TempVars::getAnother()), a, "!=", b);  // TO-DO a=a+b??
+			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "!=", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_EXP:
@@ -945,7 +961,7 @@ piv genCode(NODE *t, int extraMsg) {
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS1"<<endl;
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS2"<<endl;
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;
@@ -956,7 +972,7 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(t->dataType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;
 			//返回值?? TO-DO
@@ -970,24 +986,24 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		case TK_FACTOR_NOT:
 			a = genCode(SON(0));
-			output(tmp=mp(0, TempVars::getAnother()), "= NOT", a);
+			output(tmp=mp(0, TempVars::getAnother(a.second.getType())), "= NOT", a);
 			TempVars::release(a);  return tmp;
 			break;
 		case TK_FACTOR_MINUS:
 			a = genCode(SON(0));
-			output(tmp=mp(0, TempVars::getAnother()), "= -", a);
+			output(tmp=mp(0, TempVars::getAnother(a.second.getType())), "= -", a);
 			TempVars::release(a);  return tmp;
 			break;
-		case TK_FACTOR_ID_EXP:
-			a = genCode(SON(0));  b = genCode(SON(1));
-			output(tmp=mp(0, TempVars::getAnother()), b, "-", string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.start)));
-			//output(getName(d=mp(0, TempVars::getAnother())) + " = " + getName(tmp) + " * " + "elem_size(" + getName(a) + ")");
-			output(getName(tmp)
-							+ " = " + getName(tmp)
-								+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
-			output(getName(tmp) + " = &" + getName(a) + " + " + getName(tmp));
-			output(getName(c=mp(0, TempVars::getAnother())) + " = *" + getName(tmp));
-			TempVars::release(b); TempVars::release(tmp); return c;
+		case TK_FACTOR_ID_EXP:  //TO-DO
+			// a = genCode(SON(0));  b = genCode(SON(1));
+			// output(tmp=mp(0, TempVars::getAnother()), b, "-", string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.start)));
+			// //output(getName(d=mp(0, TempVars::getAnother())) + " = " + getName(tmp) + " * " + "elem_size(" + getName(a) + ")");
+			// output(getName(tmp)
+			// 				+ " = " + getName(tmp)
+			// 					+ " * " + string(_Value(t->symbolTable->findVar(string(a.second)).complexType->arrayType.elementSize)));  //t3 = t1 * {elem_size(a)};可以优化掉t3  TO-DO
+			// output(getName(tmp) + " = &" + getName(a) + " + " + getName(tmp));
+			// output(getName(c=mp(0, TempVars::getAnother())) + " = *" + getName(tmp));
+			// TempVars::release(b); TempVars::release(tmp); return c;
 			break;
 		case TK_FACTOR_DD:
 			// TO-DO
