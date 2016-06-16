@@ -185,4 +185,6 @@ void node_init(){
 	NODE_NAMES[TK_SYS_FUNCT] = "TK_SYS_FUNCT";
 	NODE_NAMES[TK_REM] = "TK_REM";
 
+	NODE_NAMES[ERROR] = "ERROR";
+
 }

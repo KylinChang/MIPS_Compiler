@@ -14,7 +14,15 @@ extern int yylineno;
 #define STR_COMMA   "\",\""
 #define STR_COLON   "\":\""
 #define STR_ASSIGN  "\":=\""
+#define STR_RP      "\")\""
+#define STR_RB      "\"]\""
+
 #define STR_END     "\"end\""
+#define STR_UNTIL   "\"until\""
+#define STR_DO      "\"do\""
+#define STR_TO_OR_DOWNTO      "\"do\" or \"downto\""
+#define STR_OF      "\"of\""
+#define STR_LABEL   "\"label\""
 
 void LOG_ERROR(string expected, int line);
 
@@ -435,6 +443,21 @@ array_type_decl : TK_ARRAY TK_LB simple_type_decl TK_RB TK_OF type_decl{
 
                 $$->lineno = MIN($3, $6);
             }
+            |TK_ARRAY TK_LB simple_type_decl error { IS_SYNTAX_ERROR = 1; LOG_ERROR(STR_RB, yylineno); } TK_OF type_decl{
+                //NOTE: IGNORE TK_LB TK_RB TK_OF
+                if(DEBUG){
+                    printf("PARSING ARRAY\n");
+                }
+                $$ = NEWNODE(TK_ARRAY);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = NEWNODE(TK_TYPE_DECL);
+                $$->child[0]->lineno = $3->lineno;
+                $$->child[0]->child = MALLOC($$, 1);
+                $$->child[0]->child[0] = $3;
+                $$->child[1] = $6;
+
+                $$->lineno = MIN($3, $6);
+            }
             ;
 
 record_type_decl : TK_RECORD field_decl_list TK_END{
@@ -485,6 +508,18 @@ field_decl_list : field_decl_list field_decl{
             ;
 
 field_decl : name_list TK_COLON type_decl TK_SEMI{
+            //NOTE: IGNORE TK_COLON TK_SEMI
+                if(DEBUG){
+                    printf("PARSING FIELD DECL\n");
+                }
+                $$ = NEWNODE(TK_FIELD_DECL);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+
+                $$->lineno = MIN($1,$3);
+            } 
+            | name_list error {IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno);} type_decl TK_SEMI{
             //NOTE: IGNORE TK_COLON TK_SEMI
                 if(DEBUG){
                     printf("PARSING FIELD DECL\n");
@@ -732,7 +767,7 @@ var_decl : name_list TK_COLON type_decl TK_SEMI{
 
             $$->lineno = MIN($1, $3);
         }
-        |name_list error {IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno)} type_decl TK_SEMI{
+        |name_list error {IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COLON, yylineno);} type_decl TK_SEMI{
             //NOTE: IGNORE TK_COLON TK_SEMI
             if(DEBUG){
                 printf("PARSING VAR DECL\n");
@@ -1307,7 +1342,21 @@ assign_stmt : TK_ID TK_ASSIGN expression{
                 $$->lineno = MIN($1, $3);
                 $$->lineno = MIN($$, $6);
             }
-            | TK_ID TK_DOT TK_ID TK_ASSIGN expression{
+            | TK_ID TK_LB expr error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_RB, yylineno);} TK_ASSIGN expression{
+                //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
+                if(DEBUG){
+                    printf("PARSING ASSIGN\n");
+                }
+                $$ = NEWNODE(TK_ASSIGN_ID_EXPR);
+                $$->child = MALLOC($$,3);
+                $$->child[0] = $1;
+                $$->child[1] = $3;
+                $$->child[2] = $6;
+
+                $$->lineno = MIN($1, $3);
+                $$->lineno = MIN($$, $6);
+            }
+            | TK_ID TK_DOT TK_ID TK_ASSIGN  expression{
                 //NOTE: IGNORE TK_ASSIGN TK_LB TK_RB
                 if(DEBUG){
                     printf("PARSING ASSIGN\n");
@@ -1345,6 +1394,21 @@ proc_stmt : TK_ID{
 
            $$->lineno = MIN($1, $3);
           }
+          | TK_ID TK_LP args_list error{
+           //NOTE: IGNROE TK_LP TK_RP
+           if(DEBUG){
+               printf("PARSING PROC STMT\n");
+           }
+           $$ = NEWNODE(TK_PROC_ID_ARGS);
+           $$->child = MALLOC($$,2);
+           $$->child[0] = $1;
+           $$->child[1] = $3;
+
+           $$->lineno = MIN($1, $3);
+
+           IS_SYNTAX_ERROR=1;
+           LOG_ERROR(STR_RP, yylineno);
+          }
           | TK_SYS_PROC{
             if(DEBUG){
                printf("PARSING PROC STMT\n");
@@ -1367,6 +1431,21 @@ proc_stmt : TK_ID{
 
            $$->lineno = MIN($1, $3);
           }
+          | TK_SYS_PROC TK_LP expression_list error{
+           //NOTE: IGNROE TK_LP TK_RP
+           if(DEBUG){
+               printf("PARSING PROC STMT\n");
+           }
+           $$ = NEWNODE(TK_PROC_SYS_ARGS);
+           $$->child = MALLOC($$,2);
+           $$->child[0] = $1;
+           $$->child[1] = $3;
+
+           $$->lineno = MIN($1, $3);
+
+           IS_SYNTAX_ERROR=1;
+           LOG_ERROR(STR_RP, yylineno);
+          }
           | TK_READ TK_LP factor TK_RP{
            //NOTE: IGNROE TK_LP TK_RP
            if(DEBUG){
@@ -1379,6 +1458,21 @@ proc_stmt : TK_ID{
 
            $$->lineno = MIN($1, $3);
           }
+          | TK_READ TK_LP factor error{
+           //NOTE: IGNROE TK_LP TK_RP
+           if(DEBUG){
+               printf("PARSING PROC STMT\n");
+           }
+           $$ = NEWNODE(TK_PROC_READ);
+           $$->child = MALLOC($$,2);
+           $$->child[0] = $1;
+           $$->child[1] = $3;
+
+           $$->lineno = MIN($1, $3);
+
+           IS_SYNTAX_ERROR=1;
+           LOG_ERROR(STR_RP, yylineno);
+          }
           | TK_READLN TK_LP factor TK_RP{
                      //NOTE: IGNROE TK_LP TK_RP
                      if(DEBUG){
@@ -1390,6 +1484,21 @@ proc_stmt : TK_ID{
                      $$->child[1] = $3;
 
                      $$->lineno = MIN($1, $3);
+          }
+          | TK_READLN TK_LP factor error{
+                     //NOTE: IGNROE TK_LP TK_RP
+                     if(DEBUG){
+                         printf("PARSING PROC STMT\n");
+                     }
+                     $$ = NEWNODE(TK_PROC_READLN);
+                     $$->child = MALLOC($$,2);
+                     $$->child[0] = $1;
+                     $$->child[1] = $3;
+
+                     $$->lineno = MIN($1, $3);
+
+                     IS_SYNTAX_ERROR=1;
+                     LOG_ERROR(STR_RP, yylineno);
           }
           ;
 
@@ -1415,6 +1524,7 @@ if_stmt : TK_IF expression TK_THEN stmt else_clause{
             $$->lineno = MIN($2, $4);
             $$->lineno = MIN($$, $5);
         }
+
         ;
 
 else_clause : TK_ELSE stmt{
@@ -1443,6 +1553,18 @@ repeat_stmt : TK_REPEAT stmt_list TK_UNTIL expression{
 
                 $$->lineno = MIN($2, $4);
             }
+            |TK_REPEAT stmt_list error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_UNTIL, yylineno);} expression{
+                //NOTE: IGNORE TK_REPEAR TK_UNTIL
+                if(DEBUG){
+                    printf("PARSING REPEAT STMT\n");
+                }
+                $$ = NEWNODE(TK_REPEAT);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $2;
+                $$->child[1] = $4;
+
+                $$->lineno = MIN($2, $4);
+            }
             ;
 
 while_stmt : TK_WHILE expression TK_DO stmt{
@@ -1457,9 +1579,75 @@ while_stmt : TK_WHILE expression TK_DO stmt{
 
                 $$->lineno = MIN($2, $4);
             }
+            | TK_WHILE expression error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_DO, yylineno); } stmt{
+                //NOTE: IGNORE TK_WHILE TK_DO
+                if(DEBUG){
+                    printf("PARSING WHILE STMT\n");
+                }
+                $$ = NEWNODE(TK_WHILE);
+                $$->child = MALLOC($$,2);
+                $$->child[0] = $2;
+                $$->child[1] = $4;
+
+                $$->lineno = MIN($2, $4);
+            }
             ;
 
 for_stmt : TK_FOR TK_ID TK_ASSIGN expression direction expression TK_DO stmt{
+            //NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
+            if(DEBUG){
+                printf("PARSING FOR STMT\n");
+            }
+            $$ = NEWNODE(TK_FOR);
+            $$->child = MALLOC($$,5);
+            $$->child[0] = $2;
+            $$->child[1] = $4;
+            $$->child[2] = $5;
+            $$->child[3] = $6;
+            $$->child[4] = $8;
+
+            $$->lineno = MIN($2, $4);
+            $$->lineno = MIN($$, $5);
+            $$->lineno = MIN($$, $6);
+            $$->lineno = MIN($$, $8);
+        }
+        |TK_FOR TK_ID error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_ASSIGN, $1->lineno); } expression direction expression TK_DO stmt{
+            //NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
+            if(DEBUG){
+                printf("PARSING FOR STMT\n");
+            }
+            $$ = NEWNODE(TK_FOR);
+            $$->child = MALLOC($$,5);
+            $$->child[0] = $2;
+            $$->child[1] = $4;
+            $$->child[2] = $5;
+            $$->child[3] = $6;
+            $$->child[4] = $8;
+
+            $$->lineno = MIN($2, $4);
+            $$->lineno = MIN($$, $5);
+            $$->lineno = MIN($$, $6);
+            $$->lineno = MIN($$, $8);
+        }
+        | TK_FOR TK_ID TK_ASSIGN expression error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_TO_OR_DOWNTO, yylineno); } expression TK_DO stmt{
+            //NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
+            if(DEBUG){
+                printf("PARSING FOR STMT\n");
+            }
+            $$ = NEWNODE(TK_FOR);
+            $$->child = MALLOC($$,5);
+            $$->child[0] = $2;
+            $$->child[1] = $4;
+            $$->child[2] = $5;
+            $$->child[3] = $6;
+            $$->child[4] = $8;
+
+            $$->lineno = MIN($2, $4);
+            $$->lineno = MIN($$, $5);
+            $$->lineno = MIN($$, $6);
+            $$->lineno = MIN($$, $8);
+        }
+        | TK_FOR TK_ID TK_ASSIGN expression direction expression error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_DO, yylineno); } stmt{
             //NOTE: IGNORE TK_FOR TK_ASSIGN TK_DO
             if(DEBUG){
                 printf("PARSING FOR STMT\n");
@@ -1496,6 +1684,19 @@ direction : TK_TO{
         ;
 
 case_stmt : TK_CASE expression TK_OF case_expr_list TK_END{
+            //NOTE: IGNORE TK_CASE TK_OF TK_END
+            if(DEBUG){
+                printf("PARSING CASE STMT\n");
+            }
+            $$ = NEWNODE(TK_CASE);
+            $$->child = MALLOC($$,2);
+            $$->child[0] = $2;
+            $$->child[1] = $4;
+
+            $$->lineno = MIN($2, $4);
+
+        }
+        | TK_CASE expression error { IS_SYNTAX_ERROR=1; LOG_ERROR(STR_OF, yylineno);} case_expr_list TK_END{
             //NOTE: IGNORE TK_CASE TK_OF TK_END
             if(DEBUG){
                 printf("PARSING CASE STMT\n");
@@ -1606,7 +1807,19 @@ goto_stmt : TK_GOTO TK_INTEGER{
             $$ = $2;
             $$->type = TK_GOTO;
            	setName($$, TK_GOTO);
+        } 
+        | TK_GOTO error{
+        //NOTE: GOTO STMT IS ACTUALLY TK_INTEGER
+            if(DEBUG){
+                printf("PARSING GOTO STMT\n");
+            }
+            $$ = NULL;
+
+            syntax_const_error=1;
+            IS_SYNTAX_ERROR = 1;
+            LOG_ERROR(STR_LABEL, yylineno);
         }
+
         ;
 
 expression_list : expression_list TK_COMMA expression{
@@ -1820,6 +2033,7 @@ term : term TK_MUL factor{
 
          $$->lineno = $1->lineno;
      }
+
      ;
 
 factor : TK_ID{
@@ -1874,6 +2088,19 @@ factor : TK_ID{
         $$->child[0] = $2;
         $$->lineno = $2->lineno;
     }
+    | TK_LP expression error{
+    //NOTE: IGNORE TK_LP TK_RP
+        if(DEBUG){
+            printf("PARSING FACTOR \n");
+        }
+        $$ = NEWNODE(TK_FACTOR_EXP);
+        $$->child = MALLOC($$,1);
+        $$->child[0] = $2;
+        $$->lineno = $2->lineno;
+
+        IS_SYNTAX_ERROR = 1;
+        LOG_ERROR(STR_RP, yylineno);
+    }
     | TK_NOT factor{
         if(DEBUG){
             printf("PARSING FACTOR \n");
@@ -1903,6 +2130,20 @@ factor : TK_ID{
         $$->child[1] = $3;
         $$->lineno = MIN($1,$3);
     }
+    | TK_ID TK_LB expr error{
+    //NOTE: IGNORE TK_LB TK_RB
+        if(DEBUG){
+            printf("PARSING FACTOR \n");
+        }
+        $$ = NEWNODE(TK_FACTOR_ID_EXP);
+        $$->child = MALLOC($$,2);
+        $$->child[0] = $1;
+        $$->child[1] = $3;
+        $$->lineno = MIN($1,$3);
+
+        IS_SYNTAX_ERROR = 1;
+        LOG_ERROR(STR_RB ,yylineno);
+    }
     | TK_ID TK_DOT TK_ID{
     //NOTE: ID->ID IS IN ONE NODE
         if(DEBUG){
@@ -1928,6 +2169,23 @@ args_list : args_list TK_COMMA expression{
                 int i;
                 for(i=0;i<old_child_number;i++){
                 	$$->child[i] = tmp[i];
+                }
+                $$->child[i] = $3;
+
+                free(tmp);
+        }
+        | args_list error {IS_SYNTAX_ERROR=1; LOG_ERROR(STR_COMMA, yylineno);} expression{
+            //NOTE: IGNORE TK_COMMA
+            if(DEBUG){
+                printf("PARSING ARGS LIST\n");
+            }
+                $$ = $1;
+                int old_child_number = $$->child_number;
+                NODE** tmp = $$->child;
+                $$->child = MALLOC($$, (1+old_child_number));
+                int i;
+                for(i=0;i<old_child_number;i++){
+                    $$->child[i] = tmp[i];
                 }
                 $$->child[i] = $3;
 

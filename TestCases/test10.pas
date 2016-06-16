@@ -1,8 +1,8 @@
 program test10;
 
 const
-    haha = true
-    PI=3.14 
+    haha = true;
+    PI=3.14 ;
     fir = 1;
     sec = 10;
     LARGE = 10000202020202;
@@ -90,7 +90,7 @@ begin
     test_str1 := book.content;
 
     begin
-        a:=a*2+-3--4;
+        a:=a*2+-3-4;
         b:=(-a-b)*(3+4*5);
         c:=2;
     end;
@@ -103,15 +103,15 @@ begin
 		c:=a;
 
 
-	findMin(a,b,c)
+	findMin(a,b,c);
 
 
         for a:= -1+2 to 100 do begin
             c:= c + 2+8*9;	
-	end
+	end;
 
 	for b:= a+100*10 downto -1 do begin
             c:= c + 2+8*9;	
 	end;
    
-end
+end.
