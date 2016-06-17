@@ -599,6 +599,52 @@ vector<Type> expressionListAnalysis(NODE* root) {
     return ret;
 }
 
+void checklvalue(NODE* root) {
+    // just like factor analysis, but we only check lvalue
+    Type lhst, rhst;
+    unordered_map<string, Type>::iterator tmp;
+    switch (root->type) {
+        case TK_FACTOR_ID:
+            lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
+            if (lhst.null) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable");
+                break;
+            }
+            root->dataType = lhst;
+            break;
+        case TK_FACTOR_ID_EXP:
+            lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
+            if (lhst.isSimpleType || lhst.complexType->complexType != type_array) {
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), root->child[0]->name.c_str(), "is not an array");
+                break;
+            }
+            rhst = expressionAnalysis(root->child[1]);
+            if (!rhst.isSimpleType || rhst.simpleType->simpleType != type_integer) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), "index must be integer");
+                break;
+            }
+            root->dataType = lhst.complexType->arrayType.elementType;
+            break;
+        case TK_FACTOR_DD:
+            lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
+            if (lhst.isSimpleType || lhst.complexType->complexType != type_record) {
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), root->child[0]->name.c_str(), "is not a record");
+                break;
+            }
+            tmp = lhst.complexType->recordType.attrType.find(root->child[0]->record->name);
+            if (tmp == lhst.complexType->recordType.attrType.end()) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute");
+                break;
+            }
+            rhst = tmp->second;
+            root->dataType = rhst;
+            break;
+        default:
+            LOGERR(4, "error in line", to_string(root->child[1]->lineno).c_str(), ":", "read needs a lvalue");
+    }
+
+}
+
 void statementAnalysis(NODE* root) {
 
     if (root->type == TK_STMT_LABEL) {
@@ -715,6 +761,9 @@ void statementAnalysis(NODE* root) {
                 break;
             case TK_PROC_ID_ARGS:
             case TK_PROC_SYS_ARGS:
+                if (root->child[0]->name == "write" || root->child[0]->name == "writeln") {
+                    break;
+                }
                 typeList = expressionListAnalysis(root->child[1]);
                 fpType = findFunc(symbolTableList.front(), root->child[0]->name, typeList, root->child[0]);
                 if (fpType.null) {
@@ -736,7 +785,8 @@ void statementAnalysis(NODE* root) {
                 break;
             case TK_PROC_READ:
             case TK_PROC_READLN:
-                factorAnalysis(root->child[1]);
+                checklvalue(root->child[1]);
+//                factorAnalysis(root->child[1]);
                 break;
             default:
                 assert(0);
@@ -864,14 +914,14 @@ void semanticAnalysis(NODE* ROOT) {
 //  //    char FILENAME[100];
 //  //    printf("Please input the test file: ");
 //  //    scanf("%s", FILENAME);
-
-//      FILE* file = fopen("./TestCases/test10.pas", "r");
+//
+//      FILE* file = fopen("./TestCases/test9.pas", "r");
 //      yyin = file;
-
+//
 //      node_init();
 //      yyparse();
-
+//
 //      semanticAnalysis(ROOT);
-
+//
 //      return 0;
 //  }
