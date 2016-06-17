@@ -23,6 +23,7 @@ label L1
 sp = sp + 12
 ret
 entry main
+sp = sp - 16
 point double t0
 t0 = bp - 8
 var boolean t1
@@ -140,3 +141,4 @@ t6 = bp - 8
 var boolean t7
 t7 = *t6 > 1
 if_false t7 goto L18
+sp = sp + 16

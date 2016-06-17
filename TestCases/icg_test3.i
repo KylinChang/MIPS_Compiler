@@ -52,6 +52,7 @@ t5 = *t3 + *t4
 sp = sp + 12
 ret
 entry main
+sp = sp - 12
 point int t2
 t2 = bp - 8
 arg 10
@@ -72,3 +73,4 @@ t4 = bp - 4
 var int t5
 t5 = *t4
 println t5
+sp = sp + 12
