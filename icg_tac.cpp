@@ -970,7 +970,8 @@ piv genCode(NODE *t, int extraMsg) {
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS1"<<endl;
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(t->dataType);
+//			return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysisForICG(SON(1))).complexType->fpType.retType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS2"<<endl;
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;

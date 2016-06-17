@@ -356,11 +356,11 @@ Type findFunc(SymbolTable* symbolTable, const string &varName, NODE* root) {
 }
 
 Type findFunc(SymbolTable* symbolTable, const string &varName, const vector<Type> &typeList, NODE* root) {
-    root->symbolTable = symbolTable;
+//    root->symbolTable = symbolTable;
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findFunc(varName, typeList);
         if (!y.null) {
-            // root->symbolTable = x;
+             root->symbolTable = x;
             return y;
         }
     }
