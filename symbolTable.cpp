@@ -143,7 +143,8 @@ bool FPType::operator==(const FPType &o) const {
         return false;
     }
     for (int i = 0; i < argTypeList.size(); i++) {
-        if (!(argTypeList[i] == o.argTypeList[i])) {
+        // we allow o.argTypeList automatic upcast
+        if (argTypeList[i] < o.argTypeList[i]) {
             return false;
         }
     }

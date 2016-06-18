@@ -199,7 +199,7 @@ void prepareForFP(NODE* root, bool isFunc) {
             Type t = parseType(x->child[1]);
             for (int j = 0; j < x->child[0]->child_number; j++) {
                 if (symbolTableList.front()->insertVar(x->child[0]->child[j]->name, t, true)) {
-                    LOGERR(4, "error in line", to_string(x->lineno).c_str(), ":", "duplicate variable name");
+                    LOGERR(4, "error in line", to_string(x->lineno).c_str(), ":", "duplicate parameter name");
                 }
             }
         }
@@ -218,7 +218,7 @@ void parseRecord(unordered_map<string, Type> &nameMap, NODE* root) {
     for (int i = 0; i < root->child[0]->child_number; i++) {
         auto name = root->child[0]->child[i]->name;
         if (nameMap.find(name) != nameMap.end()) {
-            LOGERR(4, "error in line", to_string(root->child[0]->child[i]->lineno).c_str(), ":", "duplicate name");
+            LOGERR(4, "error in line", to_string(root->child[0]->child[i]->lineno).c_str(), ":", "duplicate field name");
         }
         nameMap[name] = nameListType;
     }
@@ -262,6 +262,10 @@ Type parseType(NODE* root) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range data type mismatch");
             return Type();
         }
+        if (a.type == type_string || a.type == type_real) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unsupported range data type");
+            return Type();
+        }
         if (b < a) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "illegal range");
             return Type();
@@ -299,7 +303,7 @@ Type parseType(NODE* root) {
             b.ival = -b.ival;
         }
         if (b < a) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "lhs value must be smaller than rhs value in range");
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "illegal range");
             return Type();
         }
         return Type(a.type, a, b);
@@ -379,36 +383,53 @@ void varAnalysis(NODE** varList, int varListNum) {
 }
 
 Type upcast(const Type &a, const Type &b) {
-    // assume a and b are both simple type
-    if (a.simpleType->simpleType == type_string && b.simpleType->simpleType == type_string) {
-        return Type("string");
-    }
-    if (a.simpleType->simpleType == type_char && b.simpleType->simpleType == type_char) {
-        return Type("char");
-    }
-    if (a.simpleType->simpleType == type_integer && b.simpleType->simpleType == type_integer) {
-        if (a.simpleType->intType == t_int64 || a.simpleType->intType == t_qword || b.simpleType->intType == t_int64 || b.simpleType->intType == t_qword) {
-            return Type("int64");
+    if (a.isSimpleType && b.isSimpleType) {
+        if (a.simpleType->simpleType == type_string && b.simpleType->simpleType == type_string) {
+            return Type("string");
         }
-        if (a.simpleType->intType == t_longint || a.simpleType->intType == t_dword || b.simpleType->intType == t_longint || b.simpleType->intType == t_dword) {
+        if (a.simpleType->simpleType == type_char && b.simpleType->simpleType == type_char) {
+            return Type("char");
+        }
+        if (a.simpleType->simpleType == type_integer && b.simpleType->simpleType == type_integer) {
+            if (a.simpleType->intType == t_int64 || a.simpleType->intType == t_qword ||
+                b.simpleType->intType == t_int64 || b.simpleType->intType == t_qword) {
+                return Type("int64");
+            }
+            if (a.simpleType->intType == t_longint || a.simpleType->intType == t_dword ||
+                b.simpleType->intType == t_longint || b.simpleType->intType == t_dword) {
+                return Type("longint");
+            }
+            if (a.simpleType->intType == t_smallint || a.simpleType->intType == t_word ||
+                b.simpleType->intType == t_smallint || b.simpleType->intType == t_word) {
+                return Type("smallint");
+            }
+            if (a.simpleType->intType == t_shortint || a.simpleType->intType == t_byte ||
+                b.simpleType->intType == t_shortint || b.simpleType->intType == t_byte) {
+                return Type("shortint");
+            }
+        }
+        if (a.simpleType->simpleType == type_real && b.simpleType->simpleType == type_real) {
+            if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_extended) ||
+                (b.simpleType->simpleType == type_real && b.simpleType->realType == t_extended)) {
+                return Type("extended");
+            }
+            if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_double) ||
+                (b.simpleType->simpleType == type_real && b.simpleType->realType == t_double)) {
+                return Type("double");
+            }
+            if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_single) ||
+                (b.simpleType->simpleType == type_real && b.simpleType->realType == t_single)) {
+                return Type("single");
+            }
+        }
+    } else if (!a.isSimpleType && b.isSimpleType) {
+        // enum type
+        if (a.complexType->complexType == type_enum && b.simpleType->simpleType == type_integer) {
             return Type("longint");
         }
-        if (a.simpleType->intType == t_smallint || a.simpleType->intType == t_word || b.simpleType->intType == t_smallint || b.simpleType->intType == t_word) {
-            return Type("smallint");
-        }
-        if (a.simpleType->intType == t_shortint || a.simpleType->intType == t_byte || b.simpleType->intType == t_shortint || b.simpleType->intType == t_byte) {
-            return Type("shortint");
-        }
-    } else {
-        if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_extended) || (b.simpleType->simpleType == type_real && b.simpleType->realType == t_extended)) {
-            return Type("extended");
-        }
-        if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_double) || (b.simpleType->simpleType == type_real && b.simpleType->realType == t_double)) {
-            return Type("double");
-        }
-        if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_single) || (b.simpleType->simpleType == type_real && b.simpleType->realType == t_single)) {
-            return Type("single");
-        }
+    } else if (!a.isSimpleType && !b.isSimpleType) {
+        // record type
+        return a;
     }
     return Type();
 }
@@ -421,11 +442,13 @@ Type factorAnalysis(NODE* root) {
     vector<Type> typeList;
     switch (root->type) {
         case TK_FACTOR_ID:
-            lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
-            if (lhst.null) {
+            // to simplify our implementation, we set priority, first we check Var&Const, then we check function
+            auto t = findId(symbolTableList.front(), root->child[0]->name);
+            if (!t.first.null) {
+                lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
+            } else if (!t.second.invalid) {
                 lhst = findConstType(symbolTableList.front(), root->child[0]->name, root->child[0]);
-            }
-            if (lhst.null) {
+            } else {
                 lhst = findFunc(symbolTableList.front(), root->child[0]->name, root->child[0]);
             }
             if (lhst.null) {
@@ -692,7 +715,7 @@ void statementAnalysis(NODE* root) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable", root->child[0]->name.c_str());
             return;
         }
-        if (!lhst.isSimpleType && (lhst.complexType->complexType == type_range || lhst.complexType->complexType == type_proc)) {
+        if (!lhst.isSimpleType && (lhst.complexType->complexType != type_record && lhst.complexType->complexType != type_enum)) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "unsupport assignment operator");
             return;
         }
@@ -701,30 +724,15 @@ void statementAnalysis(NODE* root) {
         switch (root->type) {
             case TK_ASSIGN_ID:
                 rhst = expressionAnalysis(root->child[1]);
-                if (!lhst.isSimpleType && lhst.complexType->complexType == type_func) {
-                    // NOTE: special case: if a is a func, a can be assigned to a value
-                    if (!typeMatch(lhst.complexType->fpType.retType, rhst)) {
-                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch between assignment operator");
-                    }
-
-                    rhst = upcast(lhst.complexType->fpType.retType, rhst);
-                    if (lhst.complexType->fpType.retType < rhst) {
-                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
-                    } else if (rhst < lhst.complexType->fpType.retType) {
-                        root->child[1]->dataType = lhst.complexType->fpType.retType;
-                    }
-                } else {
-                    if (!typeMatch(lhst, rhst)) {
-                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch between assignment operator");
-                        break;
-                    }
-                    rhst = upcast(lhst, rhst);
-
-                    if (lhst < rhst) {
-                        LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
-                    } else if (rhst < lhst) {
-                        root->child[1]->dataType = lhst;
-                    }
+                if (!typeMatch(lhst, rhst)) {
+                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch between assignment operator");
+                    break;
+                }
+                rhst = upcast(lhst, rhst);
+                if (lhst < rhst) {
+                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
+                } else if (rhst < lhst) {
+                    root->child[1]->dataType = lhst;
                 }
                 break;
             case TK_ASSIGN_ID_EXPR:
@@ -803,14 +811,14 @@ void statementAnalysis(NODE* root) {
 //                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "argument number mismatch");
 //                    break;
 //                }
-                for (int i = 0; i < root->child[1]->child_number; i++) {
-                    if (!typeMatch(fpType.complexType->fpType.argTypeList[i], typeList[i])) {
-                        LOGERR(6, "error in line", to_string(root->lineno).c_str(), ":", "argument", to_string(i).c_str(), "type mismatch");
-                    }
-                    if (fpType.complexType->fpType.argTypeList[i] < typeList[i]) {
-                        LOGERR(6, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically", "for argument", to_string(i).c_str());
-                    }
-                }
+//                for (int i = 0; i < root->child[1]->child_number; i++) {
+//                    if (!typeMatch(fpType.complexType->fpType.argTypeList[i], typeList[i])) {
+//                        LOGERR(6, "error in line", to_string(root->lineno).c_str(), ":", "argument", to_string(i).c_str(), "type mismatch");
+//                    }
+//                    if (fpType.complexType->fpType.argTypeList[i] < typeList[i]) {
+//                        LOGERR(6, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically", "for argument", to_string(i).c_str());
+//                    }
+//                }
                 break;
             case TK_PROC_READ:
             case TK_PROC_READLN:
@@ -844,18 +852,24 @@ void statementAnalysis(NODE* root) {
         }
         statementAnalysis(root->child[1]);
     } else if (root->type == TK_FOR) {
-        Type lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
-        Type start = expressionAnalysis(root->child[1]);
-        Type end = expressionAnalysis(root->child[3]);
-        if (lhst.null) {
-            LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable", root->child[0]->name.c_str());
-            return;
-        }
-        if (!lhst.isSimpleType || lhst.simpleType->simpleType != type_integer) {
-            LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be integer");
-        }
-        if (!start.isSimpleType || !end.isSimpleType || start.simpleType->simpleType != end.simpleType->simpleType || start.simpleType->simpleType != type_integer) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "for loop require integer type");
+        // check lhst is var
+        auto x = findId(symbolTableList.front(), root->child[0]->name);
+        if (!x.second.invalid) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be a variable");
+        } else {
+            Type lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
+            Type start = expressionAnalysis(root->child[1]);
+            Type end = expressionAnalysis(root->child[3]);
+            if (lhst.null) {
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable", root->child[0]->name.c_str());
+                return;
+            }
+            if (!lhst.isSimpleType || lhst.simpleType->simpleType != type_integer) {
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be integer");
+            }
+            if (!start.isSimpleType || !end.isSimpleType || start.simpleType->simpleType != end.simpleType->simpleType || start.simpleType->simpleType != type_integer) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "for loop require integer type");
+            }
         }
         root->child[1]->dataType = Type("longint");
         root->child[3]->dataType = Type("longint");
