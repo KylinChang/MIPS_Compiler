@@ -8,7 +8,7 @@
 using namespace std;
 
 static const bool ICG_DEBUG = 0;
-void outDebug() { puts("***************************************************"); }
+void outDebug(string str="") { cout<<("***********************" + str + "****************************")<<endl; }
 #define dbg(x) cout<<#x<<" = "<<x<<endl
 
 /*
@@ -392,7 +392,8 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 	if (a.first != 5) return a;
 	string varName = string(a.second);
 	auto st = t->symbolTable;
-	// cout<<(st->funcSymbolTable.find(varName) == st->funcSymbolTable.end())<<" "<<varName<<endl;
+	outDebug();
+	cout<<(st->funcSymbolTable.find(varName) == st->funcSymbolTable.end())<<" "<<varName<<endl;
 	if (st->funcSymbolTable.find(varName) == st->funcSymbolTable.end()) {
 		bool flag = 0;
 		int offset = 0;
@@ -416,6 +417,8 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 			TempVars::release(a); return t0;
 		}
 		else {  //函数参数
+			outDebug("wahaha");
+			
 			for (int i=st->paraSequence.size()-1; i>=0; i--) {
 				if (varName == st->paraSequence[i])
 					break;
@@ -572,6 +575,7 @@ piv genCode(NODE *t, int extraMsg) {
 		
 		/*  变量  */
 		case TK_ID:
+			if (t->symbolTable == nullptr) output("报警，变量名：" + t->name);
 			if (t->symbolTable != nullptr)
 				return output(t, mp(5, _Value(t->name)));
 			else  //全局变量
@@ -919,6 +923,7 @@ piv genCode(NODE *t, int extraMsg) {
 				}
 				// outDebug();
 				// cout<<a.first<<endl;
+				// outDebug();
 				output(sysproc + " " + getName(a));
 				if (isTempVar(a)) TempVars::release(a);
 			}
