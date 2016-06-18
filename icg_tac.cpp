@@ -392,8 +392,8 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 	if (a.first != 5) return a;
 	string varName = string(a.second);
 	auto st = t->symbolTable;
-	// outDebug();
-	// cout<<(st->funcSymbolTable.find(varName) == st->funcSymbolTable.end())<<" "<<varName<<endl;
+	outDebug();
+	cout<<(st->funcSymbolTable.find(varName) == st->funcSymbolTable.end())<<" "<<varName<<endl;
 	if (st->funcSymbolTable.find(varName) == st->funcSymbolTable.end()) {
 		bool flag = 0;
 		int offset = 0;

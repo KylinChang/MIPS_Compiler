@@ -12,7 +12,12 @@ int main(int argc, char *argv[]) {
 
     node_init();
     yyparse();
+	puts("haha");
     semanticAnalysis(ROOT);
+	if (!semanticAnalysisError) return 1;
+
+	puts("haha");
+	cout<<semanticAnalysisError<<endl;
 	
 	//cout<<(ROOT==NULL)<<endl;
 	try {
