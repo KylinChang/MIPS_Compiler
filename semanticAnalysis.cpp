@@ -799,10 +799,10 @@ void statementAnalysis(NODE* root) {
                 break;
             case TK_PROC_ID_ARGS:
             case TK_PROC_SYS_ARGS:
+                typeList = expressionListAnalysis(root->child[1]);
                 if (root->child[0]->name == "write" || root->child[0]->name == "writeln") {
                     break;
                 }
-                typeList = expressionListAnalysis(root->child[1]);
                 fpType = findFunc(symbolTableList.front(), root->child[0]->name, typeList, root->child[0]);
                 if (fpType.null) {
                     LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined function or procedure", root->child[0]->name.c_str());
