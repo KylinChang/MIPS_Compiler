@@ -7,10 +7,9 @@ const
     d = 4;
 var
     c : array[b..d] of integer;
-    procedure test();
+    procedure test;
     var
         b : integer;
-        c: array[b..d] of integer;
     begin
         b := 1;
     end;

@@ -440,10 +440,11 @@ Type factorAnalysis(NODE* root) {
     Value v;
     unordered_map<string, Type>::iterator tmp;
     vector<Type> typeList;
+    pair<Type, Value> t;
     switch (root->type) {
         case TK_FACTOR_ID:
             // to simplify our implementation, we set priority, first we check Var&Const, then we check function
-            auto t = findId(symbolTableList.front(), root->child[0]->name);
+            t = findId(symbolTableList.front(), root->child[0]->name);
             if (!t.first.null) {
                 lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
             } else if (!t.second.invalid) {
