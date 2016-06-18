@@ -1,18 +1,7 @@
 program test5;
 var
-	a, b:integer;
+	a:integer;
 function fact(a:integer):integer;
-const
-    b = 3;
-    d = 4;
-var
-    c : array[b..d] of integer;
-    procedure test;
-    var
-        b : integer;
-    begin
-        b := 1;
-    end;
 begin
 	if a>1 then
 		fact:=fact(a-1)
@@ -21,8 +10,5 @@ begin
 end;
 
 begin
-	a := fact(10);
-	writeln(a);
+	writeln(fact(10));
 end.
-
-

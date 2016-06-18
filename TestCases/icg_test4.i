@@ -26,12 +26,9 @@ sp = sp + 8
 ret
 entry main
 sp = sp - 8
-point int t0
-t0 = bp - 4
 arg 10
 call _fact
-var int t1
-t1 = *sp
-*t0 = t1
-println _a
+var int t0
+t0 = *sp
+println t0
 sp = sp + 8
