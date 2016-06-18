@@ -1,17 +1,16 @@
 program test5;
 var
-	n,a:integer;
-function f(a:integer):integer;
-	function fact(a:integer):integer;
-	begin
-			f(1);
-	end;
+	a:integer;
+function fact(a:integer):integer;
 begin
-	f:=fact(a);
+	if a>1 then
+		fact:=fact(a-1)
+	else
+		fact:=1;
 end;
 
 begin
-	a := f(10);
+	a := fact(10);
 	writeln(a);
 end.
 

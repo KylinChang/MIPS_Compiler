@@ -60,17 +60,9 @@ call _f
 var int t3
 t3 = *sp
 *t2 = t3
-point int t2
-t2 = bp - 8
-var int t3
-t3 = *t2
-println t3
+println _a
 point int t2
 t2 = bp - 4
 read t2
-point int t4
-t4 = bp - 4
-var int t5
-t5 = *t4
-println t5
+println _n
 sp = sp + 12

@@ -8,7 +8,7 @@
 using namespace std;
 
 static const bool ICG_DEBUG = 0;
-void outDebug() { puts("haha"); }
+void outDebug() { puts("***************************************************"); }
 #define dbg(x) cout<<#x<<" = "<<x<<endl
 
 /*
@@ -392,6 +392,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 	if (a.first != 5) return a;
 	string varName = string(a.second);
 	auto st = t->symbolTable;
+	// cout<<(st->funcSymbolTable.find(varName) == st->funcSymbolTable.end())<<" "<<varName<<endl;
 	if (st->funcSymbolTable.find(varName) == st->funcSymbolTable.end()) {
 		bool flag = 0;
 		int offset = 0;
@@ -521,6 +522,8 @@ int calSize(vector<string> vars, unordered_map<string, Type> a) {
 	for (auto t:vars) ret+=a[t].size();
 	return ret;
 }
+
+static string sysproc;
 piv genCode(NODE *t, int extraMsg) {
 	if (t) {
 	if (ICG_DEBUG) cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
@@ -759,13 +762,17 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		case TK_PROC_SYS_ARGS:  //这是procedure(只有write和writeln)
 			a = genCode(SON(0));
+			sysproc = string(a.second)=="writeln" ? "println" : "print";
+			// puts("*********************");
+			TempVars::release(genCode(SON(1)));
 			// output("begin_args");
-			b = genCode(SON(1)->child[0]);
-			if (b.first == 6) {
-				output(getName(tmp=mp(0, TempVars::getAnother(b.second.getType()))) + " = " + getName(b));
-				TempVars::release(b); b=tmp;
-			}
-			output((string(a.second)=="writeln"?"println ":"print ") + getName(b));  //TO-DO 暂时只处理了单个变量的输出
+			// b = genCode(SON(1)->child[0]);
+			// if (b.first == 6) {
+			// 	output(getName(tmp=mp(0, TempVars::getAnother(b.second.getType()))) + " = " + getName(b));
+			// 	TempVars::release(b); b=tmp;
+			// }
+			// output((string(a.second)=="writeln"?"println ":"print ") + getName(b));  //TO-DO 暂时只处理了单个变量的输出
+			// TempVars::release(genCode(SON(1)));
 			break;
 		
 		//TK_READ
@@ -906,7 +913,13 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_EXP_LIST:
 			for (int i=0; i<t->child_number; i++) {
 				a = genCode(SON(i));
-				output("arg " + getName(a));
+				if (a.first == 6) {
+					output(getName(tmp=mp(0, TempVars::getAnother(a.second.getType()))) + " = " + getName(a));
+					TempVars::release(a); a=tmp;
+				}
+				// outDebug();
+				// cout<<a.first<<endl;
+				output(sysproc + " " + getName(a));
 				if (isTempVar(a)) TempVars::release(a);
 			}
 			break;
