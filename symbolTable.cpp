@@ -115,6 +115,7 @@ RecordType::RecordType(const unordered_map<string, Type> &x): attrType(x) {
     int o = 0;
     for (const auto &t: attrType) {
         offset[t.first] = o;
+        // NOTE: since we only support id.id, we just calculate t.second.`simpleType`
         o += t.second.simpleType->size();
     }
 }
@@ -308,6 +309,7 @@ Type::operator string() {
 
 
 Type findVar(SymbolTable* symbolTable, const string &varName, NODE* root) {
+    // NOTE: here we assign current symbolTable to root->symbolTable for icg's convenience
     root->symbolTable = symbolTable;
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findVar(varName);
@@ -320,11 +322,11 @@ Type findVar(SymbolTable* symbolTable, const string &varName, NODE* root) {
 }
 
 Type findType(SymbolTable* symbolTable, const string &varName, NODE* root) {
-    root->symbolTable = symbolTable;
+//    root->symbolTable = symbolTable;
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findType(varName);
         if (!y.null) {
-            // root->symbolTable = x;
+             root->symbolTable = x;
             return y;
         }
     }
@@ -332,11 +334,11 @@ Type findType(SymbolTable* symbolTable, const string &varName, NODE* root) {
 }
 
 Type findConstType(SymbolTable* symbolTable, const string &constName, NODE* root) {
-    root->symbolTable = symbolTable;
+//    root->symbolTable = symbolTable;
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
         if (!y.invalid) {
-            // root->symbolTable = x;
+             root->symbolTable = x;
             return parseValueType(y);
         }
     }
@@ -344,11 +346,11 @@ Type findConstType(SymbolTable* symbolTable, const string &constName, NODE* root
 }
 
 Type findFunc(SymbolTable* symbolTable, const string &varName, NODE* root) {
-    root->symbolTable = symbolTable;
+//    root->symbolTable = symbolTable;
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findFunc(varName);
         if (!y.null) {
-            // root->symbolTable = x;
+             root->symbolTable = x;
             return y;
         }
     }
@@ -368,11 +370,11 @@ Type findFunc(SymbolTable* symbolTable, const string &varName, const vector<Type
 }
 
 Value findConst(SymbolTable* symbolTable, const string &constName, NODE* root) {
-    root->symbolTable = symbolTable;
+//    root->symbolTable = symbolTable;
     for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
         auto y = x->findConst(constName);
         if (!y.invalid) {
-            // root->symbolTable = x;
+             root->symbolTable = x;
             return y;
         }
     }

@@ -27,10 +27,11 @@ public:
     // the following data structures are used to check goto labels' validity
     unordered_map<int, int> labelRef;
     unordered_map<int, NODE*> labelMap;
-
+    // for DEBUG
     int enumCount;
     string name;
-//    set<string> enumSet;
+
+
     SymbolTable(SymbolTable* _next, const string &_name): name(_name) {nextSymbolTable = _next; enumCount = 0;}
     int insertType(string identifier, const Type &x) {
         // NOTE: here we treat type override is legal

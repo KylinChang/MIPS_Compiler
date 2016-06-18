@@ -52,6 +52,15 @@ enum ComplexTypeEnum {
 
 class Value {
 public:
+	bool operator < (const Value &b) const;
+	bool invalid;
+	SimpleTypeEnum type;
+	int ival;
+	double dval;
+	bool bval;
+	char cval;
+	string sval;
+
 	Value(){invalid = true;}
 	Value(int x) {
 		invalid = false;
@@ -78,14 +87,6 @@ public:
 		sval = x;
 		type = type_string;
 	}
-	bool operator < (const Value &b) const;
-	bool invalid;
-	SimpleTypeEnum type;
-	int ival;
-	double dval;
-	bool bval;
-	char cval;
-	string sval;
 };
 
 class SimpleType;
@@ -94,19 +95,6 @@ class SymbolTable;
 
 class Type {
 public:
-	Type(){
-		null = true;
-		simpleType = nullptr;
-		complexType = nullptr;
-	}
-	Type(const Type &o);
-	Type(const string &x);
-	Type(const vector<string> &x);
-	Type(int start, int end, const Type &elementType);
-	Type(const unordered_map<string, Type> &x);
-	Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
-	Type(const vector<Type> &argTypeList, const Type &retType, int isFunc = 0);
-
     bool operator <(const Type &o) const;
     bool operator ==(const Type &o) const;
 	int size();
@@ -115,7 +103,20 @@ public:
 	bool isSimpleType;
 	SimpleType *simpleType;
 	ComplexType *complexType;
-	
+
+    Type(){
+        null = true;
+        simpleType = nullptr;
+        complexType = nullptr;
+    }
+    Type(const Type &o);
+    Type(const string &x);
+    Type(const vector<string> &x);
+    Type(int start, int end, const Type &elementType);
+    Type(const unordered_map<string, Type> &x);
+    Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
+    Type(const vector<Type> &argTypeList, const Type &retType, int isFunc = 0);
+
 	//for ICG
 	operator string();  //暂时只有simple type
 };
@@ -137,12 +138,13 @@ Type parseValueType(const Value &x);
 class SimpleType {
 
 public:
-	SimpleType(){}
-	SimpleType(const string &x);
 	SimpleTypeEnum simpleType;
 	IntType intType;
 	RealType realType;
 	int size();
+
+    SimpleType(){}
+    SimpleType(const string &x);
 };
 
 class EnumType {
@@ -155,11 +157,10 @@ public:
 
 class RecordType {
 public:
-	RecordType(){}
-	RecordType(const unordered_map<string, Type> &x);
 	// NOTE: here we assume string in different unordered_map should have the same order
 	unordered_map<string, Type> attrType;
 	unordered_map<string, int> offset;
+
 	// NOTE: here caller should guarantee attr x in this record
 	Type getType(const string &x) {
 		return attrType[x];
@@ -168,6 +169,8 @@ public:
 		return offset[x];
 	}
     bool operator ==(const RecordType &o) const;
+    RecordType(){}
+    RecordType(const unordered_map<string, Type> &x);
 };
 
 class ArrayType {
@@ -181,39 +184,27 @@ public:
 class RangeType {
 	// NOTE: we assume we can determine the value in semantic analysis phase
 public:
-	RangeType(){}
-	RangeType(const SimpleTypeEnum &_rangeType, const Value &_start, const Value &_end): rangeType(_rangeType), start(_start), end(_end) {}
 	SimpleTypeEnum rangeType;
 	Value start, end;
+
+    RangeType(){}
+    RangeType(const SimpleTypeEnum &_rangeType, const Value &_start, const Value &_end): rangeType(_rangeType), start(_start), end(_end) {}
 };
 
 class FPType {
 public:
-	FPType(){}
-	FPType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
 	vector<Type> argTypeList;
 	Type retType;
+
     bool operator ==(const FPType &o) const;
+    FPType(){}
+    FPType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
 };
+
+
 
 class ComplexType {
 public:
-	ComplexType(const vector<string> &x): enumType(x) {
-		complexType = type_enum;
-	}
-	ComplexType(int start, int end, Type elementType): arrayType(start, end, elementType) {
-		complexType = type_array;
-	}
-	ComplexType(const unordered_map<string, Type> &x): recordType(x) {
-		complexType = type_record;
-	}
-	ComplexType(const SimpleTypeEnum &x, const Value &a, const Value &b): rangeType(x, a, b) {
-		complexType = type_range;
-	}
-	ComplexType(const vector<Type> &argTypeList, Type retType, int isFunc = 0): fpType(argTypeList, retType) {
-		complexType = isFunc ? type_func : type_proc;
-	}
-	int size();
 	ComplexTypeEnum complexType;
 	EnumType enumType;
 	RecordType recordType;
@@ -221,6 +212,23 @@ public:
 	RangeType rangeType;
 	// NOTE: here we use fptype to represent func and proc
 	FPType fpType;
+    int size();
+
+    ComplexType(const vector<string> &x): enumType(x) {
+        complexType = type_enum;
+    }
+    ComplexType(int start, int end, Type elementType): arrayType(start, end, elementType) {
+        complexType = type_array;
+    }
+    ComplexType(const unordered_map<string, Type> &x): recordType(x) {
+        complexType = type_record;
+    }
+    ComplexType(const SimpleTypeEnum &x, const Value &a, const Value &b): rangeType(x, a, b) {
+        complexType = type_range;
+    }
+    ComplexType(const vector<Type> &argTypeList, Type retType, int isFunc = 0): fpType(argTypeList, retType) {
+        complexType = isFunc ? type_func : type_proc;
+    }
 };
 
 typedef struct NODE{
