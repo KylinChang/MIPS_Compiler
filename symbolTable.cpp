@@ -381,6 +381,17 @@ Value findConst(SymbolTable* symbolTable, const string &constName, NODE* root) {
     return Value();
 }
 
+pair<Type, Value> findId(SymbolTable* symbolTable, const string &name) {
+    for (auto x = symbolTable; x != nullptr; x = x->nextSymbolTable) {
+        auto y = x->findVar(name);
+        auto z = x->findConst(name);
+        if (!y.null || !z.invalid) {
+            return make_pair(y, z);
+        }
+    }
+    return make_pair(Type(), Value());
+};
+
 Type parseValueType(const Value &x) {
     switch (x.type) {
         case type_integer:

@@ -166,4 +166,6 @@ Type findFunc(SymbolTable* symbolTable, const string &varName, const vector<Type
 
 Value findConst(SymbolTable* symbolTable, const string &constName, NODE* root);
 
+pair<Type, Value> findId(SymbolTable* symbolTable, const string &name);
+
 #endif //MIPS_COMPILER_SYMBOLTABLE_H

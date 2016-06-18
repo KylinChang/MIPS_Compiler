@@ -233,14 +233,26 @@ Type parseType(NODE* root) {
         auto x = findType(symbolTableList.front(), root->child[0]->name, root->child[0]);
         if (x.null) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined type");
+            return Type();
         }
         return x;
     } else if (root->type == TK_STD_NL) {
         vector<string> x;
         for (int i = 0; i < root->child[0]->child_number; i++) {
             x.push_back(root->child[0]->child[i]->name);
+            // check name should be undefined
+            if (!findType(symbolTableList.front(), root->child[0]->child[i]->name, root->child[0]->child[i]).null) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid enum item identifer");
+                return Type();
+            }
+            auto t = findId(symbolTableList.front(), root->child[0]->child[i]->name);
+            if (!t.first.null || !t.second.invalid) {
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid enum item identifer");
+                return Type();
+            }
             if (symbolTableList.front()->insertEnum(root->child[0]->child[i]->name)) {
                 LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "duplicate enum item");
+                return Type();
             }
         }
         return Type(x);
@@ -248,19 +260,37 @@ Type parseType(NODE* root) {
         Value a = root->child[0]->value, b = root->child[1]->value;
         if (a.type != b.type) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range data type mismatch");
+            return Type();
         }
         if (b < a) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "illegal range");
+            return Type();
         }
         return Type(a.type, a, b);
     } else if (root->type == TK_STD_DD_ID) {
+        // check id is const
+        if (!findType(symbolTableList.front(), root->child[0]->name, root->child[0]).null) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range definition must be const");
+            return Type();
+        }
+        auto x = findId(symbolTableList.front(), root->child[0]->name), y = findId(symbolTableList.front(), root->child[1]->name);
+        if (!x.first.null || !y.first.null) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range definition must be const");
+            return Type();
+        }
         // NOTE: here a and b must be const
         Value a = findConst(symbolTableList.front(), root->child[0]->name, root->child[0]), b = findConst(symbolTableList.front(), root->child[1]->name, root->child[1]);
+        if (a.invalid || b.invalid) {
+            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined const identifier");
+            return Type();
+        }
         if (a.type != b.type) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "range data type mismatch");
+            return Type();
         }
         if (a.type == type_string || a.type == type_real) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unsupported range data type");
+            return Type();
         }
         if (root->child[0]->type == TK_ID_MINUS) {
             a.ival = -a.ival;
@@ -270,6 +300,7 @@ Type parseType(NODE* root) {
         }
         if (b < a) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "lhs value must be smaller than rhs value in range");
+            return Type();
         }
         return Type(a.type, a, b);
     } else if (root->type == TK_FIELD_DL) {
@@ -307,7 +338,7 @@ void constAnalysis(NODE** constList, int constListNum) {
     for (int i = 0; i < constListNum; i++) {
         string identifier = constList[i]->child[0]->name;
         Value val = constList[i]->child[1]->value;
-        if ((symbolTableList.front()->insertConst(identifier, val))) {
+        if (!symbolTableList.front()->findVar(identifier).null || symbolTableList.front()->insertConst(identifier, val)) {
             LOGERR(4, "error in line", to_string(constList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
     }
@@ -322,7 +353,7 @@ void typeAnalysis(NODE** typeList, int typeListNum) {
 #endif
         string identifier = typeList[i]->child[0]->name;
         Type val = parseType(typeList[i]->child[1]);
-        if (!(findConst(symbolTableList.front(), identifier, typeList[i]->child[0]).invalid) || (symbolTableList.front()->insertType(identifier, val))) {
+        if (!symbolTableList.front()->findConst(identifier).invalid || (symbolTableList.front()->insertType(identifier, val))) {
             // NOTE: here we think type override is legal
             LOGERR(4, "error in line", to_string(typeList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
@@ -338,11 +369,9 @@ void varAnalysis(NODE** varList, int varListNum) {
 #endif
         Type nameListType = parseType(varList[i]->child[1]);
         for (int j = 0; j < varList[i]->child[0]->child_number; j++) {
-            if (findConst(symbolTableList.front(), varList[i]->child[0]->child[j]->name, varList[i]->child[0]->child[j]).invalid &&
-                findType(symbolTableList.front(), varList[i]->child[0]->child[j]->name, varList[i]->child[0]->child[j]).null &&
-                findVar(symbolTableList.front(), varList[i]->child[0]->child[j]->name, varList[i]->child[0]->child[j]).null) {
-                symbolTableList.front()->insertVar(varList[i]->child[0]->child[j]->name, nameListType);
-            } else {
+            if (!symbolTableList.front()->findConst(varList[i]->child[0]->child[j]->name).invalid ||
+                !symbolTableList.front()->findType(varList[i]->child[0]->child[j]->name).null ||
+                symbolTableList.front()->insertVar(varList[i]->child[0]->child[j]->name, nameListType)) {
                 LOGERR(4, "error in line", to_string(varList[i]->child[0]->child[j]->lineno).c_str(), ":", "duplicate identifer");
             }
         }
