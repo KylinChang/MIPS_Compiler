@@ -189,7 +189,7 @@ begin
         va:=2;
     end;
     
-    {ica must be variable}
+    {ica must be a variable}
     for ica := 1 to 2 do
         vb := vb + 1;
     {undefined variable}
@@ -231,7 +231,7 @@ begin
     end;
     
     goto 1;
-    {use a unavailable label}
+    {use a invalid label}
     goto 2;
 
     vba := '1' > '2';

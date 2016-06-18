@@ -140,7 +140,7 @@ public:
     void checkLabelRef() {
         for (auto &x: labelRef) {
             if (labelMap.find(x.first) == labelMap.end()) {
-                LOGERR(4, "error in line", to_string(x.second).c_str(), ":", "use a unavailable label");
+                LOGERR(4, "error in line", to_string(x.second).c_str(), ":", "use a invalid label");
             }
         }
     }
