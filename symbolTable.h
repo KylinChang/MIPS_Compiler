@@ -33,20 +33,12 @@ public:
 
 
     SymbolTable(SymbolTable* _next, const string &_name): name(_name) {nextSymbolTable = _next; enumCount = 0;}
-    int insertType(string identifier, const Type &x) {
-        // NOTE: here we treat type override is legal
-//        if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
-//            return 1;
-//        }
+    bool insertType(string identifier, const Type &x) {
+        if (typeSymbolTable.find(identifier) != typeSymbolTable.end()) {
+            return true;
+        }
         typeSymbolTable[identifier] = x;
-//        if (!x.null && !x.isSimpleType && x.complexType->complexType == type_enum) {
-//            int pre = enumSet.size();
-//            enumSet.insert(x.complexType->enumType.enumList.begin(), x.complexType->enumType.enumList.end());
-//            if (enumSet.size() != pre + x.complexType->enumType.enumList.size()) {
-//                return 2;
-//            }
-//        }
-        return 0;
+        return false;
     }
     bool insertEnum(const string &identifier) {
         return insertConst(identifier, ++enumCount);
@@ -114,8 +106,8 @@ public:
     Type findFunc(const string &x) {
         auto y = funcSymbolTable.find(x);
         if (y != funcSymbolTable.end()) {
-            auto ptype = Type(vector<Type>(), Type());
-            auto ftype = Type(vector<Type>(), Type(), true);
+            auto ptype = Type(vector<Type>(), vector<bool>(), Type());
+            auto ftype = Type(vector<Type>(), vector<bool>(), Type(), true);
             for (const auto &t: y->second) {
                 if (t == ptype || t == ftype) {
                     return t;
@@ -127,8 +119,8 @@ public:
     Type findFunc(const string &x, const vector<Type> &typeList) {
         auto y = funcSymbolTable.find(x);
         if (y != funcSymbolTable.end()) {
-            auto ptype = Type(typeList, Type());
-            auto ftype = Type(typeList, Type(), true);
+            auto ptype = Type(typeList, vector<bool>(), Type());
+            auto ftype = Type(typeList, vector<bool>(), Type(), true);
             for (const auto &t: y->second) {
                 if (t == ptype || t == ftype) {
                     return t;

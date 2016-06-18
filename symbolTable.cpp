@@ -205,10 +205,10 @@ Type::Type(const SimpleTypeEnum &x, const Value &a, const Value &b) {
     isSimpleType = false;
     complexType = new ComplexType(x, a, b);
 }
-Type::Type(const vector<Type> &argListType, const Type &retType, int isFunc) {
+Type::Type(const vector<Type> &argTypeList, const vector<bool> &argVarList, const Type &retType, int isFunc) {
     null = false;
     isSimpleType = false;
-    complexType = new ComplexType(argListType, retType, isFunc);
+    complexType = new ComplexType(argTypeList, argVarList, retType, isFunc);
 }
 
 bool Type::operator <(const Type &o) const {
@@ -242,6 +242,9 @@ bool Type::operator ==(const Type &o) const {
     if (isSimpleType && o.isSimpleType) {
         return simpleType->simpleType == o.simpleType->simpleType;
     } else if (!isSimpleType && !o.isSimpleType) {
+        if ((complexType->complexType == type_func || complexType->complexType == type_proc) && (o.complexType->complexType == type_func || o.complexType->complexType == type_proc)) {
+            return complexType->fpType == complexType->fpType;
+        }
         if (complexType->complexType != o.complexType->complexType) {
             return false;
         }
@@ -252,9 +255,6 @@ bool Type::operator ==(const Type &o) const {
                 return false;
             case type_record:
                 return complexType->recordType == o.complexType->recordType;
-            case type_func:
-            case type_proc:
-                return complexType->fpType == complexType->fpType;
             default:
                 assert(0);
         }

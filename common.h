@@ -115,7 +115,7 @@ public:
     Type(int start, int end, const Type &elementType);
     Type(const unordered_map<string, Type> &x);
     Type(const SimpleTypeEnum &x, const Value &a, const Value &b);
-    Type(const vector<Type> &argTypeList, const Type &retType, int isFunc = 0);
+    Type(const vector<Type> &argTypeList, const vector<bool> &argVarList, const Type &retType, int isFunc = 0);
 
 	//for ICG
 	operator string();  //暂时只有simple type
@@ -194,11 +194,12 @@ public:
 class FPType {
 public:
 	vector<Type> argTypeList;
+    vector<bool> argVarList;
 	Type retType;
 
     bool operator ==(const FPType &o) const;
     FPType(){}
-    FPType(vector<Type> _argTypeList, Type _retType): argTypeList(_argTypeList), retType(_retType){}
+    FPType(const vector<Type> &_argTypeList, const vector<bool> &_argVarList , Type _retType): argTypeList(_argTypeList), argVarList(_argVarList), retType(_retType){}
 };
 
 
@@ -226,7 +227,7 @@ public:
     ComplexType(const SimpleTypeEnum &x, const Value &a, const Value &b): rangeType(x, a, b) {
         complexType = type_range;
     }
-    ComplexType(const vector<Type> &argTypeList, Type retType, int isFunc = 0): fpType(argTypeList, retType) {
+    ComplexType(const vector<Type> &argTypeList, const vector<bool> &argVarList, Type retType, int isFunc = 0): fpType(argTypeList, argVarList, retType) {
         complexType = isFunc ? type_func : type_proc;
     }
 };

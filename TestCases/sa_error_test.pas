@@ -102,7 +102,7 @@ end;
 {duplicate parameter name}
 function fparameter_invalid2(x, y: integer; x, z: real): integer;
 begin
-    fparameter_invalid := 2;
+    fparameter_invalid2 := 2;
 end;
 
 function fparameter_invalid3(x, y: integer): integer;
@@ -114,6 +114,8 @@ end;
 
 begin
     1: va := 1;
+    vra := 1.0;
+    vra := 1;
     
     {duplicate label}
     1: vb := 1;
@@ -126,7 +128,7 @@ begin
     {type mismatch between assignment operator}
     vrecord := 1;
     
-    {cannot automatic downcast data type automatically}
+    {cannot downcast data type automatically}
     va := 1.0;
 
     varray[1] := 1;
@@ -154,18 +156,18 @@ begin
     
     read(va);
     
-    {read nees a lvalue}
+    {read needs a lvalue}
     read(1);
     
     
     if va = 1 then 
-        write(va);
+        write(va)
     else
         write(vb);
         
     repeat
         va := 1;
-    until va := 1;
+    until va = 1;
     
     while va = 1 do
     begin
@@ -178,6 +180,7 @@ begin
     {the type of condition clause must be boolean}
     if va then 
         write(va);
+        
     repeat
         va := 1;
     until va;
@@ -203,8 +206,8 @@ begin
     1: writeln(0);
     2: writeln(1);
     3: begin
-        a := 980*10+100;
-        b := 2;
+        va := 980*10+100;
+        vb := 2;
         end;
     end;
     
@@ -233,29 +236,29 @@ begin
 
     vba := '1' > '2';
     va := 1 + 2;
-    vba := va = 1 or vb = 1;
+    vba := (va = 1) or (vb = 1);
     va := 1 * 2;
     vra := 1 / 2;
     va := 1 div 2;
     va := 1 mod 2;
-    vba := va = 1 and vb = 1;
+    vba := (va = 1) and (vb = 1);
     
     {type mismatch for cmp operator}
     vba := 1 > '2';
     {type mismatch for + and -}
     va := 1 + '2';
     {type mismatch for or}
-    vba := 1 or '2'
+    vba := 1 or '2';
     {type mismatch for *}
     va := 1 * '2';
     {type mismatch for /}
-    va := 1 * '2';
+    va := 1 / '2';
     {type mismatch for div}
     va := 1 div '2';
     {type mismatch for mod}
     va := 1 mod '2';
     {type mismatch for and}
-    vba := va = 1 and 2;
+    vba := (va = 1) and 2;
     
     va := vb;
     va := fb;
@@ -273,59 +276,6 @@ begin
     va := not va;
     {type mismatch for -}
     vba := -vba;
-    
-    
-        
-    read(va);
-    readln(vn);
-    case vn of
-    1: writeln(0);
-    2: writeln(1);
-    3: begin
-        va := 980*10+100;
-        vb := 2;
-        end;
-    end;
-
-    arr_var[10]:=10; 
-
-    while true do
-    begin
-        va:=1;
-        vb:=1;
-        vc:=2;
-    end;
 
 
-    book.title := 1;
-    book.content := '123';
-
-    a:=book.title;
-    test_str1 := book.content;
-
-    begin
-        a:=a*2+-3-4;
-        b:=(-a-b)*(3+4*5);
-        c:=2;
-    end;
-
-        if (a > b) then
-            c := a;
-	if (a+8*9 = b) then
-		c:=a;
-	if (a+8*9 <> b) then
-		c:=a;
-
-
-	findMin(a,b,c);
-
-
-        for a:= -1+2 to 100 do begin
-            c:= c + 2+8*9;	
-	end;
-
-	for b:= a+100*10 downto -1 do begin
-            c:= c + 2+8*9;	
-	end;
-   
 end.

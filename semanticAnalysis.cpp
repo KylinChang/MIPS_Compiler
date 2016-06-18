@@ -62,31 +62,33 @@ void sa_init() {
 //    typeName["widechar"] = "widechar";
 
 //    SYS_FUNCT "abs"|"chr"|"odd"|"ord"|"pred"|"sqr"|"sqrt"|"succ"
-    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("longint")}, Type("longint"), 1));
-    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("double")}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("chr", Type(vector<Type>{Type("longint")}, Type("char"), 1));
-    symbolTableList.front()->insertFunc("ord", Type(vector<Type>{Type("char")}, Type("longint"), 1));
-    symbolTableList.front()->insertFunc("odd", Type(vector<Type>{Type("longint")}, Type("boolean"), 1));
-    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("longint")}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("double")}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("longint")}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("double")}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("longint")}, Type()));
-    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("double")}, Type()));
-    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("char")}, Type()));
-    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("string")}, Type()));
-    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("longint")}, Type()));
-    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("double")}, Type()));
-    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("char")}, Type()));
-    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("string")}, Type()));
-    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("longint")}, Type()));
-    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("double")}, Type()));
-    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("char")}, Type()));
-    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("string")}, Type()));
-    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("longint")}, Type()));
-    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("double")}, Type()));
-    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("char")}, Type()));
-    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("string")}, Type()));
+    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("longint"), 1));
+    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("chr", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("char"), 1));
+    symbolTableList.front()->insertFunc("ord", Type(vector<Type>{Type("char")}, vector<bool>{false}, Type("longint"), 1));
+    symbolTableList.front()->insertFunc("odd", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("boolean"), 1));
+    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("pred", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("succ", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("longint")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("double")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("char")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("string")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("longint")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("double")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("char")}, vector<bool>{true}, Type()));
+    symbolTableList.front()->insertFunc("readln", Type(vector<Type>{Type("string")}, vector<bool>{true}, Type()));
+//    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("longint")}, Type()));
+//    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("double")}, Type()));
+//    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("char")}, Type()));
+//    symbolTableList.front()->insertFunc("write", Type(vector<Type>{Type("string")}, Type()));
+//    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("longint")}, Type()));
+//    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("double")}, Type()));
+//    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("char")}, Type()));
+//    symbolTableList.front()->insertFunc("writeln", Type(vector<Type>{Type("string")}, Type()));
 ////
 
 
@@ -124,6 +126,7 @@ void parseFPType(NODE* root, bool isFunc) {
     string identifier = root->child[0]->name;
     // travel TK_PARA_DL
     vector<Type> argTypeList;
+    vector<bool> argVarList;
     if (root->child[1] != NULL) {
         for (int i = 0; i < root->child[1]->child_number; i++) {
             auto x = root->child[1]->child[i];
@@ -135,18 +138,19 @@ void parseFPType(NODE* root, bool isFunc) {
             Type t = parseType(x->child[1]);
             for (int j = 0; j < x->child[0]->child_number; j++) {
                 argTypeList.push_back(t);
+                argVarList.push_back(x->type == TK_PARA_TL_VAR);
             }
         }
     }
     if (isFunc) {
-        if (symbolTableList.front()->insertFunc(identifier, Type(argTypeList, parseType(root->child[2]), 1))) {
+        if (symbolTableList.front()->insertFunc(identifier, Type(argTypeList, argVarList, parseType(root->child[2]), 1))) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "duplicate function definition");
         }
 //        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, parseType(root->child[2]), 1))) {
 //            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "unknown error");
 //        }
     } else {
-        if (symbolTableList.front()->insertFunc(identifier, Type(argTypeList, Type()))) {
+        if (symbolTableList.front()->insertFunc(identifier, Type(argTypeList, argVarList, Type()))) {
             LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "duplicate procedure definition");
         }
 //        if (symbolTableList.front()->insertVar(identifier, Type(argTypeList, Type()))) {
@@ -358,7 +362,6 @@ void typeAnalysis(NODE** typeList, int typeListNum) {
         string identifier = typeList[i]->child[0]->name;
         Type val = parseType(typeList[i]->child[1]);
         if (!symbolTableList.front()->findConst(identifier).invalid || (symbolTableList.front()->insertType(identifier, val))) {
-            // NOTE: here we think type override is legal
             LOGERR(4, "error in line", to_string(typeList[i]->child[0]->lineno).c_str(), ":", "duplicate identifer");
         }
     }
@@ -408,16 +411,16 @@ Type upcast(const Type &a, const Type &b) {
                 return Type("shortint");
             }
         }
-        if (a.simpleType->simpleType == type_real && b.simpleType->simpleType == type_real) {
-            if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_extended) ||
+        if (a.simpleType->simpleType == type_real) {
+            if ((a.simpleType->realType == t_extended) ||
                 (b.simpleType->simpleType == type_real && b.simpleType->realType == t_extended)) {
                 return Type("extended");
             }
-            if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_double) ||
+            if ((a.simpleType->realType == t_double) ||
                 (b.simpleType->simpleType == type_real && b.simpleType->realType == t_double)) {
                 return Type("double");
             }
-            if ((a.simpleType->simpleType == type_real && a.simpleType->realType == t_single) ||
+            if ((a.simpleType->realType == t_single) ||
                 (b.simpleType->simpleType == type_real && b.simpleType->realType == t_single)) {
                 return Type("single");
             }
@@ -431,7 +434,7 @@ Type upcast(const Type &a, const Type &b) {
         // record type
         return a;
     }
-    return Type();
+    return b;
 }
 
 
@@ -451,6 +454,9 @@ Type factorAnalysis(NODE* root) {
                 lhst = findConstType(symbolTableList.front(), root->child[0]->name, root->child[0]);
             } else {
                 lhst = findFunc(symbolTableList.front(), root->child[0]->name, root->child[0]);
+                if (!lhst.null) {
+                    lhst = lhst.complexType->fpType.retType;
+                }
             }
             if (lhst.null) {
                 LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable or const or function");
@@ -512,7 +518,7 @@ Type factorAnalysis(NODE* root) {
             }
             tmp = lhst.complexType->recordType.attrType.find(root->child[0]->record->name);
             if (tmp == lhst.complexType->recordType.attrType.end()) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute");
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute", root->child[0]->record->name.c_str());
                 break;
             }
             rhst = tmp->second;
@@ -652,8 +658,11 @@ vector<Type> expressionListAnalysis(NODE* root) {
     return ret;
 }
 
-void checklvalue(NODE* root) {
+bool checklvalue(NODE* root) {
     // just like factor analysis, but we only check lvalue
+    if (root->type == TK_EXP || root->type == TK_EXPR || root->type == TK_TERM) {
+        return checklvalue(root->child[0]);
+    }
     Type lhst, rhst;
     unordered_map<string, Type>::iterator tmp;
     switch (root->type) {
@@ -686,16 +695,16 @@ void checklvalue(NODE* root) {
             }
             tmp = lhst.complexType->recordType.attrType.find(root->child[0]->record->name);
             if (tmp == lhst.complexType->recordType.attrType.end()) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute");
+                LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute", root->child[0]->record->name.c_str());
                 break;
             }
             rhst = tmp->second;
             root->dataType = rhst;
             break;
         default:
-            LOGERR(4, "error in line", to_string(root->child[1]->lineno).c_str(), ":", "read needs a lvalue");
+            return false;
     }
-
+    return true;
 }
 
 void statementAnalysis(NODE* root) {
@@ -716,7 +725,7 @@ void statementAnalysis(NODE* root) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable", root->child[0]->name.c_str());
             return;
         }
-        if (!lhst.isSimpleType && (lhst.complexType->complexType != type_record && lhst.complexType->complexType != type_enum)) {
+        if (!lhst.isSimpleType && (lhst.complexType->complexType != type_record && lhst.complexType->complexType != type_enum && lhst.complexType->complexType != type_array)) {
             LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "unsupport assignment operator");
             return;
         }
@@ -739,12 +748,13 @@ void statementAnalysis(NODE* root) {
             case TK_ASSIGN_ID_EXPR:
                 // NOTE: we do not do range check in semantic analysis phase
                 if (lhst.isSimpleType || lhst.complexType->complexType != type_array) {
-                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), root->child[0]->name.c_str(), "is not an array");
+                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "is not an array");
+                    break;
                 }
                 index = exprAnalysis(root->child[1]);
                 rhst = expressionAnalysis(root->child[2]);
                 if (!index.isSimpleType || index.simpleType->simpleType != type_integer) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), "index must be integer");
+                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "index must be integer");
                     break;
                 }
                 if (!typeMatch(lhst.complexType->arrayType.elementType, rhst)) {
@@ -760,13 +770,13 @@ void statementAnalysis(NODE* root) {
                 break;
             case TK_ASSIGN_DD:
                 if (lhst.isSimpleType || lhst.complexType->complexType != type_record) {
-                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), root->child[0]->name.c_str(), "is not a record");
+                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "is not a record");
                     break;
                 }
                 rhst = expressionAnalysis(root->child[1]);
                 tmp = lhst.complexType->recordType.attrType.find(root->child[0]->record->name);
                 if (tmp == lhst.complexType->recordType.attrType.end()) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute");
+                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "invalid attribute", root->child[0]->record->name.c_str());
                     break;
                 }
                 t = tmp->second;
@@ -798,15 +808,16 @@ void statementAnalysis(NODE* root) {
                 }
                 break;
             case TK_PROC_ID_ARGS:
-            case TK_PROC_SYS_ARGS:
                 typeList = expressionListAnalysis(root->child[1]);
-                if (root->child[0]->name == "write" || root->child[0]->name == "writeln") {
-                    break;
-                }
                 fpType = findFunc(symbolTableList.front(), root->child[0]->name, typeList, root->child[0]);
                 if (fpType.null) {
                     LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined function or procedure", root->child[0]->name.c_str());
                     break;
+                }
+                for (int i = 0; i < root->child[1]->child_number; i++) {
+                    if (fpType.complexType->fpType.argVarList[i] && !checklvalue(root->child[1]->child[i])) {
+                        LOGERR(5, "error in line", to_string(root->child[1]->lineno).c_str(), ":", root->child[0]->name.c_str(),"needs a lvalue");
+                    }
                 }
 //                if (fpType.complexType->fpType.argTypeList.size() != root->child[1]->child_number) {
 //                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "argument number mismatch");
@@ -821,10 +832,8 @@ void statementAnalysis(NODE* root) {
 //                    }
 //                }
                 break;
-            case TK_PROC_READ:
-            case TK_PROC_READLN:
-                checklvalue(root->child[1]);
-//                factorAnalysis(root->child[1]);
+            case TK_PROC_SYS_ARGS:
+                typeList = expressionListAnalysis(root->child[1]);
                 break;
             default:
                 assert(0);
@@ -834,7 +843,7 @@ void statementAnalysis(NODE* root) {
     } else if (root->type == TK_IF) {
         Type cond = expressionAnalysis(root->child[0]);
         if (!cond.isSimpleType || cond.simpleType->simpleType != type_boolean) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "the type of condition clause must be boolean");
+            LOGERR(4, "error in line", to_string(root->child[0]->lineno).c_str(), ":", "the type of condition clause must be boolean");
         }
         statementAnalysis(root->child[1]);
         if (root->child[2]) {
@@ -843,20 +852,20 @@ void statementAnalysis(NODE* root) {
     } else if (root->type == TK_REPEAT) {
         Type cond = expressionAnalysis(root->child[1]);
         if (!cond.isSimpleType || cond.simpleType->simpleType != type_boolean) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "the type of condition clause must be boolean");
+            LOGERR(4, "error in line", to_string(root->child[1]->lineno).c_str(), ":", "the type of condition clause must be boolean");
         }
         statementListAnalysis(root->child[0]);
     } else if (root->type == TK_WHILE) {
         Type cond = expressionAnalysis(root->child[0]);
         if (!cond.isSimpleType || cond.simpleType->simpleType != type_boolean) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "the type of condition clause must be boolean");
+            LOGERR(4, "error in line", to_string(root->child[0]->lineno).c_str(), ":", "the type of condition clause must be boolean");
         }
         statementAnalysis(root->child[1]);
     } else if (root->type == TK_FOR) {
         // check lhst is var
         auto x = findId(symbolTableList.front(), root->child[0]->name);
         if (!x.second.invalid) {
-            LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be a variable");
+            LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be a variable");
         } else {
             Type lhst = findVar(symbolTableList.front(), root->child[0]->name, root->child[0]);
             Type start = expressionAnalysis(root->child[1]);
@@ -878,7 +887,7 @@ void statementAnalysis(NODE* root) {
     } else if (root->type == TK_CASE) {
         Type lhst = expressionAnalysis(root->child[0]);
         if (!lhst.isSimpleType || (lhst.simpleType->simpleType != type_integer && lhst.simpleType->simpleType != type_char && lhst.simpleType->simpleType != type_boolean)) {
-            LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", root->child[0]->name.c_str(), "must be integer or char");
+            LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "case variable", "must be integer or char");
         }
         for (int i = 0; i < root->child[1]->child_number; i++) {
             Value c = parseConst(root->child[1]->child[i]->child[0]);

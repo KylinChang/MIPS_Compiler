@@ -1446,60 +1446,6 @@ proc_stmt : TK_ID{
            IS_SYNTAX_ERROR=1;
            LOG_ERROR(STR_RP, yylineno);
           }
-          | TK_READ TK_LP factor TK_RP{
-           //NOTE: IGNROE TK_LP TK_RP
-           if(DEBUG){
-               printf("PARSING PROC STMT\n");
-           }
-           $$ = NEWNODE(TK_PROC_READ);
-           $$->child = MALLOC($$,2);
-           $$->child[0] = $1;
-           $$->child[1] = $3;
-
-           $$->lineno = MIN($1, $3);
-          }
-          | TK_READ TK_LP factor error{
-           //NOTE: IGNROE TK_LP TK_RP
-           if(DEBUG){
-               printf("PARSING PROC STMT\n");
-           }
-           $$ = NEWNODE(TK_PROC_READ);
-           $$->child = MALLOC($$,2);
-           $$->child[0] = $1;
-           $$->child[1] = $3;
-
-           $$->lineno = MIN($1, $3);
-
-           IS_SYNTAX_ERROR=1;
-           LOG_ERROR(STR_RP, yylineno);
-          }
-          | TK_READLN TK_LP factor TK_RP{
-                     //NOTE: IGNROE TK_LP TK_RP
-                     if(DEBUG){
-                         printf("PARSING PROC STMT\n");
-                     }
-                     $$ = NEWNODE(TK_PROC_READLN);
-                     $$->child = MALLOC($$,2);
-                     $$->child[0] = $1;
-                     $$->child[1] = $3;
-
-                     $$->lineno = MIN($1, $3);
-          }
-          | TK_READLN TK_LP factor error{
-                     //NOTE: IGNROE TK_LP TK_RP
-                     if(DEBUG){
-                         printf("PARSING PROC STMT\n");
-                     }
-                     $$ = NEWNODE(TK_PROC_READLN);
-                     $$->child = MALLOC($$,2);
-                     $$->child[0] = $1;
-                     $$->child[1] = $3;
-
-                     $$->lineno = MIN($1, $3);
-
-                     IS_SYNTAX_ERROR=1;
-                     LOG_ERROR(STR_RP, yylineno);
-          }
           ;
 
 compound_stmt : TK_BEGIN stmt_list TK_END{
