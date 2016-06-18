@@ -486,7 +486,7 @@ Type factorAnalysis(NODE* root) {
         case TK_FACTOR_MINUS:
             lhst = factorAnalysis(root->child[0]);
             if (!lhst.isSimpleType || (lhst.simpleType->simpleType != type_integer && lhst.simpleType->simpleType != type_real)) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for minus");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for -");
                 break;
             }
             root->dataType = lhst;
@@ -545,7 +545,7 @@ Type termAnalysis(NODE* root) {
             if (!lhst.isSimpleType || !rhst.isSimpleType ||
                 (lhst.simpleType->simpleType == type_string || rhst.simpleType->simpleType == type_string) ||
                 (lhst.simpleType->simpleType == type_char || rhst.simpleType->simpleType == type_char)) {
-                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for *");
+                LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "type mismatch for /");
                 break;
             }
             root->dataType = Type("double");
@@ -731,7 +731,7 @@ void statementAnalysis(NODE* root) {
                 }
                 rhst = upcast(lhst, rhst);
                 if (lhst < rhst) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
+                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot downcast data type automatically");
                 } else if (rhst < lhst) {
                     root->child[1]->dataType = lhst;
                 }
@@ -753,7 +753,7 @@ void statementAnalysis(NODE* root) {
                 }
                 rhst = upcast(lhst.complexType->arrayType.elementType, rhst);
                 if (lhst.complexType->arrayType.elementType < rhst) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
+                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot downcast data type automatically");
                 } else if (rhst < lhst.complexType->arrayType.elementType) {
                     root->child[2]->dataType = lhst.complexType->arrayType.elementType;
                 }
@@ -776,7 +776,7 @@ void statementAnalysis(NODE* root) {
                 }
                 rhst = upcast(t, rhst);
                 if (t < rhst) {
-                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot automatic downcast data type automatically");
+                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "cannot downcast data type automatically");
                 } else if (rhst < t) {
                     root->child[1]->dataType = t;
                 }
@@ -793,7 +793,7 @@ void statementAnalysis(NODE* root) {
             case TK_SYS_PROC:
                 fpType = findFunc(symbolTableList.front(), root->child[0]->name, root->child[0]);
                 if (fpType.null || fpType.isSimpleType || (fpType.complexType->complexType != type_func && fpType.complexType->complexType != type_proc)) {
-                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined procedure", root->child[0]->name.c_str());
+                    LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined function or procedure", root->child[0]->name.c_str());
                     return;
                 }
                 break;
