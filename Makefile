@@ -20,6 +20,26 @@ run:
 	./a.out TestCases/icg_test2.in >TestCases/icg_test2.i
 	./a.out TestCases/icg_test3.in >TestCases/icg_test3.i
 	./a.out TestCases/icg_test4.in >TestCases/icg_test4.i
+
+newrun:
+	./a.out Assemble/1.pas >Assemble/1.in
+	./a.out Assemble/2.pas >Assemble/2.in
+	./a.out Assemble/3.pas >Assemble/3.in
+	./a.out Assemble/4.pas >Assemble/4.in
+	./a.out Assemble/5.pas >Assemble/5.in
+	./a.out Assemble/6.pas >Assemble/6.in
+	./a.out Assemble/7.pas >Assemble/7.in
+	./a.out Assemble/8.pas >Assemble/8.in
+gen:
+	./Assemble/main 1.in 1.asm
+	./Assemble/main 2.in 2.asm
+	./Assemble/main 3.in 3.asm
+	./Assemble/main 4.in 4.asm
+	./Assemble/main 5.in 5.asm
+	./Assemble/main 6.in 6.asm
+	./Assemble/main 7.in 7.asm
+	./Assemble/main 8.in 8.asm
+
 runtest:
 	./a.out TestCases/test1.pas >TestCases/test1.i
 	./a.out TestCases/test2.pas >TestCases/test2.i

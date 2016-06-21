@@ -14,8 +14,12 @@ int main(int argc, char *argv[]) {
     yyparse();
     semanticAnalysis(ROOT);
 	if (semanticAnalysisError) {
+<<<<<<< HEAD
 		cout<<semanticAnalysisError<<endl;
 		puts("** Error occurred, compiling stopped. **");
+=======
+		puts("Error occurred, compiling stopped.");
+>>>>>>> 22797135e7a44452a792c74cffafbb5484ff7e3f
 		return 1;
 	}
 

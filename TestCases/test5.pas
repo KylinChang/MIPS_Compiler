@@ -22,5 +22,5 @@ begin
    b := 200;
   (* calling a function to get max value *)
    ret := max(a, b);
-   writeln( 'Max value is : ', ret );
+   writeln(a);
 end.

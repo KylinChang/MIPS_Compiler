@@ -9,7 +9,7 @@
 
 list<SymbolTable*> symbolTableList;
 unordered_map<string, string> typeName;
-int semanticAnalysisError;
+int semanticAnalysisError = 0;
 
 
 void LOGERR(int cnt, ...) {
@@ -62,17 +62,18 @@ void sa_init() {
 //    typeName["widechar"] = "widechar";
 
 //    SYS_FUNCT "abs"|"chr"|"odd"|"ord"|"pred"|"sqr"|"sqrt"|"succ"
-    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("longint"), 1));
-    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("chr", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("char"), 1));
-    symbolTableList.front()->insertFunc("ord", Type(vector<Type>{Type("char")}, vector<bool>{false}, Type("longint"), 1));
-    symbolTableList.front()->insertFunc("odd", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("boolean"), 1));
-    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("pred", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
-    symbolTableList.front()->insertFunc("succ", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+    // finally, MIPS vm do not implement these function, so we do not support them
+//    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("longint"), 1));
+//    symbolTableList.front()->insertFunc("abs", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
+//    symbolTableList.front()->insertFunc("chr", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("char"), 1));
+//    symbolTableList.front()->insertFunc("ord", Type(vector<Type>{Type("char")}, vector<bool>{false}, Type("longint"), 1));
+//    symbolTableList.front()->insertFunc("odd", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("boolean"), 1));
+//    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+//    symbolTableList.front()->insertFunc("sqr", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
+//    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+//    symbolTableList.front()->insertFunc("sqrt", Type(vector<Type>{Type("double")}, vector<bool>{false}, Type("double"), 1));
+//    symbolTableList.front()->insertFunc("pred", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
+//    symbolTableList.front()->insertFunc("succ", Type(vector<Type>{Type("longint")}, vector<bool>{false}, Type("double"), 1));
     symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("longint")}, vector<bool>{true}, Type()));
     symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("double")}, vector<bool>{true}, Type()));
     symbolTableList.front()->insertFunc("read", Type(vector<Type>{Type("char")}, vector<bool>{true}, Type()));
@@ -472,7 +473,7 @@ Type factorAnalysis(NODE* root) {
                 LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined function");
                 break;
             }
-            root->dataType = lhst.complexType->fpType.retType;
+            root->dataType = lhst;
             break;
         case TK_FACTOR_CONST:
             v = parseConst(root->child[0]);
@@ -819,6 +820,12 @@ void statementAnalysis(NODE* root) {
                         LOGERR(5, "error in line", to_string(root->child[1]->lineno).c_str(), ":", root->child[0]->name.c_str(),"needs a lvalue");
                     }
                 }
+                if (root->child[0]->name == "read") {
+                    root->type = TK_READ;
+                } else if (root->child[0]->name == "readln") {
+                    root->type = TK_READLN;
+                }
+
 //                if (fpType.complexType->fpType.argTypeList.size() != root->child[1]->child_number) {
 //                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "argument number mismatch");
 //                    break;

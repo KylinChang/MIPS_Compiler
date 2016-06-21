@@ -33,13 +33,22 @@ void genVAR(Quad* quad, VariableMap* map);
 void genCompare(Quad* quad, VariableMap* map);
 void declareVariable(VariableMap* map);
 
-int main() {
+int main(int argc, char* argv[]) {
     char code[100];
     char elements[10][100];
     int i;
     memset(code, 0, sizeof(code));
-    fp = fopen("/Users/petertam/Desktop/in.txt","r");
-    out = fopen("/Users/petertam/Desktop/out.asm", "w");
+    if (argc != 3) {
+        printf("%d\n", argc);
+        printf("USAGE: ./main input_filename output_filename\n");
+        return 0;
+    }
+    fp = fopen(argv[1],"r");
+    out = fopen(argv[2], "w");
+    if (fp==NULL||fp==NULL) {
+        printf("USAGE: ./main input_filename output_filename\n");
+        return 0;
+    }
     //定义变量 提取语句
     while (fgets(code, 100, fp) != NULL) {
         code[strlen(code)-1]='\0';
