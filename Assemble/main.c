@@ -38,12 +38,13 @@ int main(int argc, char* argv[]) {
     char elements[10][100];
     int i;
     memset(code, 0, sizeof(code));
-    if (argc != 2) {
+    if (argc != 3) {
+        printf("%d\n", argc);
         printf("USAGE: ./main input_filename output_filename\n");
         return 0;
     }
-    fp = fopen(argv[0],"r");
-    out = fopen(argv[1], "w");
+    fp = fopen(argv[1],"r");
+    out = fopen(argv[2], "w");
     if (fp==NULL||fp==NULL) {
         printf("USAGE: ./main input_filename output_filename\n");
         return 0;
