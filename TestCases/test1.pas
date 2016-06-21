@@ -13,7 +13,7 @@ begin
         m:=y;
 end;
 
-function max(num1, num2: integer): integer;
+function max(var num1, num2: integer): integer;
 var
     result: integer;
 begin
