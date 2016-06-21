@@ -1,0 +1,12 @@
+program test5;
+var a:integer;
+function f(a,b,c,d:integer):integer;
+begin
+	f:=a+b+c+d;
+end;
+
+begin
+	a:=f(10,20,30,40);
+	writeln(a);
+end.
+

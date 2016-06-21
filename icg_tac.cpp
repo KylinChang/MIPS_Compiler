@@ -508,10 +508,11 @@ static piv getTempVar(piv a) {
 	output(c, "=", a);
 	return c;
 }
-static piv getReturnNum(int size) {
-	piv a;
-	output(getName(a=mp(0, TempVars::getAnother(type))) + " = sp - " + string(_Value(size)));
-	return a;
+static piv getReturnNum(Type type, int size) {
+	piv a, b;
+	output(getName(a=mp(0, TempVars::getAnother(string("point ") + string(type)))) + " = sp - " + string(_Value(size)));
+	output(getName(b=mp(0, TempVars::getAnother(type))) + " = *t" + string(a.second));
+	TempVars::release(a); return b;
 }
 extern map<int, string> NODE_NAMES;
 int calSize(vector<Type> a) {
@@ -519,13 +520,14 @@ int calSize(vector<Type> a) {
 	for (auto t:a) ret+=t.size();
 	return ret;
 }
-int calSize(vector<bool> a) {
+int calSize(vector<Type> a, vector<bool> b) {
 	int ret = 0;
-	for (auto t:a) ret+=t.size();
+	for (int i=0; i<(int)a.size(); i++)
+		ret += b[i]==1 ? 4 : a[i].size();
 	return ret;
 }
 int calSize(FPType a) {
-	return calSize(a.argTypeList) + calSize(a.argVarList) + a.retType.size();
+	return calSize(a.argTypeList, a.argVarList) + a.retType.size();
 }
 int calSize(unordered_map<string, Type> a) {
 	int ret = 0;
@@ -701,10 +703,6 @@ piv genCode(NODE *t, int extraMsg) {
 			output("sp = sp + " + string(_Value(
 				calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)
 				+ calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
-			if (SON(1)->name=="FUNC")
-				returnNumPos.push_back(calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)
-									+ 8
-									+ t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size());
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:
@@ -771,7 +769,8 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum(calSize(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType));
+			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType,
+													calSize(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType) + 8);
 			//if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType);
 			break;
 		case TK_PROC_ID_ARGS:
@@ -779,7 +778,8 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum(calSize(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType));
+			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType,
+													calSize(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType) + 8);
 			break;
 		
 		//SYS_PROC
@@ -1013,7 +1013,7 @@ piv genCode(NODE *t, int extraMsg) {
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS1"<<endl;
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(t->dataType.complexType->fpType.retType);
+			return getReturnNum(t->dataType.complexType->fpType.retType, calSize(t->dataType.complexType->fpType) + 8);
 //			return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysisForICG(SON(1))).complexType->fpType.retType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS2"<<endl;
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
@@ -1025,7 +1025,7 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(t->dataType.complexType->fpType.retType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(t->dataType.complexType->fpType.retType, calSize(t->dataType.complexType->fpType) + 8); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;
 			//返回值?? TO-DO

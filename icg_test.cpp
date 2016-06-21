@@ -13,15 +13,10 @@ int main(int argc, char *argv[]) {
     node_init();
     yyparse();
     semanticAnalysis(ROOT);
-	if (semanticAnalysisError) {
-<<<<<<< HEAD
-		cout<<semanticAnalysisError<<endl;
-		puts("** Error occurred, compiling stopped. **");
-=======
-		puts("Error occurred, compiling stopped.");
->>>>>>> 22797135e7a44452a792c74cffafbb5484ff7e3f
-		return 1;
-	}
+	// if (semanticAnalysisError) {
+	// 	puts("Error occurred, compiling stopped.");
+	// 	return 1;
+	// }
 
 	
 	//cout<<(ROOT==NULL)<<endl;
