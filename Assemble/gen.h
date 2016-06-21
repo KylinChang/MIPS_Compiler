@@ -29,11 +29,6 @@ typedef struct {
     bool isVar;
 } Variable;
 
-//变量表
-typedef struct {
-    int num; //变量数
-    Variable var[200];
-} VariableMap;
 
 //定义三地址码的操作类型
 typedef enum {
@@ -67,6 +62,12 @@ typedef struct {
     Address addr1, addr2, addr3;
     OpKind op;
 } Quad;
+
+//变量表
+typedef struct {
+    int num; //变量数
+    Variable var[200];
+} VariableMap;
 
 //四元组表
 typedef struct {
