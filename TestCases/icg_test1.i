@@ -20,7 +20,7 @@ point int t1
 t1 = bp + 8
 *t0 = *t1
 label L1
-sp = sp + 12
+sp = sp + 8
 ret
 entry main
 sp = sp - 16

@@ -1,40 +1,25 @@
+CC = g++ -std=c++11
+
+
 Compiler:
 	bison -yd --output=yy.tab.cpp syntax.y
 	flex --outfile=lex.yy.cpp scan.l
-	g++ -std=c++11 lex.yy.cpp yy.tab.cpp node.cpp parser.cpp semanticAnalysis.cpp symbolTable.cpp
+	g++ -std=c++11 lex.yy.cpp yy.tab.cpp node.cpp parser.cpp semanticAnalysis.cpp symbolTable.cpp icg_tac.cpp icg_test.cpp
 
-
-Compiler0:
-	yacc -d syntax.y --language=c++ --defines=yy.tab.hpp -o yy.tab.cpp && lex scan.l && g++ lex.yy.c yy.tab.cpp node.cpp parser.cpp
-
-CC = g++ -std=c++11
-OBJS = lex.yy.o yy.tab.o node.o parser.o semanticAnalysis.o symbolTable.o icg_tac.o icg_test.o
 ICG: icg_tac.cpp icg_test.cpp icg_tac.h
 	g++ -std=c++11 lex.yy.o yy.tab.o node.o semanticAnalysis.o symbolTable.o icg_tac.cpp icg_test.cpp
-ICG-yilai: syntax.y scan.l lex.yy.cpp yy.tab.cpp node.cpp semanticAnalysis.cpp symbolTable.cpp common.h yy.tab.hpp symbolTable.h semanticAnalysis.h
+ICG-yilai:
 	bison -yd --output=yy.tab.cpp syntax.y
 	flex --outfile=lex.yy.cpp scan.l
-	g++ -std=c++11 -c lex.yy.cpp yy.tab.cpp node.cpp semanticAnalysis.cpp symbolTable.cpp
-lex.yy.o: lex.yy.cpp common.h
-	$(CC) -c $<
-yy.tab.o: yy.tab.cpp yy.tab.hpp common.h
-	$(CC) -c $<
-node.o: node.cpp yy.tab.hpp common.h
-	$(CC) -c $<
-lex.yy.cpp: scan.l yy.tab.hpp common.h
-	flex --outfile=lex.yy.cpp scan.l
-yy.tab.cpp: syntax.y common.h
-	bison -yd --output=yy.tab.cpp syntax.y
+	g++ -std=c++11 -c lex.yy.cpp yy.tab.cpp node.cpp parser.cpp semanticAnalysis.cpp symbolTable.cpp
 
 #参考：http://blog.csdn.net/wtz1985/article/details/3862141
-
-clean:
-	rm *.o
 
 run:
 	./a.out TestCases/icg_test1.in >TestCases/icg_test1.i
 	./a.out TestCases/icg_test2.in >TestCases/icg_test2.i
 	./a.out TestCases/icg_test3.in >TestCases/icg_test3.i
+	./a.out TestCases/icg_test4.in >TestCases/icg_test4.i
 runtest:
 	./a.out TestCases/test1.pas >TestCases/test1.i
 	./a.out TestCases/test2.pas >TestCases/test2.i
@@ -47,4 +32,5 @@ runtest:
 	./a.out TestCases/test9.pas >TestCases/test9.i
 	./a.out TestCases/test10.pas >TestCases/test10.i
 	./a.out TestCases/test11.pas >TestCases/test11.i
+	./a.out TestCases/sa_error_test.pas >TestCases/sa_error_test.i
 
