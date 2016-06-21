@@ -529,6 +529,11 @@ Type factorAnalysis(NODE* root) {
             printf("%d", root->lineno);
             assert(0);
     }
+
+    // special case: when return a func, we return its retType
+    if (!root->dataType.isSimpleType && root->dataType.complexType->complexType == type_func) {
+        return root->dataType.complexType->fpType.retType;
+    }
     return root->dataType;
 }
 
