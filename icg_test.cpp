@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     node_init();
     yyparse();
     semanticAnalysis(ROOT);
-	if (!semanticAnalysisError) {
+	if (semanticAnalysisError) {
 		puts("Error occurred, compiling stopped.");
 		return 1;
 	}

@@ -4,7 +4,7 @@ const
 var
     x:integer;
 
-procedure findMin(x, y:integer; var m:integer)
+procedure findMin(x, y:integer; var m:integer);
 begin
 
     if x<y then
@@ -22,7 +22,7 @@ begin
     else
         result := num2;
     max := result;
-end
+end;
 begin
     x:=1+2+3*3+2;
-end
+end.

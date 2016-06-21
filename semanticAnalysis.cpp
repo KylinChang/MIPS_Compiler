@@ -9,7 +9,7 @@
 
 list<SymbolTable*> symbolTableList;
 unordered_map<string, string> typeName;
-int semanticAnalysisError;
+int semanticAnalysisError = 0;
 
 
 void LOGERR(int cnt, ...) {
