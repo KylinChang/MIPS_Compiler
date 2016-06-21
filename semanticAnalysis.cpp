@@ -473,7 +473,7 @@ Type factorAnalysis(NODE* root) {
                 LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined function");
                 break;
             }
-            root->dataType = lhst.complexType->fpType.retType;
+            root->dataType = lhst;
             break;
         case TK_FACTOR_CONST:
             v = parseConst(root->child[0]);
