@@ -184,6 +184,7 @@ begin
     repeat
         va := 1;
     until va;
+    
     while va do
     begin
         va:=2;
