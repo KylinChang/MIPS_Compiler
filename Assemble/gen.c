@@ -99,6 +99,7 @@ void changeType(Quad* quad, VariableMap* map) {
     if (strcmp(quad->addr1.contents.name, "int")==0) t = INTEGER;
     if (strcmp(quad->addr1.contents.name, "float")==0) t = FLOAT;
     if (strcmp(quad->addr1.contents.name, "double")==0) t = DOUBLE;
+    if (strcmp(quad->addr1.contents.name, "record")==0) t = RECORD;
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
             map->var[i].type = t;
