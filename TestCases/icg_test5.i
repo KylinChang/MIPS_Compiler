@@ -2,21 +2,7 @@ entry _f
 sp = sp - 8
 point double t0
 t0 = bp - 8
-point double t1
-t1 = bp + 32
-point double t2
-t2 = bp + 24
-var double t3
-t3 = *t1 + *t2
-point double t1
-t1 = bp + 16
-var double t2
-t2 = t3 + *t1
-point double t1
-t1 = bp + 8
-var double t3
-t3 = t2 + *t1
-*t0 = t3
+*t0 = 1
 sp = sp + 8
 ret
 entry main

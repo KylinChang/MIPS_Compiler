@@ -2,8 +2,6 @@ entry main
 sp = sp - 4
 point int t0
 t0 = bp - 4
-TK_EXPR
-TK_TERM
 var int t1
 t1 = 1 + 2
 *t0 = t1

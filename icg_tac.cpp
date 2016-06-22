@@ -807,12 +807,9 @@ struct CaseExpr {
 	CaseExpr(piv a, int label):a(a), label(label) {}
 };
 struct CaseParse {
-	// static piv E;
 	static vector<vector<CaseExpr> > scases;
 	static int endLabel;
 	
-	// static void setE(piv e) { E = e; }
-	// static piv getE() { return E; }
 	static void setEndLabel(int a) { endLabel = a; }
 	static int getEndLabel() { return endLabel; }
 	
@@ -1292,7 +1289,7 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_STMT_LABEL:  /*  stmt其实不需要一个返回值  */
 			a = genCode(t->child[0]);
 			a.first!=1||a.second.type!=_Value::INTEGER ? throw Error("Wrong syntax tree under TK_STMT, above TK_INTEGER"): 0;
-			output("Label LUER" + getName(a));
+			output("Label LUSER" + getName(a));
 			return genCode(t->child[1]);
 			break;
 		case TK_STMT:
