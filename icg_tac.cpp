@@ -770,7 +770,7 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			output("call " + getName(a));
 			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType,
-													calSize(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType) + 8);
+													SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType.size() + 8);
 			//if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType);
 			break;
 		case TK_PROC_ID_ARGS:
@@ -779,7 +779,7 @@ piv genCode(NODE *t, int extraMsg) {
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
 			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType,
-													calSize(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType) + 8);
+													SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType.size() + 8);
 			break;
 		
 		//SYS_PROC
@@ -1010,7 +1010,7 @@ piv genCode(NODE *t, int extraMsg) {
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS1"<<endl;
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(t->dataType.complexType->fpType.retType, calSize(t->dataType.complexType->fpType) + 8);
+			return getReturnNum(t->dataType.complexType->fpType.retType, t->dataType.complexType->fpType.retType.size() + 8);
 //			return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysisForICG(SON(1))).complexType->fpType.retType); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			if (ICG_DEBUG) cout<<TempVars::ind<<" TK_FACTOR_ID_ARGS2"<<endl;
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
@@ -1022,7 +1022,7 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			return getReturnNum(t->dataType.complexType->fpType.retType, calSize(t->dataType.complexType->fpType) + 8); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
+			return getReturnNum(t->dataType.complexType->fpType.retType, t->dataType.complexType->fpType.retType.size() + 8); //output(getName(c=mp(0, TempVars::getAnother())) + " = *sp");
 			// output(getName(mp(0, (c=mp(6, TempVars::getAnother())).second)) + " = sp");
 			return c;
 			//返回值?? TO-DO

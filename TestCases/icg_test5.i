@@ -29,7 +29,7 @@ arg 30
 arg 40
 call _f
 point double t1
-t1 = sp - 48
+t1 = sp - 16
 var double t2
 t2 = *t1
 *t0 = t2
