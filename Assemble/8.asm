@@ -99,21 +99,35 @@ L0:
 	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	# call a function
+	lw $t0, t0
+	add $s0, $t0, $0
+	lw $t0, t1
+	add $s1, $t0, $0
+	lw $t0, t2
+	add $s2, $t0, $0
+	lw $t0, t3
+	add $s3, $t0, $0
+	lw $t0, t4
+	add $s4, $t0, $0
+	lw $t0, t5
+	add $s5, $t0, $0
+	lw $t0, t6
+	add $s6, $t0, $0
+	lw $t0, t7
+	add $s7, $t0, $0
 	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	jal _fact
+	sw $s0, t0
+	sw $s1, t1
+	sw $s2, t2
+	sw $s3, t3
+	sw $s4, t4
+	sw $s5, t5
+	sw $s6, t6
+	sw $s7, t7
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
-	# calculation
-	lw $t1, bp
-	li $t2, 4
-	sub $t1, $t1, $t2
-	sw $t1, t0
-	# calculation
-	lw $t1, bp
-	li $t2, 8
-	add $t1, $t1, $t2
-	sw $t1, t1
 	# calculation
 	addi $t1, $sp, 0
 	li $t2, 12
@@ -179,9 +193,33 @@ main:
 	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	# call a function
+	lw $t0, t0
+	add $s0, $t0, $0
+	lw $t0, t1
+	add $s1, $t0, $0
+	lw $t0, t2
+	add $s2, $t0, $0
+	lw $t0, t3
+	add $s3, $t0, $0
+	lw $t0, t4
+	add $s4, $t0, $0
+	lw $t0, t5
+	add $s5, $t0, $0
+	lw $t0, t6
+	add $s6, $t0, $0
+	lw $t0, t7
+	add $s7, $t0, $0
 	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	jal _fact
+	sw $s0, t0
+	sw $s1, t1
+	sw $s2, t2
+	sw $s3, t3
+	sw $s4, t4
+	sw $s5, t5
+	sw $s6, t6
+	sw $s7, t7
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	# calculation
@@ -197,11 +235,6 @@ main:
 	lw $t0, 0($t0)
 	lw $t1, t2
 	sw $t0, 0($t1)
-	# calculation
-	lw $t1, bp
-	li $t2, 4
-	sub $t1, $t1, $t2
-	sw $t1, t0
 	# assign
 	lw $t0, t2
 	lw $t0, 0($t0)

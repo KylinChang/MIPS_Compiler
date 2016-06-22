@@ -27,6 +27,8 @@ void genFJUMP(Quad* quad);
 void genJUMP(Quad* quad);
 void genFUNC(Quad* quad);
 void genCALL(Quad* quad);
+void genSave(Quad* quad);
+void genRestore(Quad* quad);
 void genRET(Quad* quad);
 void genARG(Quad* quad, VariableMap* map);
 void genVAR(Quad* quad, VariableMap* map);
@@ -171,6 +173,17 @@ int main(int argc, char* argv[]) {
             text.quad[text.num] = quad;
             text.num++;
         }
+        if (strcmp(elements[0], "save")==0) {
+            quad.op = save;
+            text.quad[text.num] = quad;
+            text.num++;
+        }
+        if (strcmp(elements[0], "restore")==0) {
+            quad.op = restore;
+            text.quad[text.num] = quad;
+            text.num++;
+        }
+
         //如果是sp
         if (strcmp(elements[0], "sp")==0) {
             if (strcmp(elements[3], "+")==0) quad.op = add;
@@ -288,6 +301,8 @@ int main(int argc, char* argv[]) {
         if (text.quad[i].op == ret) genRET(text.quad+i);
         if (text.quad[i].op == call) genCALL(text.quad+i);
         if (text.quad[i].op == arg) genARG(text.quad+i, &map);
+        if (text.quad[i].op == save) genSave(text.quad+i);
+        if (text.quad[i].op == restore) genRestore(text.quad+i);
     }
     //退出主程序
     fprintf(out, "\tjr $ra\n");
