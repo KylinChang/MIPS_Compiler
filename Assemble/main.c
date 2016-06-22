@@ -39,7 +39,6 @@ int main(int argc, char* argv[]) {
     int i;
     memset(code, 0, sizeof(code));
     if (argc != 3) {
-        printf("%d\n", argc);
         printf("USAGE: ./main input_filename output_filename\n");
         return 0;
     }
@@ -104,8 +103,10 @@ int main(int argc, char* argv[]) {
         //如果三地址码第一个元素是print
         if (strcmp(elements[0], "print")==0) {
             //***有可能输出常量***记得补充
-            strcpy(quad.addr1.contents.name, elements[1]);
             quad.addr1.kind = getKind(elements[1]);
+            if (quad.addr1.kind == IntConst) quad.addr1.contents.intVal = atoi(elements[1]);
+            if (quad.addr1.kind == FloatConst) quad.addr1.contents.doubleVal = atof(elements[1]);
+            if (quad.addr1.kind != IntConst && quad.addr1.kind != FloatConst) strcpy(quad.addr1.contents.name, elements[1]);
             quad.op = pri;
             text.quad[text.num] = quad;
             text.num++;
@@ -113,8 +114,10 @@ int main(int argc, char* argv[]) {
         //如果三地址码第一个元素是println
         if (strcmp(elements[0], "println")==0) {
             //***有可能输出常量***记得补充
-            strcpy(quad.addr1.contents.name, elements[1]);
             quad.addr1.kind = getKind(elements[1]);
+            if (quad.addr1.kind == IntConst) quad.addr1.contents.intVal = atoi(elements[1]);
+            if (quad.addr1.kind == FloatConst) quad.addr1.contents.doubleVal = atof(elements[1]);
+            if (quad.addr1.kind != IntConst && quad.addr1.kind != FloatConst) strcpy(quad.addr1.contents.name, elements[1]);
             quad.op = priln;
             text.quad[text.num] = quad;
             text.num++;
@@ -245,7 +248,7 @@ int main(int argc, char* argv[]) {
             //sub减法
             if (strcmp(elements[3], "-")==0) quad.op = sub;
             //dvd除法
-            if (strcmp(elements[3], "/")==0) quad.op = dvd;
+            if (strcmp(elements[3], "/")==0 || strcmp(elements[3], "DIV")==0) quad.op = dvd;
             //单纯赋值 根本没有计算
             if (strlen(elements[3]) == 0) {
                 quad.op = asn;

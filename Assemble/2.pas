@@ -1,3 +1,4 @@
+program test2;
 var
     a,b,c,d:longint;
 begin

@@ -1,1 +1,15 @@
-Unexpected null pointer of the syntax tree, parsing has to stop.
+entry main
+sp = sp - 8
+point int t0
+t0 = bp - 4
+point int t1
+t1 = bp - 8
+var boolean t2
+t2 = *t0 > *t1
+if_false t2 goto L0
+println 100
+goto L1
+label L0
+println 99
+label L1
+sp = sp + 8

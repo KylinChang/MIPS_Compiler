@@ -1,3 +1,4 @@
+program test6;
 var
     n,fact,i:longint;
     a:real;

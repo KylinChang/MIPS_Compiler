@@ -216,8 +216,9 @@ void genRET(Quad*quad) {
 
 void genVAR(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# stack\n");
-    if (strcmp(quad->addr1.contents.name, "int")==0) {
+    if (strcmp(quad->addr1.contents.name, "int")==0 || strcmp(quad->addr1.contents.name, "boolean")==0) {
         stackoffset = stackoffset + 4;
+        strcpy(quad->addr1.contents.name, "int");
         changeVar(quad, map);
         fprintf(out, "\taddi $sp, $sp, -4\n");
         fprintf(out, "\tsw $sp, %s\n", quad->addr2.contents.name);
@@ -525,36 +526,39 @@ void genREAD(Quad* quad, VariableMap* map) {
 //生成输出的句子（已支持浮点数）
 void genPRINT(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# print\n");
-    //    保存现场
-    //    fprintf(out, "\taddi $sp, $sp, -4\n");
-    //    fprintf(out, "\tsw $ra, 0($sp)\n");
-    
-    fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
-    
-    type t = getType(quad->addr1.contents.name, map);
-    if (t == INTEGER) {
-        fprintf(out, "\tlw $a0, 0($t0)\n");
+    if (quad->addr1.kind == IntConst) {
+        fprintf(out, "\tli $a0, %d\n", quad->addr1.contents.intVal);
         fprintf(out, "\tli $v0, 1\n");
         fprintf(out, "\tsyscall\n");
-    }
-    if (t == FLOAT) {
-        fprintf(out, "\tl.s $f12, 0($t0)\n");
+    } else
+    if (quad->addr1.kind == FloatConst) {
+        fprintf(out, "\tli.s $f12, %f\n", quad->addr1.contents.floatVal);
         fprintf(out, "\tli $v0, 2\n");
         fprintf(out, "\tsyscall\n");
-    }
-    if (t == DOUBLE) {
-        fprintf(out, "\tl.d $f12, 0($t0)\n");
-        fprintf(out, "\tli $v0, 3\n");
-        fprintf(out, "\tsyscall\n");
+    } else {
+        fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
+        type t = getType(quad->addr1.contents.name, map);
+        if (t == INTEGER) {
+            fprintf(out, "\tlw $a0, 0($t0)\n");
+            fprintf(out, "\tli $v0, 1\n");
+            fprintf(out, "\tsyscall\n");
+        }
+        if (t == FLOAT) {
+            fprintf(out, "\tl.s $f12, 0($t0)\n");
+            fprintf(out, "\tli $v0, 2\n");
+            fprintf(out, "\tsyscall\n");
+        }
+        if (t == DOUBLE) {
+            fprintf(out, "\tl.d $f12, 0($t0)\n");
+            fprintf(out, "\tli $v0, 3\n");
+            fprintf(out, "\tsyscall\n");
+        }
     }
     if (quad->op == priln) {
         fprintf(out, "\tla $a0, endl\n");
         fprintf(out, "\tli $v0, 4\n");
         fprintf(out, "\tsyscall\n");
     }
-    //    恢复现场
-    //    fprintf(out, "\tlw $ra, 0($sp)\n");
-    //    fprintf(out, "\taddi $sp, $sp, 4\n");
 }
 
 //标一个标签

@@ -31,14 +31,14 @@ newrun:
 	./a.out Assemble/7.pas >Assemble/7.in
 	./a.out Assemble/8.pas >Assemble/8.in
 gen:
-	./Assemble/main 1.in 1.asm
-	./Assemble/main 2.in 2.asm
-	./Assemble/main 3.in 3.asm
-	./Assemble/main 4.in 4.asm
-	./Assemble/main 5.in 5.asm
-	./Assemble/main 6.in 6.asm
-	./Assemble/main 7.in 7.asm
-	./Assemble/main 8.in 8.asm
+	./Assemble/main Assemble/1.in Assemble/1.asm
+	./Assemble/main Assemble/2.in Assemble/2.asm
+	./Assemble/main Assemble/3.in Assemble/3.asm
+	./Assemble/main Assemble/4.in Assemble/4.asm
+	./Assemble/main Assemble/5.in Assemble/5.asm
+	./Assemble/main Assemble/6.in Assemble/6.asm
+	./Assemble/main Assemble/7.in Assemble/7.asm
+	./Assemble/main Assemble/8.in Assemble/8.asm
 
 runtest:
 	./a.out TestCases/test1.pas >TestCases/test1.i

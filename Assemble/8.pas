@@ -1,3 +1,4 @@
+program test8;
 var
     n:longint;
 function fact(x:longint):longint;
