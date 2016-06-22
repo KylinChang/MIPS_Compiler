@@ -2,6 +2,6 @@ program test1;
 var
     n:integer;
 begin
-    read(n);
+    readln(n);
     writeln(n);
 end.

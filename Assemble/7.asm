@@ -62,8 +62,8 @@ _nabs:
 	# calculation
 	addi, $sp, $sp, 4
 	# free stack
-lw $t0, bp
-add $sp, $t0, $0
+	lw $t0, bp
+	add $sp, $t0, $0
 	lw $t0, 0($sp)
 	sw $t0, bp
 	addi $sp, $sp, 4

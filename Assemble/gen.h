@@ -32,7 +32,7 @@ typedef struct {
 
 //定义三地址码的操作类型
 typedef enum {
-    gt, sm, eq, ne, if_f, lab, add, sub, dvd, mul, rd, pri, priln, asn, jump, dec, call, var, sp, func, ret, arg
+    gt, sm, eq, ne, if_f, lab, add, sub, dvd, mul, rd, pri, priln, asn, jump, dec, call, var, sp, func, ret, arg, save, restore
     //add sub mul dvd是加减乘除
     //gt sm eq是比较
     //pri priln rd是输入输出

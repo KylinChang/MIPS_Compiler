@@ -178,6 +178,23 @@ void genCALL(Quad* quad) {
 
 }
 
+void genSave() {
+    fprintf(out, "\t#save pointer\n");
+    fprintf(out, "\taddi $sp, $sp, -32\n");
+    for (int i=0; i<8; i++) {
+        fprintf(out, "\tlw $t0, t%d\n", i);
+        fprintf(out, "\tsw $t0, %d($sp)\n", 4*i);
+    }
+}
+
+void genRestore() {
+    fprintf(out, "\t#retrieve pointer\n");
+    for (int i=0; i<8; i++) {
+        fprintf(out, "\tlw $t0, %d($sp)\n", 4*i);
+        fprintf(out, "\tsw $t0, t%d\n", i);
+    }
+}
+
 void genARG(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# push an arg\n");
     if (quad->addr1.kind == IntConst) {
