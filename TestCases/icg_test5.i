@@ -1,5 +1,5 @@
 entry _f
-sp = sp - 40
+sp = sp - 8
 point double t0
 t0 = bp - 8
 point double t1
@@ -17,7 +17,7 @@ t1 = bp + 8
 var double t3
 t3 = t2 + *t1
 *t0 = t3
-sp = sp + 40
+sp = sp + 8
 ret
 entry main
 sp = sp - 8

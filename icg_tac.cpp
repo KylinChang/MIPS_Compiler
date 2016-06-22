@@ -695,18 +695,14 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_ROUTINE:
 			genCode(SON(0));
 			// output("int bp sp");
-			output("sp = sp - " + string(_Value(
-				calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)
-				+ calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量(包括返回值)的大小
+			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));  //将sp减去局部变量(包括返回值)的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
 			// ww = t->name=="FUNC" ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
 			// outDebug();
 			// cout<<calSize(t->symbolTable->varSymbolTable)<<" "<<calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)<<" "<<ww<<" "<<t->symbolTable->varSequence.size()<<endl;
 			// outDebug();
 			// output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww + 4)));
-			output("sp = sp + " + string(_Value(
-				calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)
-				+ calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
+			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:
@@ -1076,15 +1072,11 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_PROGRAM:
 			genCode(SON(1)->child[0]);
 			puts("entry main");
-			output("sp = sp - " + string(_Value(
-				calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable)
-				+ calSize(SON(1)->symbolTable->paraSequence, SON(1)->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
+			output("sp = sp - " + string(_Value(calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
 			if (SON(1)->child[1]) TempVars::release(genCode(SON(1)->child[1], TK_ROUTINE));
 			ww = SON(1)->name=="FUNC" ? SON(1)->symbolTable->varSymbolTable[SON(1)->symbolTable->varSequence[0]].size() : 0;
 			// output("sp = sp + " + string(_Value(calSize(SON(1)->symbolTable->varSymbolTable) - ww + 4)));
-			output("sp = sp + " + string(_Value(
-				calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable)
-				+ calSize(SON(1)->symbolTable->paraSequence, SON(1)->symbolTable->varSymbolTable))));
+			output("sp = sp + " + string(_Value(calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable))));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			//暂时不做处理
 			
