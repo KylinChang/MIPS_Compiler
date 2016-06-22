@@ -258,10 +258,11 @@ _Value::_Value(int a):type(INTEGER) { val.i = a; }
 _Value::_Value(double a):type(FLOAT) { val.d = a; }
 _Value::_Value(char a):type(CHAR) { val.c = a; }
 _Value::_Value(string a):type(Variable) { val.varName = a; }
+_Value::_Value(int a, string pt):type(POINT), pt(pt) { val.i = a; }
 
 _Value::_Value(int a, int d):type(MYINT),i(a) {}
-_Value::_Value(char *s, int d):type(MYSTRING),s(s) { i = d; }
-_Value::_Value(string s, int d):type(MYSTRING),s(s) { i = d; }
+_Value::_Value(char *s, int d):type(MYSTRING), s(s) { i = d; }
+_Value::_Value(string s, int d):type(MYSTRING), s(s) { i = d; }
 
 _Value::operator string() {
 	stringstream ss;
@@ -273,6 +274,7 @@ _Value::operator string() {
 		case Variable: ss<<val.varName; break;
 		case MYINT: ss<<i; break;
 		case MYSTRING: ss<<s; break;
+		case POINT: ss<<val.i; break;
 		default: break;
 	}
 	string s; ss>>s;
@@ -280,6 +282,7 @@ _Value::operator string() {
 }
 int _Value::toInt() {
 	if (type == INTEGER) return val.i;
+	if (type == POINT) return val.i;
 	if (type == MYINT) return i;
 	throw Error("_Value cast value: Current value is not an integer");
 }
@@ -288,6 +291,7 @@ string _Value::getType() {
 	if (type == FLOAT) return "float";
 	if (type == CHAR) return "char";
 	if (type == STRING) return "string";
+	if (type == POINT) return pt;
 	//if (type == Variable) return ??;
 	assert(0);
 }
@@ -411,7 +415,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 				if (varName == st->varSequence[i])
 					break;
 			}
-			piv t0 = mp(6, TempVars::getAnother("point " + string(st->varSymbolTable[varName])));  //--  //, t1 = mp(0, TempVars::getAnother());
+			piv t0 = mp(6, _Value(TempVars::getAnother("point " + string(st->varSymbolTable[varName])), string(st->varSymbolTable[varName])));  //--  //, t1 = mp(0, TempVars::getAnother());
 			output(getName(mp(0, t0.second)) + " = bp - " + string(_Value(offset)));  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(t0));
 			TempVars::release(a); return t0;
@@ -423,7 +427,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 					break;
 				offset += st->varSymbolTable[st->paraSequence[i]].size();
 			}
-			piv t0 = mp(6, TempVars::getAnother("point " + string(st->varSymbolTable[varName])));
+			piv t0 = mp(6, _Value(TempVars::getAnother("point " + string(st->varSymbolTable[varName])), string(st->varSymbolTable[varName])));
 			output(getName(mp(0, t0.second)) + " = bp + " + string(_Value(offset + 8)));  //需要保存bp和ra，所以要+8  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(a));
 			TempVars::release(a); return t0;
@@ -478,7 +482,7 @@ struct CaseParse {
 		vector<string> ret;
 		vector<CaseExpr> &cases = *scases.rbegin();
 		for (int i=0; i<cases.size(); i++)
-			ret.push_back("if_false " + getName(E) + " != " + getName(cases[i].a) + " then goto L" + toString(cases[i].label));
+			ret.push_back("if " + getName(E) + " == " + getName(cases[i].a) + " then goto L" + toString(cases[i].label));
 		scases.pop_back();
 		return ret;
 	}
@@ -691,18 +695,14 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_ROUTINE:
 			genCode(SON(0));
 			// output("int bp sp");
-			output("sp = sp - " + string(_Value(
-				calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)
-				+ calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量(包括返回值)的大小
+			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));  //将sp减去局部变量(包括返回值)的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
 			// ww = t->name=="FUNC" ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
 			// outDebug();
 			// cout<<calSize(t->symbolTable->varSymbolTable)<<" "<<calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)<<" "<<ww<<" "<<t->symbolTable->varSequence.size()<<endl;
 			// outDebug();
 			// output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww + 4)));
-			output("sp = sp + " + string(_Value(
-				calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)
-				+ calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
+			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			break;
 		case TK_ROUTINE_HEAD:
@@ -946,9 +946,6 @@ piv genCode(NODE *t, int extraMsg) {
 					output(getName(tmp=mp(0, TempVars::getAnother(a.second.getType()))) + " = " + getName(a));
 					TempVars::release(a); a=tmp;
 				}
-				// outDebug();
-				// cout<<a.first<<endl;
-				// outDebug();
 				output(sysproc + " " + getName(a));
 				if (isTempVar(a)) TempVars::release(a);
 			}
@@ -1072,15 +1069,11 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_PROGRAM:
 			genCode(SON(1)->child[0]);
 			puts("entry main");
-			output("sp = sp - " + string(_Value(
-				calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable)
-				+ calSize(SON(1)->symbolTable->paraSequence, SON(1)->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
+			output("sp = sp - " + string(_Value(calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable))));  //将sp减去参数和局部变量的大小
 			if (SON(1)->child[1]) TempVars::release(genCode(SON(1)->child[1], TK_ROUTINE));
 			ww = SON(1)->name=="FUNC" ? SON(1)->symbolTable->varSymbolTable[SON(1)->symbolTable->varSequence[0]].size() : 0;
 			// output("sp = sp + " + string(_Value(calSize(SON(1)->symbolTable->varSymbolTable) - ww + 4)));
-			output("sp = sp + " + string(_Value(
-				calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable)
-				+ calSize(SON(1)->symbolTable->paraSequence, SON(1)->symbolTable->varSymbolTable))));
+			output("sp = sp + " + string(_Value(calSize(SON(1)->symbolTable->varSequence, SON(1)->symbolTable->varSymbolTable))));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
 			//暂时不做处理
 			

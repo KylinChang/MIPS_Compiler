@@ -1,6 +1,6 @@
 program test5;
-var a:integer;
-function f(a,b,c,d:integer):integer;
+var a:real;
+function f(a,b,c,d:real):real;
 begin
 	f:=a+b+c+d;
 end;
@@ -8,5 +8,13 @@ end;
 begin
 	a:=f(10,20,30,40);
 	writeln(a);
+
+	
+    case 1 of
+    1: a:=0.0;
+    2: a:=0.1;
+    end;
+
+	read(a);
 end.
 

@@ -8,7 +8,7 @@ struct Error {
 struct _Value {
 	enum Type {
 		INTEGER, FLOAT, CHAR, STRING, Variable,
-		MYINT, MYSTRING
+		MYINT, MYSTRING, POINT
 	};
 	int type;
 	struct Val {
@@ -20,11 +20,13 @@ struct _Value {
 	} val;
 	int i;
 	string s;
+	string pt;  //point type
 	_Value();
 	_Value(int a);
 	_Value(double a);
 	_Value(char a);
 	_Value(string a);
+	_Value(int a, string pt);
 	
 	_Value(int a, int d);
 	_Value(char *s, int d);
