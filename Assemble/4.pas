@@ -1,3 +1,4 @@
+program test4;
 var
     a,b:integer;
 begin

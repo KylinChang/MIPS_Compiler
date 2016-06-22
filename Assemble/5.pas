@@ -1,3 +1,4 @@
+program test5;
 var
     c:integer;
 begin

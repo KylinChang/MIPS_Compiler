@@ -1,14 +1,12 @@
+program test7;
 var
     n:integer;
-function f(x:integer):integer;
-var
-    i:integer;
+function nabs(x:integer):integer;
 begin
-    f:=0;
-    for i:=1 to x do f:=f+i;
+    if (x<0) then nabs:=x else nabs:=0-x;
 end;
 begin
-    readln(n);
-    n:=f(n);
+    read(n);
+    n:=nabs(n);
     writeln(n);
 end.
