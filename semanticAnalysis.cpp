@@ -826,9 +826,9 @@ void statementAnalysis(NODE* root) {
                     }
                 }
                 if (root->child[0]->name == "read") {
-                    root->type = TK_READ;
+                    root->type = TK_PROC_READ;
                 } else if (root->child[0]->name == "readln") {
-                    root->type = TK_READLN;
+                    root->type = TK_PROC_READLN;
                 }
 
 //                if (fpType.complexType->fpType.argTypeList.size() != root->child[1]->child_number) {
