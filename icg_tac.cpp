@@ -40,16 +40,7 @@ void outDebug(string str="") { cout<<("***********************" + str + "*******
 	
 		得到局部变量i在站上的位置：
 			t0 = bp - ...; 得到i在栈上的位置
-			load double t1 t0; t0为地址，t1为该地址取出的double型变量
-		load目前有以下几种：
-			load int
-			load float
-			load double
-		
-		输入输出：
-			write
-			writeln
-		
+
 		
 	pascal参数传递顺序：
 		1.参数按出现顺序，从左至右地进栈。
@@ -283,17 +274,366 @@ _Value::operator string() {
 int _Value::toInt() {
 	if (type == INTEGER) return val.i;
 	if (type == POINT) return val.i;
+	if (type == CHAR) return val.c;
 	if (type == MYINT) return i;
 	throw Error("_Value cast value: Current value is not an integer");
+}
+double _Value::toFloat() {
+	if (type == INTEGER) return val.i;
+	if (type == POINT) return val.i;
+	if (type == CHAR) return val.c;
+	if (type == FLOAT) return val.d;
+	if (type == MYINT) return i;
+	throw Error("_Value cast value: Current value is not a float point number");
 }
 string _Value::getType() {
 	if (type == INTEGER) return "int";
 	if (type == FLOAT) return "float";
 	if (type == CHAR) return "char";
-	if (type == STRING) return "string";
+	// if (type == STRING) return "string";
 	if (type == POINT) return pt;
 	//if (type == Variable) return ??;
 	assert(0);
+}
+_Value operator+(_Value a, _Value b) {  //注意：这里的Variable其实就是String常量, vanName指代里面保存的字符串常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() + b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() + b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(a.toInt() + b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(a.toFloat() + b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(b.toInt() + a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(b.toFloat() + a.val.varName);
+	}
+	else {
+		return a.val.varName + b.val.varName;
+	}
+}
+_Value operator-(_Value a, _Value b) {  //注意：这里的Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() - b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() - b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+		// return a.val.varName + b.val.varName;
+	}
+}
+_Value operator|(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() | b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value operator*(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() * b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() * b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value _Value::div(_Value b) {
+	_Value a = *this;
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() / b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value operator/(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() *1.0/ b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() / b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value operator%(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() % b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value operator&(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() & b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (a.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		throw Error("Wrong Operation.");
+	}
+	else if (b.type == _Value::FLOAT) {
+		throw Error("Wrong Operation.");
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value operator>=(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() >= b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() >= b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(toString(a.toInt()) >= b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(toString(a.toFloat()) >= b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(toString(b.toInt()) >= a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(toString(b.toFloat()) >= a.val.varName);
+	}
+	else {
+		return a.val.varName >= b.val.varName;
+	}
+}
+_Value operator>(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() > b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() > b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(toString(a.toInt()) > b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(toString(a.toFloat()) > b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(toString(b.toInt()) > a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(toString(b.toFloat()) > a.val.varName);
+	}
+	else {
+		return a.val.varName > b.val.varName;
+	}
+}
+_Value operator<=(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() <= b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() <= b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(toString(a.toInt()) <= b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(toString(a.toFloat()) <= b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(toString(b.toInt()) <= a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(toString(b.toFloat()) <= a.val.varName);
+	}
+	else {
+		return a.val.varName <= b.val.varName;
+	}
+}
+_Value operator<(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() < b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() < b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(toString(a.toInt()) < b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(toString(a.toFloat()) < b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(toString(b.toInt()) < a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(toString(b.toFloat()) < a.val.varName);
+	}
+	else {
+		return a.val.varName < b.val.varName;
+	}
+}
+_Value operator==(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() == b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() == b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(toString(a.toInt()) == b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(toString(a.toFloat()) == b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(toString(b.toInt()) == a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(toString(b.toFloat()) == a.val.varName);
+	}
+	else {
+		return a.val.varName == b.val.varName;
+	}
+}
+_Value operator!=(_Value a, _Value b) {  //注意：这里的_Value::Variable其实就是String常量
+	if ((a.type == _Value::INTEGER || a.type == _Value::CHAR) && (b.type == _Value::INTEGER || b.type == _Value::CHAR)) {
+		return _Value(a.toInt() != b.toInt());
+	}
+	else if ((a.type == _Value::FLOAT && b.type != _Value::Variable) || (b.type == _Value::FLOAT && a.type != _Value::Variable)) {
+		return _Value(a.toFloat() != b.toFloat());
+	}
+	else if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(toString(a.toInt()) != b.val.varName);
+	}
+	else if (a.type == _Value::FLOAT) {
+		return _Value(toString(a.toFloat()) != b.val.varName);
+	}
+	else if (b.type == _Value::INTEGER || b.type == _Value::CHAR) {
+		return _Value(toString(b.toInt()) != a.val.varName);
+	}
+	else if (b.type == _Value::FLOAT) {
+		return _Value(toString(b.toFloat()) != a.val.varName);
+	}
+	else {
+		return a.val.varName != b.val.varName;
+	}
+}
+_Value operator~(_Value a) {  //注意：这里的_Value::Variable其实就是String常量
+	if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(~a.toInt());
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
+}
+_Value operator-(_Value a) {  //注意：这里的_Value::Variable其实就是String常量
+	if (a.type == _Value::INTEGER || a.type == _Value::CHAR) {
+		return _Value(~a.toInt());
+	}
+	else {
+		throw Error("Wrong Operation.");
+	}
 }
 
 bool isTempVar(piv a) {
@@ -545,6 +885,147 @@ int calSize(vector<string> vars, unordered_map<string, Type> a) {
 }
 
 static string sysproc;
+// bool constVar(int type) {
+// 	return type == REAL
+// 		|| type == TK_INTEGER
+// 		|| type == TK_CHAR
+// 		|| type == TK_STRING
+// 		|| type == TK_SYS_CON;
+// }
+pair<bool, _Value> testOptimize(NODE *t) {
+	// cout<<NODE_NAMES[t->type]<<endl;
+	if (t) {
+		pair<bool, _Value> a, b;
+		switch (t->type) {
+		case TK_REAL:
+			return mp(true, _Value(t->value.dval));
+			break;
+		case TK_INTEGER:
+			return mp(true, _Value(t->value.ival));
+			break;
+		case TK_CHAR:
+			return mp(true, _Value(t->value.cval));
+			break;
+		case TK_STRING:
+			return mp(true, _Value(t->value.sval));  //?? TO-DO
+			break;
+		case TK_SYS_CON:
+			if (t->value.type == type_integer) a = mp(true, _Value(t->value.ival));
+			else if (t->value.type == type_real) a = mp(true, _Value(t->value.dval));
+			else if (t->value.type == type_boolean) a = mp(true, _Value(t->value.bval));
+			else if (t->value.type == type_char) a = mp(true, _Value(t->value.cval));
+			return mp(false, _Value());
+			break;
+		
+		case TK_EXPR:
+			return testOptimize(SON(0));
+			break;
+		case TK_TERM:
+			return testOptimize(SON(0));
+			break;
+		case TK_EXP:
+			return testOptimize(SON(0));
+			break;
+		case TK_FACTOR_EXP:
+			return testOptimize(SON(0));
+			break;
+		case TK_FACTOR_CONST:
+			return testOptimize(SON(0));
+			break;
+
+		
+		case TK_PLUS:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second + b.second);
+			return mp(false, _Value());
+			break;
+		case TK_MINUS:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second - b.second);
+			return mp(false, _Value());
+			break;
+		case TK_OR:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second | b.second);
+			return mp(false, _Value());
+			break;
+		case TK_MUL:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second * b.second);
+			return mp(false, _Value());
+			break;
+		case TK_DIV:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second.div(b.second));
+			return mp(false, _Value());
+			break;
+		case TK_REM:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second / b.second);
+			return mp(false, _Value());
+			break;
+		case TK_MOD:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second % b.second);
+			return mp(false, _Value());
+			break;
+		case TK_AND:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second & b.second);
+			return mp(false, _Value());
+			break;
+		
+		case TK_GE:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second >= b.second);
+			return mp(false, _Value());
+			break;
+		case TK_GT:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second > b.second);
+			return mp(false, _Value());
+			break;
+		case TK_LE:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second <= b.second);
+			return mp(false, _Value());
+			break;
+		case TK_LT:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second < b.second);
+			return mp(false, _Value());
+			break;
+		case TK_EQUAL:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second == b.second);
+			return mp(false, _Value());
+			break;
+		case TK_UNEQUAL:
+			a = testOptimize(SON(0)), b = testOptimize(SON(1));
+			if (a.first & b.first) return mp(true, a.second != b.second);
+			return mp(false, _Value());
+			break;
+
+		case TK_FACTOR_NOT:
+			a = testOptimize(SON(0));
+			if (a.first) return mp(true, ~a.second);
+			return mp(false, _Value());
+			break;
+		case TK_FACTOR_MINUS:
+			a = testOptimize(SON(0));
+			if (a.first) return mp(true, -a.second);
+			return mp(false, _Value());
+			break;
+		default:
+			return mp(false, _Value());
+			break;
+		}
+	}
+	else {
+		throw Error("Unexpected null pointer of the syntax tree, parsing has to stop.");
+		exit(0);
+	}
+}
 piv genCode(NODE *t, int extraMsg) {
 	if (t) {
 	if (ICG_DEBUG) cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
@@ -552,6 +1033,7 @@ piv genCode(NODE *t, int extraMsg) {
 		piv x, d, tmp;
 		int w1, w2, ww;
 		string stemp;
+		pair<bool, _Value> ta, tb; _Value tv;
 		switch (t->type) {
 		/*  常量  */
 		case TK_REAL:
@@ -617,18 +1099,49 @@ piv genCode(NODE *t, int extraMsg) {
 		/*  操作符  */
 		case TK_PLUS:
 			if (ICG_DEBUG) cout<<TempVars::ind<<endl;
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			// cout<<"wahahahahahahah"<<" "<<ta.first<<" "<<tb.first<<" "<<NODE_NAMES[t->type]<<endl;
+			if (ta.first && tb.first) {
+				tv = ta.second + tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '+');  chkOpnd(b, "Right", '+');
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "+", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_MINUS:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second - tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '-');  chkOpnd(b, "Right", '-');
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "-", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_OR:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second | tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '|');  chkOpnd(b, "Right", '|');
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "|", b);  // TO-DO a=a+b??
@@ -636,30 +1149,80 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		
 		case TK_MUL:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second * tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", '*');  chkOpnd(b, "Right", '*');
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "*", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_DIV:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second.div(tb.second);
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'DIV'");  chkOpnd(b, "Right", "'DIV'");
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "DIV", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_REM:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second / tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'/'");  chkOpnd(b, "Right", "'/'");
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "/", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_MOD:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second % tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'MOD'");  chkOpnd(b, "%", "'MOD'");
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "%", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_AND:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second & tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(t->child[0]), b = genCode(t->child[1]);
 			chkOpnd(a, "Left", "'AND'");  chkOpnd(b, "Right", "'AND'");
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "&", b);  // TO-DO a=a+b??
@@ -953,31 +1516,91 @@ piv genCode(NODE *t, int extraMsg) {
 		
 		//expression  //TO-DO
 		case TK_GE:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second >= tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));  b = genCode(SON(1));
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, ">=", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_GT:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second > tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));  b = genCode(SON(1));
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, ">", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_LE:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second <= tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));  b = genCode(SON(1));
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "<=", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_LT:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second < tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));  b = genCode(SON(1));
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "<", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_EQUAL:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second == tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));  b = genCode(SON(1));
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "==", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
 			break;
 		case TK_UNEQUAL:
+			ta = testOptimize(SON(0)); tb = testOptimize(SON(1));
+			if (ta.first && tb.first) {
+				tv = ta.second != tb.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));  b = genCode(SON(1));
 			output(c=mp(0, TempVars::getAnother(t->dataType)), a, "!=", b);  // TO-DO a=a+b??
 			TempVars::release(a); TempVars::release(b); return c;
@@ -1035,11 +1658,31 @@ piv genCode(NODE *t, int extraMsg) {
 			return genCode(SON(0));
 			break;
 		case TK_FACTOR_NOT:
+			ta = testOptimize(SON(0));
+			if (ta.first) {
+				tv = ~ta.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));
 			output(tmp=mp(0, TempVars::getAnother(a.second.getType())), "= NOT", a);
 			TempVars::release(a);  return tmp;
 			break;
 		case TK_FACTOR_MINUS:
+			ta = testOptimize(SON(0));
+			if (ta.first) {
+				tv = -ta.second;
+				if (tv.type == _Value::Variable) {
+					a = mp(3, _Value(stringVars++));
+					output("string " + getName(a) + " " + "\"" + string(tv) + "\"");
+					return a;
+				}
+				else return mp(1, tv);
+			}
 			a = genCode(SON(0));
 			output(tmp=mp(0, TempVars::getAnother(a.second.getType())), "= -", a);
 			TempVars::release(a);  return tmp;

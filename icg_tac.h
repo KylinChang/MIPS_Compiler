@@ -34,7 +34,10 @@ struct _Value {
 	
 	operator string();
 	int toInt();
+	double toFloat();
 	string getType();
+
+	_Value div(_Value b);
 };
 typedef pair<int, _Value> piv;
 piv genCode(NODE *t, int extraMsg=-1);

@@ -1,0 +1,8 @@
+(* 常数优化计算测试 *)
+
+program test5;
+var a:integer;
+begin
+	a:=1 + (2*3 DIV 4 >5 < 6) / 7;
+end.
+
