@@ -2,6 +2,7 @@
 
 	endl:	.asciiz	"\n"
 	bp:	.word	0
+	offset:	.word	0
 	t0:	.word	0
 	t1:	.word	0
 	t2:	.word	0
@@ -32,7 +33,7 @@ _fact:
 	sw $t0, 0($sp)
 	sw $sp, bp
 	# calculation
-	addi, $sp, $sp, -8
+	addi, $sp, $sp, -4
 	# calculation
 	lw $t1, bp
 	li $t2, 8
@@ -104,7 +105,20 @@ L0:
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	# calculation
-	addi, $sp, $sp, -16
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# calculation
+	lw $t1, bp
+	li $t2, 8
+	add $t1, $t1, $t2
+	sw $t1, t1
+	# calculation
+	addi $t1, $sp, 0
+	li $t2, 12
+	sub $t1, $t1, $t2
+	sw $t1, t2
 	# stack
 	addi $sp, $sp, -4
 	sw $sp, t3
@@ -131,9 +145,10 @@ L0:
 	sw $t0, 0($t1)
 L1:
 	# calculation
-	addi, $sp, $sp, 8
+	addi, $sp, $sp, 4
 	# free stack
-	addi $sp, $sp, 20
+	lw $t0, bp
+	add $sp, $t0, $0
 	lw $t0, 0($sp)
 	sw $t0, bp
 	addi $sp, $sp, 4
@@ -148,6 +163,11 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t0
+	# read
+	li $v0, 5
+	syscall
+	lw $t0, t0
+	sw $v0, 0($t0)
 	# calculation
 	lw $t1, bp
 	li $t2, 4
@@ -165,7 +185,10 @@ main:
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	# calculation
-	addi, $sp, $sp, -16
+	addi $t1, $sp, 0
+	li $t2, 12
+	sub $t1, $t1, $t2
+	sw $t1, t1
 	# stack
 	addi $sp, $sp, -4
 	sw $sp, t2
@@ -174,6 +197,11 @@ main:
 	lw $t0, 0($t0)
 	lw $t1, t2
 	sw $t0, 0($t1)
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
 	# assign
 	lw $t0, t2
 	lw $t0, 0($t0)

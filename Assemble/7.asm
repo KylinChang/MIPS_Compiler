@@ -2,6 +2,7 @@
 
 	endl:	.asciiz	"\n"
 	bp:	.word	0
+	offset:	.word	0
 	t0:	.word	0
 	t1:	.word	0
 	t2:	.word	0
@@ -35,25 +36,6 @@ _nabs:
 	addi, $sp, $sp, -4
 	# calculation
 	lw $t1, bp
-	li $t2, 8
-	add $t1, $t1, $t2
-	sw $t1, t0
-	# stack
-	addi $sp, $sp, -4
-	sw $sp, t1
-	# compare
-	lw $t3, t0
-	lw $t1, 0($t3)
-	li $t2, 0
-	slt $t3, $t1, $t2
-	lw $t2, t1
-	sw $t3, 0($t2)
-	# if_false jump
-	lw $t1, t1
-	lw $t1, 0($t1)
-	beq $t1, $0, L0
-	# calculation
-	lw $t1, bp
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t0
@@ -62,49 +44,26 @@ _nabs:
 	li $t2, 8
 	add $t1, $t1, $t2
 	sw $t1, t1
-	# assign
-	lw $t0, t1
-	lw $t0, 0($t0)
-	lw $t1, t0
-	sw $t0, 0($t1)
-	# direct jump
-	j L1
-L0:
-	# calculation
-	lw $t1, bp
-	li $t2, 4
-	sub $t1, $t1, $t2
-	sw $t1, t0
 	# stack
 	addi $sp, $sp, -4
-	sw $sp, t1
-	# stack
+	sw $sp, t2
 	# calculation
-	lw $t1, bp
-	li $t2, 8
-	add $t1, $t1, $t2
-	sw $t1, t2
-	# stack
-	addi $sp, $sp, -4
-	sw $sp, t3
-	# calculation
+	li $t1, 0
 	lw $t3, t1
-	lw $t1, 0($t3)
-	lw $t3, t2
 	lw $t2, 0($t3)
-	mul $t1, $t1, $t2
-	lw $t3, t3
+	sub $t1, $t1, $t2
+	lw $t3, t2
 	sw $t1, 0($t3)
 	# assign
-	lw $t0, t3
+	lw $t0, t2
 	lw $t0, 0($t0)
 	lw $t1, t0
 	sw $t0, 0($t1)
-L1:
 	# calculation
 	addi, $sp, $sp, 4
 	# free stack
-	addi $sp, $sp, 12
+lw $t0, bp
+add $sp, $t0, $0
 	lw $t0, 0($sp)
 	sw $t0, bp
 	addi $sp, $sp, 4
@@ -113,17 +72,12 @@ L1:
 main:
 	sw $sp, bp
 	# calculation
-	addi, $sp, $sp, -4
+	addi, $sp, $sp, -8
 	# calculation
 	lw $t1, bp
-	li $t2, 4
+	li $t2, 8
 	sub $t1, $t1, $t2
 	sw $t1, t0
-	# read
-	li $v0, 5
-	syscall
-	lw $t0, t0
-	sw $v0, 0($t0)
 	# calculation
 	lw $t1, bp
 	li $t2, 4
@@ -141,7 +95,10 @@ main:
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	# calculation
-	addi, $sp, $sp, -12
+	addi $t1, $sp, 0
+	li $t2, 12
+	sub $t1, $t1, $t2
+	sw $t1, t1
 	# stack
 	addi $sp, $sp, -4
 	sw $sp, t2
@@ -157,7 +114,7 @@ main:
 	sw $t0, 0($t1)
 	# calculation
 	lw $t1, bp
-	li $t2, 4
+	li $t2, 8
 	sub $t1, $t1, $t2
 	sw $t1, t0
 	# stack
@@ -177,5 +134,5 @@ main:
 	li $v0, 4
 	syscall
 	# calculation
-	addi, $sp, $sp, 4
+	addi, $sp, $sp, 8
 	jr $ra

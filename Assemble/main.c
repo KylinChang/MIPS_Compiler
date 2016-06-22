@@ -175,7 +175,8 @@ int main(int argc, char* argv[]) {
         if (strcmp(elements[0], "sp")==0) {
             if (strcmp(elements[3], "+")==0) quad.op = add;
             if (strcmp(elements[3], "-")==0) quad.op = sub;
-            strcpy(quad.addr1.contents.name, "sp");
+            strcpy(quad.addr3.contents.name, elements[0]);
+            strcpy(quad.addr1.contents.name, elements[2]);
             quad.addr2.contents.intVal = atoi(elements[4]);
             text.quad[text.num] = quad;
             text.num++;
@@ -215,11 +216,15 @@ int main(int argc, char* argv[]) {
             text.num++;
         }
         if (strcmp(elements[0], "arg")==0) {
-            quad.op = arg;
-            if (elements[1][0]=='*')
-                strcpy(quad.addr1.contents.name, elements[1]+1);
-            else
-                strcpy(quad.addr1.contents.name, elements[1]);
+            quad.addr1.kind = getKind(elements[1]);
+            if (quad.addr1.kind == IntConst) quad.addr1.contents.intVal = atoi(elements[1]);
+            if (quad.addr1.kind == FloatConst) quad.addr1.contents.doubleVal = atof(elements[1]);
+            if (quad.addr1.kind != IntConst && quad.addr1.kind != FloatConst) {
+                if (elements[1][0]=='*')
+                    strcpy(quad.addr1.contents.name, elements[1]+1);
+                else
+                    strcpy(quad.addr1.contents.name, elements[1]);
+            }
             quad.op = arg;
             text.quad[text.num] = quad;
             text.num++;

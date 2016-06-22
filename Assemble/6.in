@@ -69,7 +69,7 @@ goto L2
 label L3
 point double t1
 t1 = bp - 20
-var int t3
+var double t3
 t3 = *t1
 println t3
 sp = sp + 20

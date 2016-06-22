@@ -2,6 +2,7 @@
 
 	endl:	.asciiz	"\n"
 	bp:	.word	0
+	offset:	.word	0
 	t0:	.word	0
 	t1:	.word	0
 	t2:	.word	0

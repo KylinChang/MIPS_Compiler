@@ -50,6 +50,7 @@ void declareVariable(VariableMap* map) {
     fprintf(out, ".data 0x10000000\n\n");
     fprintf(out, "\tendl:\t.asciiz\t\"\\n\"\n");
     fprintf(out, "\tbp:\t.word\t0\n");
+    fprintf(out, "\toffset:\t.word\t0\n");
     for (i=0; i<20; i++) {
         fprintf(out, "\tt%d:\t.word\t0\n", i);
         sprintf(name, "t%d", i);
@@ -168,45 +169,58 @@ void genCALL(Quad* quad) {
     //push ra
     fprintf(out, "\taddi $sp, $sp, -4\n");
     fprintf(out, "\tsw $ra, 0($sp)\n");
-    
+
     fprintf(out, "\tjal %s\n", quad->addr1.contents.name);
-    
+
     //pop ra
     fprintf(out, "\tlw $ra, 0($sp)\n");
     fprintf(out, "\taddi $sp, $sp, 4\n");
-    
+
 }
 
 void genARG(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# push an arg\n");
-    type t = getType(quad->addr1.contents.name, map);
-    if (t == INTEGER) {
+    if (quad->addr1.kind == IntConst) {
         fprintf(out, "\taddi $sp, $sp, -4\n");
-        fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
-        fprintf(out, "\tlw $t0, 0($t0)\n");
+        fprintf(out, "\tli $t0, 0%d\n", quad->addr1.contents.intVal);
         fprintf(out, "\tsw $t0, 0($sp)\n");
-        stackoffset += 4;
-    }
-    if (t == FLOAT) {
+    } else
+    if (quad->addr1.kind == FloatConst) {
         fprintf(out, "\taddi $sp, $sp, -4\n");
-        fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
-        fprintf(out, "\tl.s $f0, 0($t0)\n");
-        fprintf(out, "\ts.s $f0, 0($sp)\n");
-        stackoffset += 4;
-    }
-    if (t == DOUBLE) {
-        fprintf(out, "\taddi $sp, $sp, -8\n");
-        fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
-        fprintf(out, "\tl.d $f0, 0($t0)\n");
-        fprintf(out, "\ts.d $f0, 0($sp)\n");
-        stackoffset += 8;
+        fprintf(out, "\tli.s $f0, 0%f\n", quad->addr1.contents.floatVal);
+        fprintf(out, "\tsw $f0, 0($sp)\n");
+    } else {
+        type t = getType(quad->addr1.contents.name, map);
+        if (t == INTEGER) {
+            fprintf(out, "\taddi $sp, $sp, -4\n");
+            fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
+            fprintf(out, "\tlw $t0, 0($t0)\n");
+            fprintf(out, "\tsw $t0, 0($sp)\n");
+            stackoffset += 4;
+        }
+        if (t == FLOAT) {
+            fprintf(out, "\taddi $sp, $sp, -4\n");
+            fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
+            fprintf(out, "\tl.s $f0, 0($t0)\n");
+            fprintf(out, "\ts.s $f0, 0($sp)\n");
+            stackoffset += 4;
+        }
+        if (t == DOUBLE) {
+            fprintf(out, "\taddi $sp, $sp, -8\n");
+            fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
+            fprintf(out, "\tl.d $f0, 0($t0)\n");
+            fprintf(out, "\ts.d $f0, 0($sp)\n");
+            stackoffset += 8;
+        }
     }
 }
 
 void genRET(Quad*quad) {
     fprintf(out, "\t# free stack\n");
     //temp
-    fprintf(out, "\taddi $sp, $sp, %d\n", stackoffset);
+//    fprintf(out, "\taddi $sp, $sp, %d\n", stackoffset);
+    fprintf(out, "\tlw $t0, bp\n");
+    fprintf(out, "\tadd $sp, $t0, $0\n");
     //bp = bp_old / pop bp
     fprintf(out, "\tlw $t0, 0($sp)\n");
     fprintf(out, "\tsw $t0, bp\n");
@@ -223,21 +237,21 @@ void genVAR(Quad* quad, VariableMap* map) {
         fprintf(out, "\taddi $sp, $sp, -4\n");
         fprintf(out, "\tsw $sp, %s\n", quad->addr2.contents.name);
     }
-    
+
     if (strcmp(quad->addr1.contents.name, "float")==0) {
         stackoffset = stackoffset + 4;
         changeVar(quad, map);
         fprintf(out, "\taddi $sp, $sp, -4\n");
         fprintf(out, "\tsw $sp, %s\n", quad->addr2.contents.name);
     }
-    
+
     if (strcmp(quad->addr1.contents.name, "double")==0) {
         stackoffset = stackoffset + 8;
         changeVar(quad, map);
         fprintf(out, "\taddi $sp, $sp, -8\n");
         fprintf(out, "\tsw $sp, %s\n", quad->addr2.contents.name);
     }
-    
+
 }
 
 
@@ -351,9 +365,18 @@ void genASN(Quad* quad, VariableMap* map) {
 void genCAL(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# calculation\n");
     if (strcmp(quad->addr1.contents.name, "sp")==0) {
-        if (quad->op == add) fprintf(out,"\taddi, $sp, $sp, %d\n", quad->addr2.contents.intVal);
-        if (quad->op == sub) fprintf(out,"\taddi, $sp, $sp, -%d\n", quad->addr2.contents.intVal);
-        return;
+        if (strcmp(quad->addr3.contents.name, "sp")==0) {
+            if (quad->op == add) fprintf(out,"\taddi, $sp, $sp, %d\n", quad->addr2.contents.intVal);
+            if (quad->op == sub) fprintf(out,"\taddi, $sp, $sp, -%d\n", quad->addr2.contents.intVal);
+            return;
+        } else {
+            fprintf(out, "\taddi $t1, $sp, 0\n");
+            fprintf(out, "\tli $t2, %d\n", quad->addr2.contents.intVal);
+            if (quad->op == add) fprintf(out, "\tadd $t1, $t1, $t2\n");
+            if (quad->op == sub) fprintf(out, "\tsub $t1, $t1, $t2\n");
+            fprintf(out, "\tsw $t1, %s\n", quad->addr3.contents.name);
+            return;
+        }
     }
     type t1 = UNDEFINED, t2 = UNDEFINED, t3 = UNDEFINED;
     if (quad->addr3.kind == String && getVar(quad->addr3.contents.name, map)) {

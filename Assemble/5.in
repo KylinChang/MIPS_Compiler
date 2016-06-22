@@ -16,9 +16,9 @@ Label L5
 println 4444444
 goto L1
 label L0
-if_false *t0 != 1 then goto L2
-if_false *t0 != 2 then goto L3
-if_false *t0 != 3 then goto L4
-if_false *t0 != 4 then goto L5
+if *t0 == 1 then goto L2
+if *t0 == 2 then goto L3
+if *t0 == 3 then goto L4
+if *t0 == 4 then goto L5
 label L1
 sp = sp + 4
