@@ -6,7 +6,7 @@ begin
     nabs:=0-x;
 end;
 begin
-    readln(n);
+    n:=5;
     sum:=nabs(n);
     writeln(sum);
 end.

@@ -2,6 +2,7 @@
 
 	endl:	.asciiz	"\n"
 	bp:	.word	0
+	offset:	.word	0
 	t0:	.word	0
 	t1:	.word	0
 	t2:	.word	0
@@ -34,11 +35,15 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t0
-	# read
-	li $v0, 5
-	syscall
-	lw $t0, t0
-	sw $v0, 0($t0)
+	# assign
+	li $t0, 3
+	lw $t1, t0
+	sw $t0, 0($t1)
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
 	# direct jump
 	j L0
 	# print
@@ -78,22 +83,54 @@ main:
 	# direct jump
 	j L1
 L0:
+	# compare
+	lw $t3, t0
+	lw $t1, 0($t3)
+	li $t2, 1
+	slt $t4, $t1, $t2
+	slt $t5, $t2, $t1
+	nor $t3, $t4, $t5
+	andi $t3, $t3, 1
+	add $t7, $t3, $0
 	# if_false jump
-	lw $t1, *t0
-	lw $t1, 0($t1)
-	beq $t1, $0, 1
+	add $t1, $t7, $0
+	beq $t1, $0, L2
+	# compare
+	lw $t3, t0
+	lw $t1, 0($t3)
+	li $t2, 2
+	slt $t4, $t1, $t2
+	slt $t5, $t2, $t1
+	nor $t3, $t4, $t5
+	andi $t3, $t3, 1
+	add $t7, $t3, $0
 	# if_false jump
-	lw $t1, *t0
-	lw $t1, 0($t1)
-	beq $t1, $0, 2
+	add $t1, $t7, $0
+	beq $t1, $0, L3
+	# compare
+	lw $t3, t0
+	lw $t1, 0($t3)
+	li $t2, 3
+	slt $t4, $t1, $t2
+	slt $t5, $t2, $t1
+	nor $t3, $t4, $t5
+	andi $t3, $t3, 1
+	add $t7, $t3, $0
 	# if_false jump
-	lw $t1, *t0
-	lw $t1, 0($t1)
-	beq $t1, $0, 3
+	add $t1, $t7, $0
+	beq $t1, $0, L4
+	# compare
+	lw $t3, t0
+	lw $t1, 0($t3)
+	li $t2, 4
+	slt $t4, $t1, $t2
+	slt $t5, $t2, $t1
+	nor $t3, $t4, $t5
+	andi $t3, $t3, 1
+	add $t7, $t3, $0
 	# if_false jump
-	lw $t1, *t0
-	lw $t1, 0($t1)
-	beq $t1, $0, 4
+	add $t1, $t7, $0
+	beq $t1, $0, L5
 L1:
 	# calculation
 	addi, $sp, $sp, 4

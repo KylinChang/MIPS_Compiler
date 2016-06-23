@@ -35,11 +35,6 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t0
-	# read
-	li $v0, 5
-	syscall
-	lw $t0, t0
-	sw $v0, 0($t0)
 	# stack
 	addi $sp, $sp, -4
 	sw $sp, t1

@@ -2,6 +2,9 @@ entry main
 sp = sp - 4
 point int t0
 t0 = bp - 4
+*t0 = 3
+point int t0
+t0 = bp - 4
 goto L0
 Label L2
 println 1111111

@@ -75,6 +75,15 @@ main:
 	addi, $sp, $sp, -8
 	# calculation
 	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# assign
+	li $t0, 5
+	lw $t1, t0
+	sw $t0, 0($t1)
+	# calculation
+	lw $t1, bp
 	li $t2, 8
 	sub $t1, $t1, $t2
 	sw $t1, t0
@@ -83,11 +92,6 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t1
-	# read
-	li $v0, 5
-	syscall
-	lw $t0, t1
-	sw $v0, 0($t0)
 	# push an arg
 	#save pointer
 	addi $sp, $sp, -32
