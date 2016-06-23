@@ -2,6 +2,7 @@
 
 	endl:	.asciiz	"\n"
 	bp:	.word	0
+	offset:	.word	0
 	t0:	.word	0
 	t1:	.word	0
 	t2:	.word	0
@@ -29,6 +30,15 @@ main:
 	sw $sp, bp
 	# calculation
 	addi, $sp, $sp, -20
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# assign
+	li $t0, 15
+	lw $t1, t0
+	sw $t0, 0($t1)
 	# calculation
 	lw $t1, bp
 	li $t2, 8
@@ -60,11 +70,6 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t1
-	# read
-	li $v0, 5
-	syscall
-	lw $t0, t1
-	sw $v0, 0($t0)
 	# assign
 	li $t0, 1
 	lw $t1, t0

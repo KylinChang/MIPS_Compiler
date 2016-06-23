@@ -3,7 +3,7 @@ var
     n,fact,i:longint;
     a:real;
 begin
-    read(n);
+    n := 15;
     fact:=1;
     a:=1.0;
     for i:=1 to n do

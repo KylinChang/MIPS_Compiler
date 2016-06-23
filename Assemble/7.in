@@ -15,7 +15,6 @@ point int t0
 t0 = bp - 8
 point int t1
 t1 = bp - 4
-read t1
 arg *t1
 call _nabs
 point int t1

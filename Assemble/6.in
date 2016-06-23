@@ -1,6 +1,9 @@
 entry main
 sp = sp - 20
 point int t0
+t0 = bp - 4
+*t0 = 15
+point int t0
 t0 = bp - 8
 *t0 = 1
 point double t0

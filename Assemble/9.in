@@ -1,0 +1,21 @@
+entry main
+sp = sp - 20
+point double t0
+t0 = bp - 20
+point record t1
+t1 = bp - 12
+point int t2
+t2 = t1 + 0
+point record t3
+t3 = bp - 12
+point int t4
+t4 = t3 + 8
+var double t5
+t5 = t2 + t4
+*t0 = t5
+point double t0
+t0 = bp - 20
+var double t2
+t2 = *t0
+println t2
+sp = sp + 20
