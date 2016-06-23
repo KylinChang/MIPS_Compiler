@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
             text.num++;
         }
         //添加一个标签
-        if (strcmp(elements[0], "label")==0) {
+        if (strcmp(elements[0], "label")==0 || strcmp(elements[0], "Label")==0) {
             addLabel(elements[1], &lb);
             quad.op = lab;
             quad.addr1.kind = String;
@@ -203,12 +203,12 @@ int main(int argc, char* argv[]) {
         if (strcmp(elements[0], "if")==0) {
             //先比较
             //eq赋值为相同
-            if (strcmp(elements[2], "==")==0) quad.op = eq;
-            if (strcmp(elements[2], "!=")==0) quad.op = ne;
+            if (strcmp(elements[2], "==")==0) quad.op = ne;
+            if (strcmp(elements[2], "!=")==0) quad.op = eq;
             //gt赋值为大于
-            if (strcmp(elements[2], ">")==0) quad.op = gt;
+            if (strcmp(elements[2], ">")==0) quad.op = sm;
             //gt赋值为小于
-            if (strcmp(elements[2], "<")==0) quad.op = sm;
+            if (strcmp(elements[2], "<")==0) quad.op = gt;
             quad.addr1.kind = getKind(elements[1]);
             quad.addr2.kind = getKind(elements[3]);
             quad.addr3.kind = String;

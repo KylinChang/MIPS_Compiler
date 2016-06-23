@@ -46,6 +46,7 @@ main:
 	sw $t1, t0
 	# direct jump
 	j L0
+L2:
 	# print
 	li $a0, 1111111
 	li $v0, 1
@@ -55,6 +56,7 @@ main:
 	syscall
 	# direct jump
 	j L1
+L3:
 	# print
 	li $a0, 2222222
 	li $v0, 1
@@ -64,6 +66,7 @@ main:
 	syscall
 	# direct jump
 	j L1
+L4:
 	# print
 	li $a0, 3333333
 	li $v0, 1
@@ -73,6 +76,7 @@ main:
 	syscall
 	# direct jump
 	j L1
+L5:
 	# print
 	li $a0, 4444444
 	li $v0, 1
@@ -89,8 +93,7 @@ L0:
 	li $t2, 1
 	slt $t4, $t1, $t2
 	slt $t5, $t2, $t1
-	nor $t3, $t4, $t5
-	andi $t3, $t3, 1
+	or $t3, $t4, $t5
 	add $t7, $t3, $0
 	# if_false jump
 	add $t1, $t7, $0
@@ -101,8 +104,7 @@ L0:
 	li $t2, 2
 	slt $t4, $t1, $t2
 	slt $t5, $t2, $t1
-	nor $t3, $t4, $t5
-	andi $t3, $t3, 1
+	or $t3, $t4, $t5
 	add $t7, $t3, $0
 	# if_false jump
 	add $t1, $t7, $0
@@ -113,8 +115,7 @@ L0:
 	li $t2, 3
 	slt $t4, $t1, $t2
 	slt $t5, $t2, $t1
-	nor $t3, $t4, $t5
-	andi $t3, $t3, 1
+	or $t3, $t4, $t5
 	add $t7, $t3, $0
 	# if_false jump
 	add $t1, $t7, $0
@@ -125,8 +126,7 @@ L0:
 	li $t2, 4
 	slt $t4, $t1, $t2
 	slt $t5, $t2, $t1
-	nor $t3, $t4, $t5
-	andi $t3, $t3, 1
+	or $t3, $t4, $t5
 	add $t7, $t3, $0
 	# if_false jump
 	add $t1, $t7, $0
