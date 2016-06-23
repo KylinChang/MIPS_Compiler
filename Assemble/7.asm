@@ -83,7 +83,30 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t1
+	# read
+	li $v0, 5
+	syscall
+	lw $t0, t1
+	sw $v0, 0($t0)
 	# push an arg
+	#save pointer
+	addi $sp, $sp, -32
+	lw $t0, t0
+	sw $t0, 0($sp)
+	lw $t0, t1
+	sw $t0, 4($sp)
+	lw $t0, t2
+	sw $t0, 8($sp)
+	lw $t0, t3
+	sw $t0, 12($sp)
+	lw $t0, t4
+	sw $t0, 16($sp)
+	lw $t0, t5
+	sw $t0, 20($sp)
+	lw $t0, t6
+	sw $t0, 24($sp)
+	lw $t0, t7
+	sw $t0, 28($sp)
 	addi $sp, $sp, -4
 	lw $t0, t1
 	lw $t0, 0($t0)
@@ -94,6 +117,23 @@ main:
 	jal _nabs
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
+	#retrieve pointer
+	lw $t0, 4($sp)
+	sw $t0, t0
+	lw $t0, 8($sp)
+	sw $t0, t1
+	lw $t0, 12($sp)
+	sw $t0, t2
+	lw $t0, 16($sp)
+	sw $t0, t3
+	lw $t0, 20($sp)
+	sw $t0, t4
+	lw $t0, 24($sp)
+	sw $t0, t5
+	lw $t0, 28($sp)
+	sw $t0, t6
+	lw $t0, 32($sp)
+	sw $t0, t7
 	# calculation
 	addi $t1, $sp, 0
 	li $t2, 12

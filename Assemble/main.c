@@ -6,6 +6,7 @@
 FILE* fp;
 FILE* out;
 int stackoffset = 0;
+int arglen = 0;
 VariableMap map;
 QuadTable text;
 LabelTable lb;
@@ -27,8 +28,8 @@ void genFJUMP(Quad* quad);
 void genJUMP(Quad* quad);
 void genFUNC(Quad* quad);
 void genCALL(Quad* quad);
-void genSave(Quad* quad);
-void genRestore(Quad* quad);
+void genSave();
+void genRestore();
 void genRET(Quad* quad);
 void genARG(Quad* quad, VariableMap* map);
 void genVAR(Quad* quad, VariableMap* map);
@@ -82,6 +83,9 @@ int main(int argc, char* argv[]) {
             strcpy(quad.addr1.contents.name, elements[1]);
             quad.addr1.kind = String;
             quad.op = call;
+            text.quad[text.num] = quad;
+            text.num++;
+            quad.op = restore;
             text.quad[text.num] = quad;
             text.num++;
         }

@@ -15,7 +15,7 @@
 typedef enum {FALSE, TRUE} bool;
 
 //定义变量类型
-typedef enum {INTEGER, FLOAT, DOUBLE, STRING, ARRAY, UNDEFINED, IMM} type;
+typedef enum {INTEGER, FLOAT, DOUBLE, STRING, ARRAY, RECORD, UNDEFINED, IMM} type;
 
 //变量
 typedef struct {

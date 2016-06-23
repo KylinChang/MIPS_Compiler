@@ -15,6 +15,7 @@
 
 extern FILE* fp;
 extern FILE* out;
+extern int arglen;
 extern int stackoffset;
 extern VariableMap map;
 extern QuadTable text;
@@ -98,6 +99,7 @@ void changeType(Quad* quad, VariableMap* map) {
     if (strcmp(quad->addr1.contents.name, "int")==0) t = INTEGER;
     if (strcmp(quad->addr1.contents.name, "float")==0) t = FLOAT;
     if (strcmp(quad->addr1.contents.name, "double")==0) t = DOUBLE;
+    if (strcmp(quad->addr1.contents.name, "record")==0) t = RECORD;
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
             map->var[i].type = t;
@@ -190,13 +192,17 @@ void genSave() {
 void genRestore() {
     fprintf(out, "\t#retrieve pointer\n");
     for (int i=0; i<8; i++) {
-        fprintf(out, "\tlw $t0, %d($sp)\n", 4*i);
+        fprintf(out, "\tlw $t0, %d($sp)\n", arglen+4*i);
         fprintf(out, "\tsw $t0, t%d\n", i);
     }
+    arglen = 0;
 }
 
 void genARG(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# push an arg\n");
+    if (arglen == 0) {
+        genSave();
+    }
     if (quad->addr1.kind == IntConst) {
         fprintf(out, "\taddi $sp, $sp, -4\n");
         fprintf(out, "\tli $t0, 0%d\n", quad->addr1.contents.intVal);
@@ -213,21 +219,21 @@ void genARG(Quad* quad, VariableMap* map) {
             fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
             fprintf(out, "\tlw $t0, 0($t0)\n");
             fprintf(out, "\tsw $t0, 0($sp)\n");
-            stackoffset += 4;
+            arglen += 4;
         }
         if (t == FLOAT) {
             fprintf(out, "\taddi $sp, $sp, -4\n");
             fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
             fprintf(out, "\tl.s $f0, 0($t0)\n");
             fprintf(out, "\ts.s $f0, 0($sp)\n");
-            stackoffset += 4;
+            arglen += 4;
         }
         if (t == DOUBLE) {
             fprintf(out, "\taddi $sp, $sp, -8\n");
             fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
             fprintf(out, "\tl.d $f0, 0($t0)\n");
             fprintf(out, "\ts.d $f0, 0($sp)\n");
-            stackoffset += 8;
+            arglen += 8;
         }
     }
 }

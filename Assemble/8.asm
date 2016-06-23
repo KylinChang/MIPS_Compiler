@@ -94,40 +94,51 @@ L0:
 	lw $t3, t3
 	sw $t1, 0($t3)
 	# push an arg
+	#save pointer
+	addi $sp, $sp, -32
+	lw $t0, t0
+	sw $t0, 0($sp)
+	lw $t0, t1
+	sw $t0, 4($sp)
+	lw $t0, t2
+	sw $t0, 8($sp)
+	lw $t0, t3
+	sw $t0, 12($sp)
+	lw $t0, t4
+	sw $t0, 16($sp)
+	lw $t0, t5
+	sw $t0, 20($sp)
+	lw $t0, t6
+	sw $t0, 24($sp)
+	lw $t0, t7
+	sw $t0, 28($sp)
 	addi $sp, $sp, -4
 	lw $t0, t3
 	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	# call a function
-	lw $t0, t0
-	add $s0, $t0, $0
-	lw $t0, t1
-	add $s1, $t0, $0
-	lw $t0, t2
-	add $s2, $t0, $0
-	lw $t0, t3
-	add $s3, $t0, $0
-	lw $t0, t4
-	add $s4, $t0, $0
-	lw $t0, t5
-	add $s5, $t0, $0
-	lw $t0, t6
-	add $s6, $t0, $0
-	lw $t0, t7
-	add $s7, $t0, $0
 	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	jal _fact
-	sw $s0, t0
-	sw $s1, t1
-	sw $s2, t2
-	sw $s3, t3
-	sw $s4, t4
-	sw $s5, t5
-	sw $s6, t6
-	sw $s7, t7
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
+	#retrieve pointer
+	lw $t0, 4($sp)
+	sw $t0, t0
+	lw $t0, 8($sp)
+	sw $t0, t1
+	lw $t0, 12($sp)
+	sw $t0, t2
+	lw $t0, 16($sp)
+	sw $t0, t3
+	lw $t0, 20($sp)
+	sw $t0, t4
+	lw $t0, 24($sp)
+	sw $t0, t5
+	lw $t0, 28($sp)
+	sw $t0, t6
+	lw $t0, 32($sp)
+	sw $t0, t7
 	# calculation
 	addi $t1, $sp, 0
 	li $t2, 12
@@ -177,51 +188,125 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t0
-	# read
-	li $v0, 5
-	syscall
-	lw $t0, t0
-	sw $v0, 0($t0)
+	# assign
+	li $t0, 3
+	lw $t1, t0
+	sw $t0, 0($t1)
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
 	# calculation
 	lw $t1, bp
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t1
 	# push an arg
+	#save pointer
+	addi $sp, $sp, -32
+	lw $t0, t0
+	sw $t0, 0($sp)
+	lw $t0, t1
+	sw $t0, 4($sp)
+	lw $t0, t2
+	sw $t0, 8($sp)
+	lw $t0, t3
+	sw $t0, 12($sp)
+	lw $t0, t4
+	sw $t0, 16($sp)
+	lw $t0, t5
+	sw $t0, 20($sp)
+	lw $t0, t6
+	sw $t0, 24($sp)
+	lw $t0, t7
+	sw $t0, 28($sp)
 	addi $sp, $sp, -4
 	lw $t0, t1
 	lw $t0, 0($t0)
 	sw $t0, 0($sp)
 	# call a function
-	lw $t0, t0
-	add $s0, $t0, $0
-	lw $t0, t1
-	add $s1, $t0, $0
-	lw $t0, t2
-	add $s2, $t0, $0
-	lw $t0, t3
-	add $s3, $t0, $0
-	lw $t0, t4
-	add $s4, $t0, $0
-	lw $t0, t5
-	add $s5, $t0, $0
-	lw $t0, t6
-	add $s6, $t0, $0
-	lw $t0, t7
-	add $s7, $t0, $0
 	addi $sp, $sp, -4
 	sw $ra, 0($sp)
 	jal _fact
-	sw $s0, t0
-	sw $s1, t1
-	sw $s2, t2
-	sw $s3, t3
-	sw $s4, t4
-	sw $s5, t5
-	sw $s6, t6
-	sw $s7, t7
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
+	#retrieve pointer
+	lw $t0, 4($sp)
+	sw $t0, t0
+	lw $t0, 8($sp)
+	sw $t0, t1
+	lw $t0, 12($sp)
+	sw $t0, t2
+	lw $t0, 16($sp)
+	sw $t0, t3
+	lw $t0, 20($sp)
+	sw $t0, t4
+	lw $t0, 24($sp)
+	sw $t0, t5
+	lw $t0, 28($sp)
+	sw $t0, t6
+	lw $t0, 32($sp)
+	sw $t0, t7
+	# calculation
+	addi $t1, $sp, 0
+	li $t2, 12
+	sub $t1, $t1, $t2
+	sw $t1, t1
+	# stack
+	addi $sp, $sp, -4
+	sw $sp, t2
+	# assign
+	lw $t0, t1
+	lw $t0, 0($t0)
+	lw $t1, t2
+	sw $t0, 0($t1)
+	# push an arg
+	#save pointer
+	addi $sp, $sp, -32
+	lw $t0, t0
+	sw $t0, 0($sp)
+	lw $t0, t1
+	sw $t0, 4($sp)
+	lw $t0, t2
+	sw $t0, 8($sp)
+	lw $t0, t3
+	sw $t0, 12($sp)
+	lw $t0, t4
+	sw $t0, 16($sp)
+	lw $t0, t5
+	sw $t0, 20($sp)
+	lw $t0, t6
+	sw $t0, 24($sp)
+	lw $t0, t7
+	sw $t0, 28($sp)
+	addi $sp, $sp, -4
+	lw $t0, t2
+	lw $t0, 0($t0)
+	sw $t0, 0($sp)
+	# call a function
+	addi $sp, $sp, -4
+	sw $ra, 0($sp)
+	jal _fact
+	lw $ra, 0($sp)
+	addi $sp, $sp, 4
+	#retrieve pointer
+	lw $t0, 4($sp)
+	sw $t0, t0
+	lw $t0, 8($sp)
+	sw $t0, t1
+	lw $t0, 12($sp)
+	sw $t0, t2
+	lw $t0, 16($sp)
+	sw $t0, t3
+	lw $t0, 20($sp)
+	sw $t0, t4
+	lw $t0, 24($sp)
+	sw $t0, t5
+	lw $t0, 28($sp)
+	sw $t0, t6
+	lw $t0, 32($sp)
+	sw $t0, t7
 	# calculation
 	addi $t1, $sp, 0
 	li $t2, 12
