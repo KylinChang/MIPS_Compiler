@@ -15,7 +15,7 @@
 //typedef enum {FALSE, TRUE} bool;
 
 //定义变量类型
-typedef enum {INTEGER, FLOAT, DOUBLE, STRING, ARRAY, RECORD, UNDEFINED, IMM} type;
+typedef enum {INTEGER, FLOAT, DOUBLE, STRING, ARRAY, RECORD, UNDEFINED, IMM} TYPE;
 
 //变量
 typedef struct {
@@ -25,7 +25,7 @@ typedef struct {
         char floatval[200];
         char doubleval[200];
     };
-    type type; //指向的类型
+    TYPE TYPE; //指向的类型
     bool isVar;
 } Variable;
 

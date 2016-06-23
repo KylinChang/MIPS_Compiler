@@ -36,10 +36,10 @@ int getElement(char* src, int* head, char* dst) {
 }
 
 //添加一个变量到变量表中
-void addVariable(VariableMap* map, char* name, type vartype, char* initval) {
+void addVariable(VariableMap* map, char* name, TYPE vartype, char* initval) {
     strcpy(map->var[map->num].name, name);
     strcpy(map->var[map->num].initval, initval);
-    map->var[map->num].type = vartype;
+    map->var[map->num].TYPE = vartype;
     map->var[map->num].isVar = false;
     map->num++;
 }
@@ -63,7 +63,7 @@ void declareVariable(VariableMap* map) {
 //添加一个数组到变量表中
 void addArray(VariableMap* map, char* name, int space) {
     strcpy(map->var[map->num].name, name);
-    map->var[map->num].type = ARRAY;
+    map->var[map->num].TYPE = ARRAY;
     //    map->var[map->num].space = space;
     map->num++;
 }
@@ -85,37 +85,37 @@ AddrKind getKind(char* name) {
 }
 
 //根据变量名查到到它的类型
-type getType(char* name, VariableMap* map) {
+TYPE getTYPE(char* name, VariableMap* map) {
     if (name[0]=='$') return INTEGER;
     for (int i=0; i<map->num; i++)
         if (strcmp(name, map->var[i].name)==0)
-            return map->var[i].type;
+            return map->var[i].TYPE;
     return UNDEFINED;
 }
 
 //改变某个变量指针指向的类型
 void changeType(Quad* quad, VariableMap* map) {
-    type t = UNDEFINED;
+    TYPE t = UNDEFINED;
     if (strcmp(quad->addr1.contents.name, "int")==0) t = INTEGER;
     if (strcmp(quad->addr1.contents.name, "float")==0) t = FLOAT;
     if (strcmp(quad->addr1.contents.name, "double")==0) t = DOUBLE;
     if (strcmp(quad->addr1.contents.name, "record")==0) t = RECORD;
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
-            map->var[i].type = t;
+            map->var[i].TYPE = t;
             map->var[i].isVar = false;
             return;
         }
 }
 
 void changeVar(Quad* quad, VariableMap* map) {
-    type t = UNDEFINED;
+    TYPE t = UNDEFINED;
     if (strcmp(quad->addr1.contents.name, "int")==0) t = INTEGER;
     if (strcmp(quad->addr1.contents.name, "float")==0) t = FLOAT;
     if (strcmp(quad->addr1.contents.name, "double")==0) t = DOUBLE;
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
-            map->var[i].type = t;
+            map->var[i].TYPE = t;
             map->var[i].isVar = true;
             return;
         }
@@ -213,7 +213,7 @@ void genARG(Quad* quad, VariableMap* map) {
         fprintf(out, "\tli.s $f0, 0%f\n", quad->addr1.contents.floatVal);
         fprintf(out, "\tsw $f0, 0($sp)\n");
     } else {
-        type t = getType(quad->addr1.contents.name, map);
+        TYPE t = getTYPE(quad->addr1.contents.name, map);
         if (t == INTEGER) {
             fprintf(out, "\taddi $sp, $sp, -4\n");
             fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
@@ -281,7 +281,7 @@ void genVAR(Quad* quad, VariableMap* map) {
 //将赋值的三地址码语句转化为mips（已支持浮点数）
 void genASN(Quad* quad, VariableMap* map) {
     fprintf(out, "\t# assign\n");
-//    type t1 = UNDEFINED;
+//    TYPE t1 = UNDEFINED;
     if (quad->addr2.kind == String && getVar(quad->addr2.contents.name, map)) {
         quad->addr2.kind = Val;
         addStar(quad->addr2.contents.name);
@@ -291,7 +291,7 @@ void genASN(Quad* quad, VariableMap* map) {
         addStar(quad->addr1.contents.name);
     }
     if (strcmp(quad->addr1.contents.name, "*sp")==0) {
-        type t1 = getType(quad->addr2.contents.name+1, map);
+        TYPE t1 = getTYPE(quad->addr2.contents.name+1, map);
         if (t1 == INTEGER) {
             fprintf(out, "\tlw $t0, 0($sp)\n");
             fprintf(out, "\tlw $t1, %s\n", quad->addr2.contents.name+1);
@@ -314,7 +314,7 @@ void genASN(Quad* quad, VariableMap* map) {
         fprintf(out, "\tsw $t1, %s\n", quad->addr2.contents.name);
     } else
     if (quad->addr2.kind == Val) {
-        type t2 = getType(quad->addr2.contents.name+1, map);
+        TYPE t2 = getTYPE(quad->addr2.contents.name+1, map);
         if (t2 == INTEGER) {
             if (quad->addr1.kind == IntConst) fprintf(out, "\tli $t0, %d\n", quad->addr1.contents.intVal);
             if (quad->addr1.kind == Val) {
@@ -333,8 +333,8 @@ void genASN(Quad* quad, VariableMap* map) {
             if (quad->addr1.kind == FloatConst) fprintf(out, "\tli.s $f0, %f\n", quad->addr1.contents.floatVal);
             if (quad->addr1.kind == Val) {
                 fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name+1);
-                if (getType(quad->addr1.contents.name+1, map)==FLOAT) fprintf(out, "\tl.s $f0, 0($t0)\n");
-                if (getType(quad->addr1.contents.name+1, map)==INTEGER) {
+                if (getTYPE(quad->addr1.contents.name+1, map)==FLOAT) fprintf(out, "\tl.s $f0, 0($t0)\n");
+                if (getTYPE(quad->addr1.contents.name+1, map)==INTEGER) {
                     fprintf(out, "\tlw $t0, 0($t0)\n");
                     fprintf(out, "\tmtc1, $t0, $f0\n");
                     fprintf(out, "\tcvt.s.w $f0, $f0\n");
@@ -356,17 +356,17 @@ void genASN(Quad* quad, VariableMap* map) {
             }
             if (quad->addr1.kind == Val) {
                 fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name+1);
-                if (getType(quad->addr1.contents.name+1, map)==FLOAT) {
+                if (getTYPE(quad->addr1.contents.name+1, map)==FLOAT) {
                     fprintf(out, "\tl.s $f0, 0($t0)\n");
                     fprintf(out, "\tcvt.d.s, $f0, $f0");
                 }
-                if (getType(quad->addr1.contents.name+1, map)==INTEGER) {
+                if (getTYPE(quad->addr1.contents.name+1, map)==INTEGER) {
                     fprintf(out, "\tlw $t0, 0($t0)\n");
                     fprintf(out, "\tmtc1 $t0, $f0\n");
                     fprintf(out, "\tcvt.s.w $f0, $f0\n");
                     fprintf(out, "\tcvt.d.s $f0, $f0\n");
                 }
-                if (getType(quad->addr1.contents.name+1, map)==DOUBLE) fprintf(out, "\tl.d $f0, 0($t0)\n");
+                if (getTYPE(quad->addr1.contents.name+1, map)==DOUBLE) fprintf(out, "\tl.d $f0, 0($t0)\n");
             }
             fprintf(out, "\tlw $t0, %s\n", quad->addr2.contents.name+1);
             fprintf(out, "\ts.d $f0, 0($t0)\n");
@@ -401,7 +401,7 @@ void genCAL(Quad* quad, VariableMap* map) {
             return;
         }
     }
-    type t1 = UNDEFINED, t2 = UNDEFINED, t3 = UNDEFINED;
+    TYPE t1 = UNDEFINED, t2 = UNDEFINED, t3 = UNDEFINED;
     if (quad->addr3.kind == String && getVar(quad->addr3.contents.name, map)) {
         addStar(quad->addr3.contents.name);
         quad->addr3.kind = Val;
@@ -424,7 +424,7 @@ void genCAL(Quad* quad, VariableMap* map) {
         fprintf(out, "\tsw $t1, %s\n", quad->addr3.contents.name);
     }
     if (quad->addr3.kind == Val) { //关于值的计算
-        t3 = getType(quad->addr3.contents.name+1, map);
+        t3 = getTYPE(quad->addr3.contents.name+1, map);
         if (t3 == INTEGER) {
             if (quad->addr1.kind == IntConst) fprintf(out, "\tli $t1, %d\n", quad->addr1.contents.intVal);
             if (quad->addr1.kind == Val) {
@@ -454,7 +454,7 @@ void genCAL(Quad* quad, VariableMap* map) {
             if (quad->addr1.kind == IntConst) fprintf(out, "\tli.s $f1, %d.0\n", quad->addr1.contents.intVal);
             if (quad->addr1.kind == FloatConst) fprintf(out, "\tli.s $f1, %f\n", quad->addr1.contents.floatVal);
             if (quad->addr1.kind == Val) {
-                t1 = getType(quad->addr1.contents.name+1, map);
+                t1 = getTYPE(quad->addr1.contents.name+1, map);
                 fprintf(out, "\tlw $t3, %s\n", quad->addr1.contents.name+1);
                 if (t1 == FLOAT) fprintf(out, "\tl.s $f1, 0($t3)\n");
                 if (t1 == INTEGER) {
@@ -466,7 +466,7 @@ void genCAL(Quad* quad, VariableMap* map) {
             if (quad->addr2.kind == IntConst) fprintf(out, "\tli.s $f2, %d.0\n", quad->addr2.contents.intVal);
             if (quad->addr2.kind == FloatConst) fprintf(out, "\tli.s $f2, %f\n", quad->addr2.contents.floatVal);
             if (quad->addr2.kind == Val) { //要强制转换类型
-                t2 = getType(quad->addr2.contents.name+1, map);
+                t2 = getTYPE(quad->addr2.contents.name+1, map);
                 fprintf(out, "\tlw $t3, %s\n", quad->addr2.contents.name+1);
                 if (t2 == FLOAT) fprintf(out, "\tl.s $f2, 0($t3)\n");
                 if (t2 == INTEGER) {
@@ -486,7 +486,7 @@ void genCAL(Quad* quad, VariableMap* map) {
             if (quad->addr1.kind == IntConst) fprintf(out, "\tli.d $f0, %d.0\n", quad->addr1.contents.intVal);
             if (quad->addr1.kind == FloatConst) fprintf(out, "\tli.d $f0, %f\n", quad->addr1.contents.floatVal);
             if (quad->addr1.kind == Val) {
-                t1 = getType(quad->addr1.contents.name+1, map);
+                t1 = getTYPE(quad->addr1.contents.name+1, map);
                 fprintf(out, "\tlw $t3, %s\n", quad->addr1.contents.name+1);
                 if (t1 == INTEGER) {
                     fprintf(out, "\tlw $t1, 0($t3)\n");
@@ -503,7 +503,7 @@ void genCAL(Quad* quad, VariableMap* map) {
             if (quad->addr2.kind == IntConst) fprintf(out, "\tli.d $f2, %d.0\n", quad->addr2.contents.intVal);
             if (quad->addr2.kind == FloatConst) fprintf(out, "\tli.d $f2, %f\n", quad->addr2.contents.floatVal);
             if (quad->addr2.kind == Val) {
-                t2 = getType(quad->addr2.contents.name+1, map);
+                t2 = getTYPE(quad->addr2.contents.name+1, map);
                 fprintf(out, "\tlw $t3, %s\n", quad->addr2.contents.name+1);
                 if (t2 == INTEGER) {
                     fprintf(out, "\tlw $t2, 0($t3)\n");
@@ -545,7 +545,7 @@ void genREAD(Quad* quad, VariableMap* map) {
     //    保存现场
     //    fprintf(out, "\taddi $sp, $sp, -4\n");
     //    fprintf(out, "\tsw $ra, 0($sp)\n");
-    type t = getType(quad->addr1.contents.name, map);
+    TYPE t = getTYPE(quad->addr1.contents.name, map);
     if (t == INTEGER) {
         fprintf(out, "\tli $v0, 5\n");
         fprintf(out, "\tsyscall\n");
@@ -583,7 +583,7 @@ void genPRINT(Quad* quad, VariableMap* map) {
         fprintf(out, "\tsyscall\n");
     } else {
         fprintf(out, "\tlw $t0, %s\n", quad->addr1.contents.name);
-        type t = getType(quad->addr1.contents.name, map);
+        TYPE t = getTYPE(quad->addr1.contents.name, map);
         if (t == INTEGER) {
             fprintf(out, "\tlw $a0, 0($t0)\n");
             fprintf(out, "\tli $v0, 1\n");
@@ -645,14 +645,14 @@ void genCompare(Quad* quad, VariableMap* map) {
         quad->addr1.kind = Val;
         addStar(quad->addr1.contents.name);
     }
-    type t1 = UNDEFINED, t2 = UNDEFINED, t=UNDEFINED;
-    if (quad->addr1.kind==Val) t1 = getType(quad->addr1.contents.name+1, map); else
+    TYPE t1 = UNDEFINED, t2 = UNDEFINED, t=UNDEFINED;
+    if (quad->addr1.kind==Val) t1 = getTYPE(quad->addr1.contents.name+1, map); else
         switch (quad->addr1.kind) {
             case IntConst: t1 = INTEGER; break;
             case FloatConst: t1 = FLOAT; break;
             default: break;
         }
-    if (quad->addr2.kind==Val) t2 = getType(quad->addr2.contents.name+1, map); else
+    if (quad->addr2.kind==Val) t2 = getTYPE(quad->addr2.contents.name+1, map); else
         switch (quad->addr2.kind) {
             case IntConst: t2 = INTEGER; break;
             case FloatConst: t2 = FLOAT; break;
@@ -693,7 +693,7 @@ void genCompare(Quad* quad, VariableMap* map) {
         if (quad->addr1.kind == IntConst) fprintf(out, "\tli.s $f0, %d.0\n", quad->addr1.contents.intVal);
         if (quad->addr1.kind == FloatConst) fprintf(out, "\tli.s $f0, %f\n", quad->addr1.contents.floatVal);
         if (quad->addr1.kind == Val) {
-            t1 = getType(quad->addr1.contents.name+1, map);
+            t1 = getTYPE(quad->addr1.contents.name+1, map);
             fprintf(out, "\tlw $t3, %s\n", quad->addr1.contents.name+1);
             if (t1 == FLOAT) fprintf(out, "\tl.s $f0, 0($t3)\n");
             if (t1 == INTEGER) {
@@ -705,7 +705,7 @@ void genCompare(Quad* quad, VariableMap* map) {
         if (quad->addr2.kind == IntConst) fprintf(out, "\tli.s $f2, %d.0\n", quad->addr2.contents.intVal);
         if (quad->addr2.kind == FloatConst) fprintf(out, "\tli.s $f2, %f\n", quad->addr2.contents.floatVal);
         if (quad->addr2.kind == Val) { //要强制转换类型
-            t2 = getType(quad->addr2.contents.name+1, map);
+            t2 = getTYPE(quad->addr2.contents.name+1, map);
             fprintf(out, "\tlw $t3, %s\n", quad->addr2.contents.name+1);
             if (t2 == FLOAT) fprintf(out, "\tl.s $f2, 0($t3)\n");
             if (t2 == INTEGER) {
@@ -726,7 +726,7 @@ void genCompare(Quad* quad, VariableMap* map) {
         if (quad->addr1.kind == IntConst) fprintf(out, "\tli.d $f0, %d.0\n", quad->addr1.contents.intVal);
         if (quad->addr1.kind == FloatConst) fprintf(out, "\tli.d $f0, %f\n", quad->addr1.contents.floatVal);
         if (quad->addr1.kind == Val) {
-            t1 = getType(quad->addr1.contents.name+1, map);
+            t1 = getTYPE(quad->addr1.contents.name+1, map);
             fprintf(out, "\tlw $t3, %s\n", quad->addr1.contents.name+1);
             if (t1 == INTEGER) {
                 fprintf(out, "\tlw $t1, 0($t3)\n");
@@ -743,7 +743,7 @@ void genCompare(Quad* quad, VariableMap* map) {
         if (quad->addr2.kind == IntConst) fprintf(out, "\tli.d $f2, %d.0\n", quad->addr2.contents.intVal);
         if (quad->addr2.kind == FloatConst) fprintf(out, "\tli.d $f2, %f\n", quad->addr2.contents.floatVal);
         if (quad->addr2.kind == Val) {
-            t2 = getType(quad->addr2.contents.name+1, map);
+            t2 = getTYPE(quad->addr2.contents.name+1, map);
             fprintf(out, "\tlw $t3, %s\n", quad->addr2.contents.name+1);
             if (t2 == INTEGER) {
                 fprintf(out, "\tlw $t2, 0($t3)\n");
@@ -769,7 +769,7 @@ void genCompare(Quad* quad, VariableMap* map) {
         fprintf(out, "\tadd $t7, $t3, $0\n");
         return;
     }
-    t = getType(quad->addr3.contents.name+1, map);
+    t = getTYPE(quad->addr3.contents.name+1, map);
     fprintf(out, "\tlw $t2, %s\n", quad->addr3.contents.name+1);
     if (t == INTEGER) fprintf(out, "\tsw $t3, 0($t2)\n");
     if (t == FLOAT) {
