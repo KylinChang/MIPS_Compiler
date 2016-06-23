@@ -32,83 +32,6 @@ _minsquare:
 	addi $sp, $sp, -4
 	sw $t0, 0($sp)
 	sw $sp, bp
-
-_min:
-	# use stack
-	lw $t0, bp
-	addi $sp, $sp, -4
-	sw $t0, 0($sp)
-	sw $sp, bp
-	# calculation
-	addi, $sp, $sp, -4
-	# calculation
-	lw $t1, bp
-	li $t2, 12
-	add $t1, $t1, $t2
-	sw $t1, t0
-	# calculation
-	lw $t1, bp
-	li $t2, 8
-	add $t1, $t1, $t2
-	sw $t1, t1
-	# stack
-	addi $sp, $sp, -4
-	sw $sp, t2
-	# compare
-	lw $t3, t0
-	lw $t1, 0($t3)
-	lw $t3, t1
-	lw $t2, 0($t3)
-	slt $t3, $t1, $t2
-	lw $t2, t2
-	sw $t3, 0($t2)
-	# if_false jump
-	lw $t1, t2
-	lw $t1, 0($t1)
-	beq $t1, $0, L0
-	# calculation
-	lw $t1, bp
-	li $t2, 4
-	sub $t1, $t1, $t2
-	sw $t1, t0
-	# calculation
-	lw $t1, bp
-	li $t2, 12
-	add $t1, $t1, $t2
-	sw $t1, t1
-	# assign
-	lw $t0, t1
-	lw $t0, 0($t0)
-	lw $t1, t0
-	sw $t0, 0($t1)
-	# direct jump
-	j L1
-L0:
-	# calculation
-	lw $t1, bp
-	li $t2, 4
-	sub $t1, $t1, $t2
-	sw $t1, t0
-	# calculation
-	lw $t1, bp
-	li $t2, 8
-	add $t1, $t1, $t2
-	sw $t1, t1
-	# assign
-	lw $t0, t1
-	lw $t0, 0($t0)
-	lw $t1, t0
-	sw $t0, 0($t1)
-L1:
-	# calculation
-	addi, $sp, $sp, 4
-	# free stack
-	lw $t0, bp
-	add $sp, $t0, $0
-	lw $t0, 0($sp)
-	sw $t0, bp
-	addi $sp, $sp, 4
-	jr $ra
 	# calculation
 	addi, $sp, $sp, -8
 	# calculation
@@ -228,6 +151,83 @@ L1:
 	sw $t0, 0($t1)
 	# calculation
 	addi, $sp, $sp, 8
+	# free stack
+	lw $t0, bp
+	add $sp, $t0, $0
+	lw $t0, 0($sp)
+	sw $t0, bp
+	addi $sp, $sp, 4
+	jr $ra
+
+_min:
+	# use stack
+	lw $t0, bp
+	addi $sp, $sp, -4
+	sw $t0, 0($sp)
+	sw $sp, bp
+	# calculation
+	addi, $sp, $sp, -4
+	# calculation
+	lw $t1, bp
+	li $t2, 12
+	add $t1, $t1, $t2
+	sw $t1, t0
+	# calculation
+	lw $t1, bp
+	li $t2, 8
+	add $t1, $t1, $t2
+	sw $t1, t1
+	# stack
+	addi $sp, $sp, -4
+	sw $sp, t2
+	# compare
+	lw $t3, t0
+	lw $t1, 0($t3)
+	lw $t3, t1
+	lw $t2, 0($t3)
+	slt $t3, $t1, $t2
+	lw $t2, t2
+	sw $t3, 0($t2)
+	# if_false jump
+	lw $t1, t2
+	lw $t1, 0($t1)
+	beq $t1, $0, L0
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# calculation
+	lw $t1, bp
+	li $t2, 12
+	add $t1, $t1, $t2
+	sw $t1, t1
+	# assign
+	lw $t0, t1
+	lw $t0, 0($t0)
+	lw $t1, t0
+	sw $t0, 0($t1)
+	# direct jump
+	j L1
+L0:
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# calculation
+	lw $t1, bp
+	li $t2, 8
+	add $t1, $t1, $t2
+	sw $t1, t1
+	# assign
+	lw $t0, t1
+	lw $t0, 0($t0)
+	lw $t1, t0
+	sw $t0, 0($t1)
+L1:
+	# calculation
+	addi, $sp, $sp, 4
 	# free stack
 	lw $t0, bp
 	add $sp, $t0, $0
