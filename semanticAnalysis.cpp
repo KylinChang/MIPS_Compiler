@@ -815,6 +815,20 @@ void statementAnalysis(NODE* root) {
                 break;
             case TK_PROC_ID_ARGS:
                 typeList = expressionListAnalysis(root->child[1]);
+                // special case for read/readln
+                if (root->child[0]->name == "read" || root->child[0]->name == "readln") {
+                    for (int i = 0; i < root->child[1]->child_number; i++) {
+                        if (!checklvalue(root->child[1]->child[i])) {
+                            LOGERR(5, "error in line", to_string(root->child[1]->lineno).c_str(), ":", root->child[0]->name.c_str(),"needs a lvalue");
+                        }
+                    }
+                    if (root->child[0]->name == "read" ) {
+                        root->type = TK_PROC_READ;
+                    } else if (root->child[0]->name == "readln") {
+                        root->type = TK_PROC_READLN;
+                    }
+                    break;
+                }
                 fpType = findFunc(symbolTableList.front(), root->child[0]->name, typeList, root->child[0]);
                 if (fpType.null) {
                     LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined function or procedure", root->child[0]->name.c_str());
@@ -824,11 +838,6 @@ void statementAnalysis(NODE* root) {
                     if (fpType.complexType->fpType.argVarList[i] && !checklvalue(root->child[1]->child[i])) {
                         LOGERR(5, "error in line", to_string(root->child[1]->lineno).c_str(), ":", root->child[0]->name.c_str(),"needs a lvalue");
                     }
-                }
-                if (root->child[0]->name == "read") {
-                    root->type = TK_PROC_READ;
-                } else if (root->child[0]->name == "readln") {
-                    root->type = TK_PROC_READLN;
                 }
 
 //                if (fpType.complexType->fpType.argTypeList.size() != root->child[1]->child_number) {
@@ -844,7 +853,7 @@ void statementAnalysis(NODE* root) {
 //                    }
 //                }
                 break;
-            case TK_PROC_SYS_ARGS:
+            case TK_PROC_SYS_ARGS: // write/writeln
                 typeList = expressionListAnalysis(root->child[1]);
                 break;
             default:
