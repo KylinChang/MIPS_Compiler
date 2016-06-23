@@ -1,21 +1,31 @@
 entry main
 sp = sp - 20
+point record t0
+t0 = bp - 12
+point double t1
+t1 = t0 + 0
+*t1 = 123.456
+point record t0
+t0 = bp - 12
+point int t1
+t1 = t0 + 8
+*t1 = 777
 point double t0
 t0 = bp - 20
 point record t1
 t1 = bp - 12
-point int t2
+point double t2
 t2 = t1 + 0
-point record t3
-t3 = bp - 12
-point int t4
-t4 = t3 + 8
-var double t5
-t5 = t2 + t4
-*t0 = t5
+point record t1
+t1 = bp - 12
+point int t3
+t3 = t1 + 8
+var double t1
+t1 = *t2 + *t3
+*t0 = t1
 point double t0
 t0 = bp - 20
-var double t2
-t2 = *t0
-println t2
+var double t1
+t1 = *t0
+println t1
 sp = sp + 20

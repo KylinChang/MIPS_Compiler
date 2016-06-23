@@ -243,7 +243,7 @@ bool Type::operator ==(const Type &o) const {
         return simpleType->simpleType == o.simpleType->simpleType;
     } else if (!isSimpleType && !o.isSimpleType) {
         if ((complexType->complexType == type_func || complexType->complexType == type_proc) && (o.complexType->complexType == type_func || o.complexType->complexType == type_proc)) {
-            return complexType->fpType == complexType->fpType;
+            return complexType->fpType == o.complexType->fpType;
         }
         if (complexType->complexType != o.complexType->complexType) {
             return false;

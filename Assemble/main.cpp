@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
             text.num++;
         }
         //如果三地址码第一个元素是read
-        if (strcmp(elements[0], "read")==0) {
+        if (strcmp(elements[0], "read")==0 || strcmp(elements[0],"readln")==0) {
             strcpy(quad.addr1.contents.name, elements[1]);
             quad.addr1.kind = getKind(elements[0]);
             quad.op = rd;
@@ -305,8 +305,8 @@ int main(int argc, char* argv[]) {
         if (text.quad[i].op == ret) genRET(text.quad+i);
         if (text.quad[i].op == call) genCALL(text.quad+i);
         if (text.quad[i].op == arg) genARG(text.quad+i, &map);
-        if (text.quad[i].op == save) genSave(text.quad+i);
-        if (text.quad[i].op == restore) genRestore(text.quad+i);
+//        if (text.quad[i].op == save) genSave(text.quad+i);
+        if (text.quad[i].op == restore) genRestore();
     }
     //退出主程序
     fprintf(out, "\tjr $ra\n");

@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 //定义布尔类型
-typedef enum {FALSE, TRUE} bool;
+//typedef enum {FALSE, TRUE} bool;
 
 //定义变量类型
 typedef enum {INTEGER, FLOAT, DOUBLE, STRING, ARRAY, RECORD, UNDEFINED, IMM} type;

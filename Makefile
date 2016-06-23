@@ -31,6 +31,9 @@ newrun:
 	./a.out Assemble/7.pas >Assemble/7.in
 	./a.out Assemble/8.pas >Assemble/8.in
 	./a.out Assemble/9.pas >Assemble/9.in
+	./a.out Assemble/10.pas >Assemble/10.in
+	./a.out Assemble/11.pas >Assemble/11.in
+	./a.out Assemble/12.pas >Assemble/12.in
 gen:
 	./Assemble/main Assemble/1.in Assemble/1.asm
 	./Assemble/main Assemble/2.in Assemble/2.asm
@@ -41,6 +44,9 @@ gen:
 	./Assemble/main Assemble/7.in Assemble/7.asm
 	./Assemble/main Assemble/8.in Assemble/8.asm
 	./Assemble/main Assemble/9.in Assemble/9.asm
+	./Assemble/main Assemble/10.in Assemble/10.asm
+	./Assemble/main Assemble/11.in Assemble/11.asm
+	./Assemble/main Assemble/12.in Assemble/12.asm
 
 runtest:
 	./a.out TestCases/test1.pas >TestCases/test1.i
