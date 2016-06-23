@@ -1029,7 +1029,7 @@ pair<bool, _Value> testOptimize(NODE *t) {
 	}
 }
 piv genCode(NODE *t, int extraMsg) {
-	// cout<<NODE_NAMES[t->type]<<endl;
+	// cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
 	if (t) {
 	if (ICG_DEBUG) cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
 		piv a, b, c;
@@ -1372,11 +1372,23 @@ piv genCode(NODE *t, int extraMsg) {
 		
 		//TK_READ
 		case TK_PROC_READ:  //TO-DO 应该只有ID而不是factor可以read??先当成单个ID来做
-			a = genCode(SON(0));
-			b = genCode(SON(1));
-			stemp = string(SON(1)->child[0]->symbolTable->varSymbolTable[SON(1)->child[0]->name]);
-			// output("begin_args");
-			output("read t" + string(b.second));
+			for (int i=0; i<SON(1)->child_number; i++) {
+				a = genCode(SON(1)->child[i]);
+				output("read t" + string(a.second));
+				if (isTempVar(a)) TempVars::release(a);
+			}
+			// a = genCode(SON(0));
+			// b = genCode(SON(1));
+			// stemp = string(SON(1)->child[0]->symbolTable->varSymbolTable[SON(1)->child[0]->name]);
+			// // output("begin_args");
+			// output("read t" + string(b.second));
+			break;
+		case TK_PROC_READLN:
+			for (int i=0; i<SON(1)->child_number; i++) {
+				a = genCode(SON(1)->child[i]);
+				output(string("read") + (i==SON(1)->child_number-1?"ln":"") + " t" + string(a.second));
+				if (isTempVar(a)) TempVars::release(a);
+			}
 			break;
 		
 		//compound_stmt

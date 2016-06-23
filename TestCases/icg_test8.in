@@ -1,0 +1,9 @@
+program test;
+var a,b:real;
+begin
+	read(a,b);
+	writeln(a,b);
+	readln(a,b);
+	write(a,b);
+end.
+
