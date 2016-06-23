@@ -782,7 +782,7 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 		// dbg(string(a.second));
 		// dbg(st->findVar(varName).null);
 		// dbg(st->findFunc(varName).complexType);
-		piv t0 = mp(2, _Value(string(a.second), st->findFunc(varName).complexType->complexType == type_func));  //TO-DO 还需要知道这个函数的返回值大小
+		piv t0 = mp(2, _Value(string(a.second), st->findFunc(varName, t->dataType.complexType->fpType.argTypeList).complexType->complexType == type_func));  //TO-DO 还需要知道这个函数的返回值大小
 		TempVars::release(a);
 		return t0;
 	}
@@ -1338,8 +1338,8 @@ piv genCode(NODE *t, int extraMsg) {
 			a = genCode(SON(0));
 			// output("begin_args");
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType,
-													SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType.size() + 8);
+			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, SON(0)->dataType.complexType->fpType.argTypeList).complexType->fpType.retType,
+													SON(0)->symbolTable->findFunc(SON(0)->name, SON(0)->dataType.complexType->fpType.argTypeList).complexType->fpType.retType.size() + 8);
 			//if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name).complexType->fpType.retType);
 			break;
 		case TK_PROC_ID_ARGS:
@@ -1347,8 +1347,8 @@ piv genCode(NODE *t, int extraMsg) {
 			// output("begin_args");
 			TempVars::release(genCode(SON(1)));
 			output("call " + getName(a));
-			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType,
-													SON(0)->symbolTable->findFunc(SON(0)->name, expressionListAnalysis(SON(1))).complexType->fpType.retType.size() + 8);
+			if (a.second.i == 1) return getReturnNum(SON(0)->symbolTable->findFunc(SON(0)->name, SON(0)->dataType.complexType->fpType.argTypeList).complexType->fpType.retType,
+													SON(0)->symbolTable->findFunc(SON(0)->name, SON(0)->dataType.complexType->fpType.argTypeList).complexType->fpType.retType.size() + 8);
 			break;
 		
 		//SYS_PROC

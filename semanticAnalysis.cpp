@@ -463,7 +463,7 @@ Type factorAnalysis(NODE* root) {
                 LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined variable or const or function");
                 break;
             }
-            root->dataType = lhst;
+            root->dataType = root->child[0]->dataType = lhst;
             break;
         case TK_FACTOR_ID_ARGS:
         case TK_FACTOR_SYS_FUNCT:
@@ -473,7 +473,7 @@ Type factorAnalysis(NODE* root) {
                 LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "undefined function");
                 break;
             }
-            root->dataType = lhst;
+            root->dataType = root->child[0]->dataType = lhst;
             break;
         case TK_FACTOR_CONST:
             v = parseConst(root->child[0]);
@@ -810,8 +810,9 @@ void statementAnalysis(NODE* root) {
                 fpType = findFunc(symbolTableList.front(), root->child[0]->name, root->child[0]);
                 if (fpType.null || fpType.isSimpleType || (fpType.complexType->complexType != type_func && fpType.complexType->complexType != type_proc)) {
                     LOGERR(5, "error in line", to_string(root->lineno).c_str(), ":", "undefined function or procedure", root->child[0]->name.c_str());
-                    return;
+                    break;
                 }
+                root->child[0]->dataType = root->dataType = fpType;
                 break;
             case TK_PROC_ID_ARGS:
                 typeList = expressionListAnalysis(root->child[1]);
@@ -839,6 +840,7 @@ void statementAnalysis(NODE* root) {
                         LOGERR(5, "error in line", to_string(root->child[1]->lineno).c_str(), ":", root->child[0]->name.c_str(),"needs a lvalue");
                     }
                 }
+                root->child[0]->dataType = root->dataType = fpType;
 
 //                if (fpType.complexType->fpType.argTypeList.size() != root->child[1]->child_number) {
 //                    LOGERR(4, "error in line", to_string(root->lineno).c_str(), ":", "argument number mismatch");

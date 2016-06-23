@@ -37,7 +37,7 @@ main:
 	sw $t1, t0
 	# calculation
 	lw $t1, t0
-	li $t2, 0
+	li $t2, 4
 	add $t1, $t1, $t2
 	sw $t1, t1
 	# assign
@@ -52,7 +52,7 @@ main:
 	sw $t1, t0
 	# calculation
 	lw $t1, t0
-	li $t2, 8
+	li $t2, 0
 	add $t1, $t1, $t2
 	sw $t1, t1
 	# assign
@@ -71,7 +71,7 @@ main:
 	sw $t1, t1
 	# calculation
 	lw $t1, t1
-	li $t2, 0
+	li $t2, 4
 	add $t1, $t1, $t2
 	sw $t1, t2
 	# calculation
@@ -81,7 +81,7 @@ main:
 	sw $t1, t1
 	# calculation
 	lw $t1, t1
-	li $t2, 8
+	li $t2, 0
 	add $t1, $t1, $t2
 	sw $t1, t3
 	# stack
