@@ -1237,12 +1237,12 @@ piv genCode(NODE *t, int extraMsg) {
 			genCode(t->child[0]);
 			//TO-DO　计算函数sp位置
 			genCode(t->child[1]);
-			output("ret"); lessIndent();
+			// output("ret"); lessIndent();
 			break;
 		case TK_PROC_DECL:
 			genCode(t->child[0]);
 			genCode(t->child[1]);
-			output("ret"); lessIndent();
+			// output("ret"); lessIndent();
 			break;
 		case TK_FUNC_HEAD:
 			a = genCode(t->child[0]);
@@ -1259,17 +1259,20 @@ piv genCode(NODE *t, int extraMsg) {
 			throw Error("Wrong syntax tree as it somehow generates illegal 'TK_PARA'");
 			break;
 		case TK_ROUTINE:
-			genCode(SON(0));
 			// output("int bp sp");
 			output("sp = sp - " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));  //将sp减去局部变量(包括返回值)的大小
 			if (SON(1)) TempVars::release(genCode(SON(1), TK_ROUTINE));
+			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
+			output("ret"); lessIndent();
+
 			// ww = t->name=="FUNC" ? t->symbolTable->varSymbolTable[t->symbolTable->varSequence[0]].size() : 0;  //是function ?? TO-DO
 			// outDebug();
 			// cout<<calSize(t->symbolTable->varSymbolTable)<<" "<<calSize(t->symbolTable->paraSequence, t->symbolTable->varSymbolTable)<<" "<<ww<<" "<<t->symbolTable->varSequence.size()<<endl;
 			// outDebug();
 			// output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSymbolTable) - ww + 4)));
-			output("sp = sp + " + string(_Value(calSize(t->symbolTable->varSequence, t->symbolTable->varSymbolTable))));
 			// TO-DO output("return" ...); (要用到符号表里的变量吧)(检查某变量是否有被用到过，以确定是否有返回值)
+			
+			genCode(SON(0));
 			break;
 		case TK_ROUTINE_HEAD:
 			//TO-DO 其他部分

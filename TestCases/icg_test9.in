@@ -1,0 +1,19 @@
+program test12;
+var
+    a:integer;
+function f(a:integer):integer;
+    function f1(a:integer):integer;
+    begin
+		f1:=a*3;
+    end;
+    function f2(a:integer):integer;
+    begin
+		f2:=f1(a)+a;
+    end;
+begin
+    f:=f2(a)*a;
+end;
+begin
+	a:=2;
+	writeln(f(a));
+end.
