@@ -35,10 +35,11 @@ main:
 	li $t2, 4
 	sub $t1, $t1, $t2
 	sw $t1, t0
-	# assign
-	li $t0, 15
-	lw $t1, t0
-	sw $t0, 0($t1)
+	# read
+	li $v0, 5
+	syscall
+	lw $t0, t0
+	sw $v0, 0($t0)
 	# calculation
 	lw $t1, bp
 	li $t2, 8

@@ -29,7 +29,27 @@
 main:
 	sw $sp, bp
 	# calculation
-	addi, $sp, $sp, -4
+	addi, $sp, $sp, -8
+	# calculation
+	lw $t1, bp
+	li $t2, 4
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# read
+	li $v0, 5
+	syscall
+	lw $t0, t0
+	sw $v0, 0($t0)
+	# calculation
+	lw $t1, bp
+	li $t2, 8
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# read
+	li $v0, 5
+	syscall
+	lw $t0, t0
+	sw $v0, 0($t0)
 	# calculation
 	lw $t1, bp
 	li $t2, 4
@@ -52,5 +72,26 @@ main:
 	li $v0, 4
 	syscall
 	# calculation
-	addi, $sp, $sp, 4
+	lw $t1, bp
+	li $t2, 8
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# stack
+	addi $sp, $sp, -4
+	sw $sp, t1
+	# assign
+	lw $t0, t0
+	lw $t0, 0($t0)
+	lw $t1, t1
+	sw $t0, 0($t1)
+	# print
+	lw $t0, t1
+	lw $a0, 0($t0)
+	li $v0, 1
+	syscall
+	la $a0, endl
+	li $v0, 4
+	syscall
+	# calculation
+	addi, $sp, $sp, 8
 	jr $ra

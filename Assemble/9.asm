@@ -32,6 +32,35 @@ main:
 	addi, $sp, $sp, -20
 	# calculation
 	lw $t1, bp
+	li $t2, 12
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# calculation
+	lw $t1, t0
+	li $t2, 0
+	add $t1, $t1, $t2
+	sw $t1, t1
+	# assign
+	li.s $f0, 123.456001
+	cvt.d.s, $f0, $f0
+	lw $t0, t1
+	s.d $f0, 0($t0)
+	# calculation
+	lw $t1, bp
+	li $t2, 12
+	sub $t1, $t1, $t2
+	sw $t1, t0
+	# calculation
+	lw $t1, t0
+	li $t2, 8
+	add $t1, $t1, $t2
+	sw $t1, t1
+	# assign
+	li $t0, 777
+	lw $t1, t1
+	sw $t0, 0($t1)
+	# calculation
+	lw $t1, bp
 	li $t2, 20
 	sub $t1, $t1, $t2
 	sw $t1, t0
@@ -49,21 +78,28 @@ main:
 	lw $t1, bp
 	li $t2, 12
 	sub $t1, $t1, $t2
-	sw $t1, t3
+	sw $t1, t1
 	# calculation
-	lw $t1, t3
+	lw $t1, t1
 	li $t2, 8
 	add $t1, $t1, $t2
-	sw $t1, t4
+	sw $t1, t3
 	# stack
 	addi $sp, $sp, -8
-	sw $sp, t5
+	sw $sp, t1
 	# calculation
+	lw $t3, t2
+	l.d $f0, 0($t3)
+	lw $t3, t3
+	lw $t2, 0($t3)
+	mtc1 $t2, $f2
+	cvt.s.w $f2, $f2
+	cvt.d.s $f2, $f2
 	add.d $f4, $f0, $f2
-	lw $t3, t5
+	lw $t3, t1
 	s.d $f4, 0($t3)
 	# assign
-	lw $t0, t5
+	lw $t0, t1
 	l.d $f0, 0($t0)
 	lw $t0, t0
 	s.d $f0, 0($t0)
@@ -74,14 +110,14 @@ main:
 	sw $t1, t0
 	# stack
 	addi $sp, $sp, -8
-	sw $sp, t2
+	sw $sp, t1
 	# assign
 	lw $t0, t0
 	l.d $f0, 0($t0)
-	lw $t0, t2
+	lw $t0, t1
 	s.d $f0, 0($t0)
 	# print
-	lw $t0, t2
+	lw $t0, t1
 	l.d $f12, 0($t0)
 	li $v0, 3
 	syscall

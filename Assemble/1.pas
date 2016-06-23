@@ -1,7 +1,7 @@
 program test1;
 var
-    n:integer;
+    n,m:integer;
 begin
-    readln(n);
-    writeln(n);
+    readln(n,m);
+    writeln(n,m);
 end.
