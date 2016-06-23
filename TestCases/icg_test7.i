@@ -1,10 +1,8 @@
 entry main
 sp = sp - 16
-point int t0
-t0 = bp - 16
-point record t1
-t1 = bp - 12
-point int t2
-t2 = t1 + 0
-*t0 = t2
+point record t0
+t0 = bp - 12
+point double t1
+t1 = t0 + 0
+*t1 = 1.1
 sp = sp + 16

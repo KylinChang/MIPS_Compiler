@@ -1029,7 +1029,7 @@ pair<bool, _Value> testOptimize(NODE *t) {
 	}
 }
 piv genCode(NODE *t, int extraMsg) {
-	cout<<NODE_NAMES[t->type]<<endl;
+	// cout<<NODE_NAMES[t->type]<<endl;
 	if (t) {
 	if (ICG_DEBUG) cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
 		piv a, b, c;
@@ -1711,14 +1711,15 @@ piv genCode(NODE *t, int extraMsg) {
 			break;
 		case TK_ASSIGN_DD:
 			a = genCode(SON(0));
-			outDebug();
+			// outDebug();
 			// if you want get SON(0)'s field, you should access SON(0)->record
 			// and it should be (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(0)->record->name)
-			cout<< (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(0)->record->name).isSimpleType) <<endl;
-			output("t" + string((tmp=mp(6, TempVars::getAnother(string("point ") + string(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name))))).second)
-					+ " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(1)->name))));
-			b = genCode(SON(5));
+			// cout<< (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(0)->record->name).isSimpleType) <<endl;
+			output("t" + string((tmp=mp(6, TempVars::getAnother(string("point ") + string(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(0)->record->name))))).second)
+					+ " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(0)->record->name))));
+			b = genCode(SON(1));
 			output(getName(tmp) + " = " + getName(b));
+			// outDebug();
 			TempVars::release(a); TempVars::release(b); return tmp;
 			break;
 			
