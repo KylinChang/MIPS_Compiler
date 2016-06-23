@@ -8,6 +8,6 @@ var
 	end;
 	b:integer;
 begin
-	b:=a.b;
+	a.b:=1.1;
 end.
 

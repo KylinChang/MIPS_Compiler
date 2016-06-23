@@ -1029,6 +1029,7 @@ pair<bool, _Value> testOptimize(NODE *t) {
 	}
 }
 piv genCode(NODE *t, int extraMsg) {
+	cout<<NODE_NAMES[t->type]<<endl;
 	if (t) {
 	if (ICG_DEBUG) cout<<t->type<<" "<<NODE_NAMES[t->type]<<endl;
 		piv a, b, c;
@@ -1703,9 +1704,20 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_FACTOR_DD:
 			a = genCode(SON(0));
 			// output(getName(tmp=mp(0, TempVars::getAnother("point int"))) + " = t" + string(a.second) + " + field_offset(" + SON(0)->name + "," + SON(1)->name + ")");
-			output(getName(tmp=mp(0, TempVars::getAnother("point int"))) + " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(1)->name))));
-			return tmp;
+			output("t" + string((tmp=mp(6, TempVars::getAnother(string("point ") + string(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name))))).second) 
+					+ " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(1)->name))));
+			TempVars::release(a); return tmp;
 			// TO-DO
+			break;
+		case TK_ASSIGN_DD:
+			a = genCode(SON(0));
+			outDebug();
+			cout<< (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name).isSimpleType) <<endl;
+			output("t" + string((tmp=mp(6, TempVars::getAnother(string("point ") + string(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name))))).second) 
+					+ " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(1)->name))));
+			b = genCode(SON(5));
+			output(getName(tmp) + " = " + getName(b));
+			TempVars::release(a); TempVars::release(b); return tmp;
 			break;
 			
 		//procedure??
