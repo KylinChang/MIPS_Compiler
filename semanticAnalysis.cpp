@@ -531,7 +531,7 @@ Type factorAnalysis(NODE* root) {
     }
 
     // special case: when return a func, we return its retType
-    if (!root->dataType.isSimpleType && root->dataType.complexType->complexType == type_func) {
+    if (!root->dataType.null && !root->dataType.isSimpleType && root->dataType.complexType->complexType == type_func) {
         return root->dataType.complexType->fpType.retType;
     }
     return root->dataType;
