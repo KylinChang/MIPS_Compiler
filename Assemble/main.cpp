@@ -12,11 +12,11 @@ QuadTable text;
 LabelTable lb;
 
 int getElement(char* src, int* head, char* dst);
-void addVariable(VariableMap* map, char* name, type vartype, char* initval);
+void addVariable(VariableMap* map, char* name, TYPE vartype, char* initval);
 void addArray(VariableMap* map, char* name, int space);
 void addLabel(char* name, LabelTable* lb);
 AddrKind getKind(char* name);
-type getType(char* name, VariableMap* map);
+TYPE getType(char* name, VariableMap* map);
 void changeType(Quad* quad, VariableMap* map);
 void changeVar(Quad* quad, VariableMap* map);
 void genASN(Quad* quad, VariableMap* map);
