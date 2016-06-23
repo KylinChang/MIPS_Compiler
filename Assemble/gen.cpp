@@ -39,7 +39,7 @@ int getElement(char* src, int* head, char* dst) {
 void addVariable(VariableMap* map, char* name, TYPE vartype, char* initval) {
     strcpy(map->var[map->num].name, name);
     strcpy(map->var[map->num].initval, initval);
-    map->var[map->num].TYPE = vartype;
+    map->var[map->num].type = vartype;
     map->var[map->num].isVar = false;
     map->num++;
 }
@@ -63,7 +63,7 @@ void declareVariable(VariableMap* map) {
 //添加一个数组到变量表中
 void addArray(VariableMap* map, char* name, int space) {
     strcpy(map->var[map->num].name, name);
-    map->var[map->num].TYPE = ARRAY;
+    map->var[map->num].type = ARRAY;
     //    map->var[map->num].space = space;
     map->num++;
 }
@@ -89,7 +89,7 @@ TYPE getTYPE(char* name, VariableMap* map) {
     if (name[0]=='$') return INTEGER;
     for (int i=0; i<map->num; i++)
         if (strcmp(name, map->var[i].name)==0)
-            return map->var[i].TYPE;
+            return map->var[i].type;
     return UNDEFINED;
 }
 
@@ -102,7 +102,7 @@ void changeType(Quad* quad, VariableMap* map) {
     if (strcmp(quad->addr1.contents.name, "record")==0) t = RECORD;
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
-            map->var[i].TYPE = t;
+            map->var[i].type = t;
             map->var[i].isVar = false;
             return;
         }
@@ -115,7 +115,7 @@ void changeVar(Quad* quad, VariableMap* map) {
     if (strcmp(quad->addr1.contents.name, "double")==0) t = DOUBLE;
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
-            map->var[i].TYPE = t;
+            map->var[i].type = t;
             map->var[i].isVar = true;
             return;
         }
