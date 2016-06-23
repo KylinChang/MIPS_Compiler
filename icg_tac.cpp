@@ -1712,8 +1712,10 @@ piv genCode(NODE *t, int extraMsg) {
 		case TK_ASSIGN_DD:
 			a = genCode(SON(0));
 			outDebug();
-			cout<< (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name).isSimpleType) <<endl;
-			output("t" + string((tmp=mp(6, TempVars::getAnother(string("point ") + string(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name))))).second) 
+			// if you want get SON(0)'s field, you should access SON(0)->record
+			// and it should be (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(0)->record->name)
+			cout<< (SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(0)->record->name).isSimpleType) <<endl;
+			output("t" + string((tmp=mp(6, TempVars::getAnother(string("point ") + string(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getType(SON(1)->name))))).second)
 					+ " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(1)->name))));
 			b = genCode(SON(5));
 			output(getName(tmp) + " = " + getName(b));
