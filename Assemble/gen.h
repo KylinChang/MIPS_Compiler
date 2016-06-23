@@ -25,7 +25,7 @@ typedef struct {
         char floatval[200];
         char doubleval[200];
     };
-    TYPE TYPE; //指向的类型
+    TYPE type; //指向的类型
     bool isVar;
 } Variable;
 
