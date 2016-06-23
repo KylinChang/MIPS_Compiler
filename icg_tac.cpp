@@ -755,6 +755,11 @@ piv output(NODE *t, piv a) {  //临时变量装载(TO-DO 函数参数的offset�
 				if (varName == st->varSequence[i])
 					break;
 			}
+			if (!st->varSymbolTable[varName].isSimpleType) {
+				piv t0 = mp(6, _Value(TempVars::getAnother("point record")));
+				output(getName(mp(0, t0.second)) + " = bp - " + string(_Value(offset)));
+				return t0;
+			}
 			piv t0 = mp(6, _Value(TempVars::getAnother("point " + string(st->varSymbolTable[varName])), string(st->varSymbolTable[varName])));  //--  //, t1 = mp(0, TempVars::getAnother());
 			output(getName(mp(0, t0.second)) + " = bp - " + string(_Value(offset)));  //计算时要注意数组和record的情况，还得判断是不是函数本身
 			//output(string("") + "load " + string(st->varSymbolTable[varName]) + " " + getName(t1) + " " + getName(t0));
@@ -1696,7 +1701,9 @@ piv genCode(NODE *t, int extraMsg) {
 			// TempVars::release(b); TempVars::release(tmp); return c;
 			break;
 		case TK_FACTOR_DD:
-			output(getName(tmp=mp(0, TempVars::getAnother("point int"))) + " = t" + string(genCode(SON(0)).second) + " + field_offset(" + SON(0)->name + "," + SON(1)->name + ")");
+			a = genCode(SON(0));
+			// output(getName(tmp=mp(0, TempVars::getAnother("point int"))) + " = t" + string(a.second) + " + field_offset(" + SON(0)->name + "," + SON(1)->name + ")");
+			output(getName(tmp=mp(0, TempVars::getAnother("point int"))) + " = t" + string(a.second) + " + " + string(_Value(SON(0)->symbolTable->varSymbolTable[SON(0)->name].complexType->recordType.getOffset(SON(1)->name))));
 			return tmp;
 			// TO-DO
 			break;
