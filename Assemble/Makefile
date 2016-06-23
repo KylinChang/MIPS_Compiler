@@ -1,10 +1,10 @@
-CC = gcc
+CC = g++
 
 main : main.o gen.o
 	$(CC) -o $@ $^
-main.o : main.c gen.h
+main.o : main.cpp gen.h
 	$(CC) -c $<
-gen.o : gen.c gen.h
+gen.o : gen.cpp gen.h
 	$(CC) -c $<
 
 clean :

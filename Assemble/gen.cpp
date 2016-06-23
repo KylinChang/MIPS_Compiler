@@ -40,7 +40,7 @@ void addVariable(VariableMap* map, char* name, type vartype, char* initval) {
     strcpy(map->var[map->num].name, name);
     strcpy(map->var[map->num].initval, initval);
     map->var[map->num].type = vartype;
-    map->var[map->num].isVar = FALSE;
+    map->var[map->num].isVar = false;
     map->num++;
 }
 
@@ -103,7 +103,7 @@ void changeType(Quad* quad, VariableMap* map) {
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
             map->var[i].type = t;
-            map->var[i].isVar = FALSE;
+            map->var[i].isVar = false;
             return;
         }
 }
@@ -116,7 +116,7 @@ void changeVar(Quad* quad, VariableMap* map) {
     for (int i=0; i<map->num; i++)
         if (strcmp(map->var[i].name, quad->addr2.contents.name) == 0) {
             map->var[i].type = t;
-            map->var[i].isVar = TRUE;
+            map->var[i].isVar = true;
             return;
         }
 }
@@ -125,7 +125,7 @@ bool getVar(char* name, VariableMap* map) {
     for (int i=0; i<map->num; i++)
         if (strcmp(name, map->var[i].name)==0)
             return map->var[i].isVar;
-    return FALSE;
+    return false;
 }
 
 void addStar(char* name) {

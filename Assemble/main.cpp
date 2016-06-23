@@ -305,8 +305,8 @@ int main(int argc, char* argv[]) {
         if (text.quad[i].op == ret) genRET(text.quad+i);
         if (text.quad[i].op == call) genCALL(text.quad+i);
         if (text.quad[i].op == arg) genARG(text.quad+i, &map);
-        if (text.quad[i].op == save) genSave(text.quad+i);
-        if (text.quad[i].op == restore) genRestore(text.quad+i);
+//        if (text.quad[i].op == save) genSave(text.quad+i);
+        if (text.quad[i].op == restore) genRestore();
     }
     //退出主程序
     fprintf(out, "\tjr $ra\n");
